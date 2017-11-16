@@ -21,8 +21,8 @@
     width: 100%;
     min-height: 30px;
     position: fixed;
-    bottom: 10px;
-    background: black;
+    bottom: 0px;
+    background: red;
     padding-top: 10px;
     padding-bottom: 10px;
 }
