@@ -1,0 +1,22 @@
+{%  extends 'base_form.html' %}
+{% load static %}
+{% block h1 %}
+    Новая заявка
+{% endblock %}
+{%  block  card-body  %}
+    <form method="post" novalidate id="new-request-form">
+          {% csrf_token %}
+           <div id="new-request-error-message"></div>
+          {% include 'includes/forms.html' %}
+          <a  class="btn btn-outline-secondary  mt-2" id="save-new-request">Сохранить</a>
+          <button  class="btn   mt-2"  >Выйти</button>
+
+    </form>
+
+{%  endblock %}
+{% block scripts %}
+  <script>
+
+  </script>
+  {% endblock %}
+

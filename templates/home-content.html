@@ -1,0 +1,30 @@
+{% load static %}
+
+{% for req in main_requests %}
+    <div class="row">
+           <div class="col-1">
+                {{ req.number }}
+           </div>
+           <div class="col-5 about  ">
+                 {{ req.about }}
+           </div>
+           <div class="col-2">
+               <small class="text-muted d-block">{{ req.request_dateTime }}<br></small>
+               {{ req.str_user_request }}<br>
+               <small class="text-muted d-block">{{ req.str_user_status }}</small>
+               <small class="text-muted d-block">{{ req.str_user_deparment }}</small>
+           </div>
+            <div class="col-1">
+                {{ req.place.name }}
+            </div>
+            <div class="col-1"></div>
+            <div class="col-1">
+               {{ req.receive_user.user.first_name }} {{ req.receive_user.user.last_name }}<br>
+               <small class="text-muted d-block">{{ req.str_receive_dateTime }}</small>
+            </div>
+            <div class="col-1">
+                {{ req.close_user.user.first_name }} {{req.close_user.user.last_name }}<br>
+                 <small class="text-muted d-block">{{ req.str_close_dateTime }}</small>
+            </div>
+    </div>
+{%  endfor %}

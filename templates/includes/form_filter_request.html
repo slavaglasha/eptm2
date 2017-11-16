@@ -1,0 +1,74 @@
+{% load  form_tags widget_tweaks %}
+
+
+
+	<div class="row">
+        <h3>Подал заявку</h3>
+    </div>
+
+   <div class="row">
+        <div class="col-md-7">
+			<div class="form-group row">
+                <div class="col-2 col-form-label-sm">
+				    {{form.request_dateTime_start.label_tag}}
+                </div>
+                <div class="col-5">
+				{% render_field form.request_dateTime_start class=form.request_dateTime_start|input_class %}
+				{% for error in form.request_dateTime_start.errors %}
+      				<div class="invalid-feedback">
+        				{{ error }}
+      				</div>
+    			{% endfor %}
+				{% if form.requets_dateTime_start.help_text %}
+					<small class="form-text text-muted">
+						{{ form.request_dateTime_start.help_text|safe }}
+					</small>
+				{% endif %}
+
+                 </div>
+            <div class="col-5">
+				{% render_field form.request_dateTime_end class=form.request_dateTime_start|input_class %}
+				{% for error in form.request_dateTime_end.errors %}
+      				<div class="invalid-feedback">
+        				{{ error }}
+      				</div>
+    			{% endfor %}
+				{% if form.request_dateTime_end.help_text %}
+					<small class="form-text text-muted">
+						{{ form.request_dateTime_end.help_text|safe }}
+					</small>
+				{% endif %}
+
+              </div>
+
+			</div>
+        </div>
+        <div class="col-md-5">
+            	<div class="form-group row">
+                    <div class="col col-form-label-sm">
+                        {{form.request_user.label_tag}}
+                    </div>
+                    <div class="col">
+                        {% render_field form.request_user class=form.request_user|input_class %}
+                        {% render_field form.request_outer_user class=form.request_outer_user|input_class %}
+                        {% for error in form.request_user.errors %}
+                            <div class="invalid-feedback">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                        {% for error in form.request_outer_user.errors %}
+                            <div class="invalid-feedback">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                        {% if form.request_user.help_text %}
+                            <small class="form-text text-muted">
+                                {{ form.input_user.help_text|safe }}
+                            </small>
+                        {% endif %}
+
+                     </div>
+                </div>
+        </div>
+   </div>

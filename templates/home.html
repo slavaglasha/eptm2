@@ -1,0 +1,68 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title-block %}
+{% block stylesheet %}
+    <link href="{% static 'css/home-list/style.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+    <div class="row">
+
+              <div class="col-1">
+                  №
+              </div>
+              <div class="col-5">
+                О чем заявлено
+              </div>
+
+               <div class="col-2">
+                    Поступила
+                </div>
+                <div class="col-1">
+                     Место
+                </div>
+                <div class="col-1">
+                     Выезды
+                </div>
+
+                <div class="col-1">
+                    Куратор
+                </div>
+                <div class="col-1">
+                    Закрыл
+                </div>
+
+    </div>
+{% endblock %}
+{% block content %}
+    {% include 'home-content.html' %}
+{%  endblock %}
+{% block footer %}
+    <div class="row">
+    {% if user.is_authenticated %}
+        <button href="#" id="new-request" class="btn  btn-outline-secondary">Новая заявка</button>
+     {% endif %}
+        <a href="#" id="show-filter" class="btn  btn-outline-secondary">Фильтр</a>
+    </div>
+    <div class="outer_block">
+
+    </div>
+
+    <div class="row show-block mr-0, ml-0" id="filter-block">
+
+          {% include 'includes/filterform.html' %}
+
+    </div>
+    <div class="show-block" id="new-request-block">
+
+    </div>
+
+ <div class="show-block" id="error-block">
+    <p id="error-message"></p>
+ </div>
+
+{% endblock %}
+
+{% block scripts %}
+ <script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
