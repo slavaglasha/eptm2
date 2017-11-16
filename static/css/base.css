@@ -21,7 +21,7 @@
     width: 100%;
     min-height: 30px;
     position: fixed;
-    bottom: 0;
+    bottom: 10px;
     background: black;
     padding-top: 10px;
     padding-bottom: 10px;
