@@ -1,0 +1,35 @@
+#flex-container {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+  height:100vh;
+}
+
+#flex-container  .flex-item {
+	flex: auto;
+    background: #f2f2f2;
+   -webkit-flex: 1 1 auto;
+    overflow-y: auto;
+    height: 0;
+}
+
+#flex-container > .raw-item {
+
+
+
+}
+
+.table-scroll{
+  max-height:100%;
+  overflow-y:scroll;
+
+}
+
+/*.wraper{
+  height:800vh;
+}
+.table-head{
+  background-color:red;
+  height:10px;
+}*/

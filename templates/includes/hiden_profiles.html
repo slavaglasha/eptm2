@@ -1,0 +1,13 @@
+ <div class="hiden">
+               <select id="user_department">
+                    {% for profile in profiles %}
+                        <option value="{{ profile.id }}">{{ profile.deparment.name }}</option>
+                   {% endfor %}
+               </select>
+                <select id="user_position">
+                    {% for profile in profiles %}
+                        <option value="{{ profile.id }}">{{ profile.user_position }}</option>
+                   {% endfor %}
+               </select>
+
+</div>

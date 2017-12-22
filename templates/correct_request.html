@@ -1,0 +1,55 @@
+{%  extends 'base_form.html' %}
+{% load static %}
+
+{%  block columns %}
+     <div class="col-12 col-lg-12 col-sm-12">
+{% endblock %}
+{% block h1 %}
+    Заявка № <span  >{{ number }}</span>
+{% endblock %}
+{% block card-body %}
+    <form action="#" id="request-form" >
+        {% csrf_token %}
+            <div class="hiddent" id="id_request" hidden>  {{ pk }}</div>
+        <div class="error-message alert alert-danger" role="alert"></div>
+        {% include 'includes/form_inline.html' %}
+       <div class="hiden" id="cur_user">
+            {{ user.pk }}
+           {%  include 'includes/hiden_profiles.html' %}
+       </div>
+        {% include 'includes/hiden_profiles.html' %}
+       <a  class="btn btn-outline-secondary  mt-2 btn-sm" id="correct-request__save-request">Сохранить</a>
+       {% if enableReceive %}
+           <a  class="btn  mt-2 btn-outline-secondary btn-sm" id="correct-request__receive" >Принять</a>
+       {% endif %}
+       <a  class="btn  mt-2 btn-outline-secondary btn-sm" id="correct-request__btn-close" >Выйти</a>
+
+
+    </form>
+{% endblock %}
+{% block scripts %}
+   <script src="{%  static 'js/init_form_widget.js' %}">
+   </script>
+  <script>
+    $(document).ready(function () {
+
+
+
+
+
+
+
+
+        function after_open_new(){
+            form = $("#request-form");
+            connectUser(form);
+            connectPlace(form);
+            correct_request_initWidgets();
+        }
+
+        after_open_new();
+        $("#correct_request-block").show();
+
+    })
+  </script>
+  {% endblock %}

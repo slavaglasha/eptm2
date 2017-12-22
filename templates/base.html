@@ -6,14 +6,19 @@
     <title>{% block title %}requests{% endblock %}</title>
 	<link rel="stylesheet" href = "{% static 'libraries/boostrap/css/bootstrap.min.css' %}" >
 	<link rel="stylesheet" href = "{% static 'css/base.css' %}" >
+    <link rel="stylesheet" href="{%  static 'css/flex.css' %}">
+    <link rel="stylesheet" href="{% static 'libraries/air-datepicker-master/css/datepicker.min.css'%}">
 
 
 
     {% block stylesheet %} {% endblock %}
   </head>
   <body>
+  <div class="wraper-my " id="flex-container">
+
      {% block body %}
-     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+     <div class="raw-item">
+     <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
      <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">Eptm</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="MainMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +31,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link  dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ user.username }}
+
                                 </a>
 
                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
@@ -48,14 +54,15 @@
 
     </nav>
     <div class="title-row">
-        <div class="container">
-            <div  class ="title-block" >
+          <div  class ="title-block" >
+
                 {% block title-block %}
                 {% endblock %}
-            </div>
+
         </div>
     </div>
-    <div class="container">
+    </div>
+    <div class="container flex-item">
         <div class="content-block" id="content-block">
 		{% block content %}
 		{% endblock %}
@@ -63,7 +70,7 @@
 
 	</div>
 
-     <div class = "footer">
+     <div class = "footer raw-item  ">
      <div class="container">
 
             {%  block footer %}
@@ -71,13 +78,20 @@
 
      </div>
      </div>
+     <div class="container-fluid">
+      {% block  shownblock %}
 
+      {% endblock %}
+     </div>
 
 
     {% endblock body %}
+  </div>
   <script src="{% static 'libraries/jquery-3.2.1.min.js'%}"> </script>
   <script src="{% static 'libraries/popper.min.js'%}"> </script>
   <script src="{% static 'libraries/boostrap/js/bootstrap.js'%}"> </script>
+
+
   {% block scripts %}
 
   {% endblock %}

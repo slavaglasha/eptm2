@@ -11,18 +11,18 @@
 
 	<div class="row">
         <div class="col-12">
-            <h5 class="mb-0 mt-0 align-items-center">Ввел заявку</h5>
+            <h5 class="  align-content-center">Ввел заявку</h5>
         </div>
     </div>
     <div class="row">
 
-			<div class="form-group col-md-7 col-sm-12">
+			<div class="form-group col-lg-7 col-md-12">
                 <div class="row">
-                <div class="col-2 col-form-label-sm">
+                <div class="col-12 col-lg-2 col-md-4 col-sm-3 col-form-label-sm">
 				    {{form.input_dateTime_start.label_tag}}
                 </div>
-                <div class="col-5">
-				{% render_field form.input_dateTime_start class=form.input_dateTime_start|input_class %}
+                <div class="col-6 col-sm-5 col-md-4 col-lg-5">
+				{% render_field form.input_dateTime_start class=form.input_dateTime_start|input_class autocomplete="off" %}
 				{% for error in form.input_dateTime_start.errors %}
       				<div class="invalid-feedback">
         				{{ error }}
@@ -35,8 +35,8 @@
 				{% endif %}
 
                  </div>
-            <div class="col-5 ">
-				{% render_field form.input_dateTime_end class=form.input_dateTime_start|input_class %}
+            <div class="col-6 col-sm-4 col-md-4 col-lg-5">
+				{% render_field form.input_dateTime_end class=form.input_dateTime_start|input_class autocomplete="off" %}
 				{% for error in form.input_dateTime_end.errors %}
       				<div class="invalid-feedback">
         				{{ error }}
@@ -51,13 +51,13 @@
               </div>
                </div>
 			</div>
-            <div class="col-md-5 col-sm-12" >
-            	<div class="form-group row ">
-                <div class="col  col-form-label-sm">
+            <div class=" form-group col-lg-5 col-md-12" >
+            	<div class=" row ">
+                <div class="col-lg-4 col-md-4 col-sm-3  col-form-label-sm">
 				    {{form.input_user.label_tag}}
                 </div>
-                <div class="col">
-				{% render_field form.input_user class=form.input_user|input_class %}
+                <div class="col-lg-8 col-md-8 col-sm-9 col-8 ">
+				{% render_field form.input_user class=form.input_user|input_class autocomplete="off"%}
 				{% for error in form.input_user.errors %}
       				<div class="invalid-feedback">
         				{{ error }}

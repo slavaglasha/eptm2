@@ -4,12 +4,13 @@
     Поиск
 {% endblock %}
 {%  block columns %}
-    <div class="col-12 p-0">
+    <div class=" col-md-8 col-lg-12 col-12 ">
 {% endblock %}
 {%  block  card-body  %}
+
     <form action="" id="filter-form">
         {% csrf_token %}
-        <div class="form-content" id="filter-form-content">
+        <div class="form-content" >
             <div id="error-message"></div>
 
             {%  include 'includes/form_filter_input.html' %}
@@ -19,13 +20,17 @@
         </div>
         <div >
 
-             <a href="#" id="hide-filter" class="btn  btn-outline-secondary">Отменить </a>
-             <a href="#" id="save-filter" class="btn  btn-outline-secondary">
+             <a href="#" id="hide-filter" class="btn  btn-outline-secondary btn-sm">Отменить </a>
+             <a href="#" id="save-filter" class="btn  btn-outline-secondary btn-sm">
                          Применить
              </a>
 
         </div>
 
     </form>
+
+
+{% endblock %}
+{%  block scripts %}
 
 {% endblock %}

@@ -8,15 +8,38 @@
           {% csrf_token %}
            <div id="new-request-error-message"></div>
           {% include 'includes/forms.html' %}
-          <a  class="btn btn-outline-secondary  mt-2" id="save-new-request">Сохранить</a>
-          <button  class="btn   mt-2"  >Выйти</button>
+          {% include 'includes/hiden_profiles.html' %}
+          <a  class="btn btn-outline-secondary  mt-2 btn-sm" id="save-new-request">Сохранить</a>
+          <a  class="btn  mt-2 btn-outline-secondary btn-sm" id="new-request__btn-close" >Выйти</a>
 
     </form>
 
+
 {%  endblock %}
 {% block scripts %}
+   <script src="{%  static 'js/init_form_widget.js' %}">
+   </script>
   <script>
+    $(document).ready(function () {
 
+
+
+
+
+
+
+
+        function after_open_new(){
+            form = $("#new-request-form");
+            connectUser(form);
+            connectPlace(form);
+            new_request_initWidjects();
+        }
+
+        after_open_new();
+        $("#new-request-block").show();
+
+    })
   </script>
   {% endblock %}
 
