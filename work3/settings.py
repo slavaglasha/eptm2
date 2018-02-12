@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'work_profiles',
     'account',
     'places',
+    'departures',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eptm_db',
         'USER': 'dbuser',
-        'PASSWORD' :'pusha',
+        'PASSWORD':'pusha',
     }
 }
 
@@ -138,4 +139,4 @@ STATICFILES_DIRS = [
 
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/base/filter-request/'
