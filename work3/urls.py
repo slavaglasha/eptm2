@@ -32,6 +32,8 @@ urlpatterns = [
     # url(r'^base/list-request/', main_views.ListViewRequest.as_view(), name='listview'),
      url(r'^base/filter-request/$',main_views.ListFilterView, name='list_view'),
      url(r'^base/new-request/$',main_views.CreateNewRequest.as_view(), name='base_create_view'),
+     url(r'^base/new-request/success/',main_views.new_request_success, name='base_create_view_success'),
+     url(r'^base/update-request/(?P<pk>\d+)/$', main_views.UpdateRequest.as_view(), name='base_update_veiw'),
      url(r'^simplle/',main_views.simple, name='view'),
     url(r'^admin/', admin.site.urls),
 

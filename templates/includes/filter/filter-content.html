@@ -3,13 +3,13 @@
 
 {% for req in list_requests %}
     <div class="row" >
-           <div class="col-1  align-content-center ">
-               <span class="align-content-center  " > {{ req.number }}</span>
+           <div class="col-1  align-content-center centered ">
+                 <small><span class="align-content-center number-column " > {{ req.number }}</span></small>
 
-                <div class="hidden"><a href="{% url 'correct_request' req.id %}'"></a></div>
+                <div class="hiden"><a href="#">{{ req.id}}</a></div>
 
            </div>
-           <div class="col-5 about d-none d-sm-block  ">
+           <div class="col-3 col-sm-5 col-lg-3 about d-none d-sm-block  ">
                <i > {{ req.about }}</i>
            </div>
            <div class="col-2 d-none d-lg-block">
@@ -21,7 +21,7 @@
             <div class="col-1 about d-none d-lg-block">
                 {{ req.place.name }}
             </div>
-            <div class="col-1 d-none d-lg-block"></div>
+            <div class="col-3 d-none d-lg-block"></div>
             <div class="col-1 d-none d-lg-block">
                {{ req.receive_user.user.first_name }} {{ req.receive_user.user.last_name }}<br>
                <small class="text-muted d-block">{{ req.str_receive_dateTime }}</small>

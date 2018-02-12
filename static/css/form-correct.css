@@ -5,3 +5,174 @@
 .form-control{
     background-color: white;
 }
+
+
+.modal-content{
+    border-radius: 0;
+    box-shadow: 0 0 5px 0px #3638a1;
+
+}
+
+.modal-header{
+    padding: 0.5em;
+    padding-left: 1em;
+    background: #5b687a;
+    color: white;
+    border-radius: 0;
+}
+
+.modal-header button{
+    color: #c8c8c8;
+    text-shadow: none;
+}
+
+.modal-header button:hover{
+    color: white;
+    cursor: pointer;
+}
+
+.modal-footer{
+    background-color: #5b687a;
+}
+
+.modal-dialog button span{
+    color: #fff;
+}
+
+
+.form-control{
+    border-radius: 0;
+    box-shadow: 0 0 2px 0 #e6e6e6;
+}
+
+.form-control.is-valid.this-valid{
+    border-color: #605fbc;
+}
+
+.form-control.is-valid.this-valid:focus{
+  border-color: #8b98b4;
+  box-shadow: inset 2px 2px 6px 0px rgba(70, 68, 121, 0.96);
+}
+
+.form-control.is-invalid.this-invalid{
+    border-color: #8b98b4;
+    box-shadow: inset 2px 2px 6px 0px rgba(121, 74, 73, 0.96);
+}
+
+.form-control.is-invalid.this-invalid:focus{
+  border-color: #8b98b4;
+  box-shadow: inset 2px 2px 6px 0px rgba(121, 74, 73, 0.96);
+}
+
+.invalid-feedback{
+    color: #852a2d;
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.form-control:focus{
+    border-color: #8b98b4;
+    box-shadow: inset 2px 2px 6px 0 rgba(121, 121, 121, 0.96);
+}
+
+.datepicker{
+    z-index: 1100;
+    border-radius: 0;
+    background-color: #e2edf4;
+}
+
+.datepicker--nav{
+    background-color: #5b687a;
+    color: white;
+
+}
+
+.datepicker--day-name{
+  color: #0c5460;
+}
+
+.datepicker--nav i{
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.datepicker--nav-action path{
+    stroke: white;
+}
+
+.datepicker--nav-action:hover{
+    background-color: black;
+    border-radius: 0;
+    color: white;
+}
+.datepicker--nav-title:hover{
+    background-color: black;
+    color:white;
+    border-radius: 0;
+}
+
+.datepicker--cell-day.-other-month-, .datepicker--cell-year.-other-decade- {
+    color: #95b1be;;
+}
+
+
+.datepicker--cell.-current-{
+    color: black;
+    border: 1px solid #050809;
+}
+
+.datepicker--cell.-selected-, .datepicker--cell.-selected-.-current- {
+background-color: #00008b;
+    border-radius: 0;
+}
+
+.datepicker--cell.-selected-, .datepicker--cell.-selected-.-current- :hover{
+    background-color: #27248b;;
+}
+
+
+.datepicker--cell :hover{
+    border-radius: 0;
+    background-color: midnightblue;
+
+}
+.datepicker--cell.-focus-{
+    background-color: #232930;
+    color: white;
+}
+
+.datepicker--time-row input[type="range"]::-moz-range-thumb{
+    background:#010115;
+    border: none;
+}
+.datepicker--time-row input[type='range']::-ms-thumb {
+        background: #010115;
+        border-color: #010115; }
+
+.datepicker--time-row input[type='range']::-webkit-slider-thumb{
+        background: #010115;
+        border-color: #010115;
+}
+
+.datepicker--time-row input[type="range"]:hover::-moz-range-thumb {
+    border: 1px solid black;
+}
+
+.datepicker--time-row{
+    background: linear-gradient(to right, #331515, #080611) left 50%/100% 1px no-repeat;
+}
+
+.datepicker--button{
+    color: black;
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+
+}
+
+.datepicker--button:hover{
+    color: white;
+    background-color: #232930;
+    border-radius: 0;
+}
+
+.modal-open .ui-front {
+ z-index:2000;
+}

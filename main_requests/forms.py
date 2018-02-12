@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import SplitDateTimeWidget
+from django.forms import SplitDateTimeWidget, inlineformset_factory
 from django.utils import timezone
 
 
@@ -30,8 +30,8 @@ datetime_default_errors = {
 
 
 class newMainRequestForm(forms.ModelForm):
-    about = forms.CharField(widget=forms.Textarea(), max_length=500, help_text="Максимальная длинна сообщения  500 "
-                                                                               "символов.", initial="About")
+    about = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'О чем заявлено'}), max_length=500, help_text="Максимальная длинна сообщения  500 "
+                                                                               "символов.", initial="",label="О чем заявлено" )
 
     # request_dateTime = forms.SplitDateTimeField(input_date_formats=['%d.%m.%Y'],
     #                                             input_time_formats=['%H:%M'],
@@ -50,8 +50,9 @@ class newMainRequestForm(forms.ModelForm):
                   'request_dateTime', 'place','about']
         labels = {'request_user': 'Заявитель', 'request_outer_User': 'Внешний заявитель',
                    'request_outer_status': 'Должность', 'request_outer_department': ' Подразделение',
-                   'request_dateTime': 'Дата подачи заявки', 'about': 'О чем заявлено',
-                   'place': 'Место' }
+                   'request_dateTime': 'Дата подачи заявки',
+                   'place': 'Место', 'about': 'О чем заявлено', }
+        error_messages = {'request_dateTime' : datetime_default_errors}
 
 class updateMainRequestForm(forms.ModelForm):
     about = forms.CharField(widget=forms.Textarea(attrs={'rows':4}), max_length=500, help_text="Максимальная длинна сообщения  500 "
@@ -70,6 +71,45 @@ class updateMainRequestForm(forms.ModelForm):
               'place': 'Место',
               'receive_user':'Принял','receive_dateTime':'Дата принятия',
              'close_user':'Закрыл', 'close_dateTime':'Дата закрытия'}
+
+
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('place_user')
+        super(updateMainRequestForm, self).__init__( *args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        print(instance.input_user.pk)
+        groups = user.groups.all().values_list('id', flat=True)
+        if 2 in groups:  # исполнители
+            self.fields['receive_user'].queryset = Profile.objects.filter(pk=user.id) # можно поставить только себя
+            self.fields['close_user'].queryset = Profile.objects.filter(pk=user.id)  # можно поставить только себя
+            if instance.input_user.pk != user.id: #rjhhtrnbhetn yt cdj. pfzdre vj;tn njkmrj ghbyznm
+                self.fields['request_user'].widget.attrs['disabled'] = True
+                self.fields['request_outer_User'].widget.attrs['disabled'] = True
+                self.fields['request_outer_status'].widget.attrs['disabled'] = True
+                self.fields['request_outer_department'].widget.attrs['disabled'] = True
+                self.fields['request_dateTime'].widget.attrs['disabled'] = True
+                self.fields['place'].widget.attrs['disabled'] = True
+                self.fields['about'].widget.attrs['disabled'] = True
+                self.fields['place'].widget.attrs['disabled'] = True
+        if 3 in groups: #пользователи
+            self.fields['receive_user'].widget.attrs['disabled'] = True
+            self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+
+            self.fields['close_user'].widget.attrs['disabled'] = True
+            self.fields['close_dateTime'].widget.attrs['disabled'] = True
+            if instance.input_user.pk != user.id:
+                self.fields['request_user'].widget.attrs['disabled'] = True
+                self.fields['request_outer_User'].widget.attrs['disabled'] = True
+                self.fields['request_outer_status'].widget.attrs['disabled'] = True
+                self.fields['request_outer_department'].widget.attrs['disabled'] = True
+                self.fields['request_dateTime'].widget.attrs['disabled'] = True
+                self.fields['place'].widget.attrs['disabled'] = True
+                self.fields['about'].widget.attrs['disabled'] = True
+                self.fields['place'].widget.attrs['disabled'] = True
+
+
+        # self.fields['sku'].widget.attrs['readonly'] = True
 
 
 

@@ -1,0 +1,25 @@
+{% load static %}
+  <div class="wait-block">Сохранение заявки</div>
+    <form method="post" novalidate id="new-request-form">
+          {% csrf_token %}
+           <div id="new-request-error-message"></div>
+          {% include 'includes/forms.html' %}
+        <div class="hiden">
+        {%  for user in  form.request_user.field.queryset.all %}
+            <div id="user-{{ user.id }}">
+                <div class="position">{{ user.user_position}}</div>
+                <div class="department">{{ user.deparment.name }}</div>
+            </div>
+        {% endfor %}
+        </div>
+        <!-- <a id="btn_save_new"  class="btn btn btn-primary  mt-2 btn-sm" >Сохранить</a> -->
+
+
+          <!--<a  href="{%  url 'list_view' %}" class="btn  mt-2 btn-outline-secondary btn-sm" id="new-request__btn-close" >Выйти</a>-->
+          <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
+                               Выйти
+                        </button> -->
+
+
+    </form>
+    {% include 'includes/hiden_profiles.html' %}

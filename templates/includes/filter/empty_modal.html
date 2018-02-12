@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade show bd-example-modal-lg" id="newRequestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade  bd-example-modal-lg" id="newRequestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document" >
             <div class="modal-content">
 
@@ -10,22 +10,27 @@
                         </button>
 
                     </div>
-                    <form action="" method="post">
-                    <div class="modal-body">
 
+                    <div class="modal-body">
+                     <div class="wait-block">Сохранение заявки</div>
 
 
 
                     </div>
                     <div class="modal-footer">
-                        <input class="btn btn-smm btn-primary" type="submit" value="Сохранить"/>
-                        <button type="button" class="btn btn-smm" data-dismiss="modal" aria-label="Close" >
-                               Отменть
+                         <a id="btn_new_request_correct"  class=" btn  mt-2 btn-sm hiden"  >Редактировать заявку</a>
+
+                         <a id="btn_save_new"  class=" btn btn-primary  mt-2 btn-sm" >Сохранить</a>
+
+
+          <!--<a  href="{%  url 'list_view' %}" class="btn  mt-2 btn-outline-secondary btn-sm" id="new-request__btn-close" >Выйти</a>-->
+         <button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
+                               Выйти
                         </button>
 
 
                     </div>
-            </form>
+
 
 
             </div>

@@ -144,7 +144,7 @@ $(document).ready(function() {
                     this.options.doOnClear(parent_block);
 
                 }
-                this.input.val("");
+                //this.input.val("");
                 outinput.val(value);
             } else {
 

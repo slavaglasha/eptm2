@@ -586,6 +586,7 @@
             if (this.opts.todayButton instanceof Date) {
                 this.selectDate(this.opts.todayButton)
             }
+            this._setInputValue(this.date);
         },
 
         clear: function () {
@@ -2235,4 +2236,8 @@
         }
     };
 })();
+
  })(window, jQuery);
+
+
+

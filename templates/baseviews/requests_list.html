@@ -4,13 +4,16 @@
     <link href="{% static 'css/home-list/style.css' %}" rel="stylesheet">
     <link href="{% static 'css/add_bootstrap/style.css' %}" rel="stylesheet">
 
+   <link href="{% static 'libraries/select2.css'%}" rel="stylesheet">
+    <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.theme.css' %}" rel="stylesheet">
 
-    <!--<link href="{% static 'css/form-correct.css' %}" rel="stylesheet">-->
+    <link href="{% static 'css/form-correct.css' %}" rel="stylesheet">
 
 {% endblock %}
 {% block title-block %}
-    {% include 'baseviews/../includes/filter/top_pagination.html' %}
-    <div class="container">
+
+    <div class="container-fluid">
     <div class="table-title-row">
      <div class="row">
 
@@ -18,7 +21,7 @@
               <div class="col-1">
                   №
               </div>
-              <div class="col-5 d-none d-sm-block">
+              <div class="col-3 col-sm-5 col-lg-3 d-none d-sm-block">
                 О чем заявлено
               </div>
 
@@ -28,7 +31,7 @@
                 <div class="col-1 d-none d-lg-block">
                      Место
                 </div>
-                <div class="col-1 d-none d-lg-block">
+                <div class="col-3 d-none d-lg-block">
                      Выезды
                 </div>
 
@@ -47,23 +50,30 @@
     </div>
 {%endblock %}
 {% block content %}
-
+    <div class="need-blur">
     {% include 'includes/filter/filter-content.html' %}
-
+    </div>
 {%  endblock %}
+
  {% block  shownblock %}
     {% include 'includes/filter/filter_modal_form.html' %}
-     {% include 'includes/filter/empty_modal.html' %}
+    {% include 'includes/filter/empty_modal.html' %}
+     {% include 'includes/filter/update_request.html' %}
+  {% endblock %}
+{%  block footer-row %}
+      {% include 'baseviews/../includes/filter/top_pagination.html' %}
   {% endblock %}
 {%  block footer %}
 
 
 
 
-   <button class="btn  btn-sm" type="button" data-toggle="modal" data-target="#exampleModal">Фильтр</button>
-   <a href="{% url 'base_create_view' %}" class="btn  btn-sm" type="button" >Новая заявка</a>
 
+
+
+   <button class="btn  btn-sm" type="button" data-toggle="modal" data-target="#filterModal">Фильтр</button>
    <button id="btn-new-request" class="btn  btn-sm" type="button" data-toggle="modal" >Новая заявка</button>
+
 
 
 
@@ -73,5 +83,14 @@
 
 {% endblock %}
 {% block scripts %}
+
+
+<script src="{% static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.js'%}"></script>
+ <script src="{% static 'libraries/air-datepicker-master/js/datepicker.js' %}"></script>
+
+
+    <script src="{% static 'js/select-widjet.js' %}"></script>
     <script src="{% static 'js/base-view/request-filter/script.js' %}"></script>
+    <script src="{% static 'js/base-view/request-filter/updaterequest.js' %}"></script>
+
 {% endblock %}

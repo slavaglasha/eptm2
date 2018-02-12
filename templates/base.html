@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href = "{% static 'css/base.css' %}" >
     <link rel="stylesheet" href="{%  static 'css/flex.css' %}">
     <link rel="stylesheet" href="{% static 'libraries/air-datepicker-master/css/datepicker.min.css'%}">
-
+    <link rel="stylesheet" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
 
 
     {% block stylesheet %} {% endblock %}
@@ -18,41 +18,57 @@
 
      {% block body %}
      <div class="raw-item">
-     <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
-     <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">Eptm</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="MainMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggle-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainMenu">
+     <div class="row-background">
+     <nav class="navbar navbar-expand-sm navbar-dark  ">
+         <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">RC</a>
+                {% if user.is_authenticated %}
+                <a class="navbar-toggler" id="userWideMenu" href="#" type="button" data-toggle="collapse" data-target="MainMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="fa fa-cog"></span>
+                </a>
 
-                    {% if user.is_authenticated %}
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link  dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ user.username }}
+                <div id="drop-user-menu-wide" class="dropdown-menu-my wide " aria-labelledby="userMenu"> <!-- dropdown-menu dropdown-menu-right -->
+                                        <a class="username" href="#"  >{{ user.username }}</a>
+                                        <a class="" href="#">Сменить пароль</a>
+                                        <a class="" href="{%  url 'logout' %}">Выход</a>
 
-                                </a>
 
-                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-                                    <a class="dropdown-item" href="#">My account</a>
-                                    <a class="dropdown-item" href="#">Change password</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{%  url 'logout' %}">Log out</a>
-                                </div>
-                            </li>
-                        </ul>
-                    {% else %}
-                        <form class="form-inline ml-auto">
-                            <a href="{% url 'login' %}" class="btn  btn-outline-secondary">Log in</a>
+                </div>
 
-                        </form>
-                    {% endif %}
+                {% else %}
+                     <a href="{% url 'login' %}" class=" navbar-togglerbtn  btn-outline-secondary">Log in</a>
 
+                {% endif %}
+                <div class="collapse navbar-collapse" id="mainMenu">
+
+                        {% if user.is_authenticated %}
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link " href="#" id="userMenu" ><!--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" -->
+                                        {{ user.username }}
+                                    </a>
+
+                                   <div id="drop-user-menu" class="dropdown-menu-my " aria-labelledby="userMenu"> <!-- dropdown-menu dropdown-menu-right -->
+                                        <a class="" href="#">Аккаунт</a>
+                                        <a class="" href="#">Сменить пароль</a>
+                                        <a class="" href="{%  url 'logout' %}">Выход</a>
+
+
+                                    </div>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <form class="form-inline ml-auto">
+                                <a href="{% url 'login' %}" class="btn  btn-outline-secondary">Log in</a>
+
+                            </form>
+                        {% endif %}
+
+              </div>
           </div>
-      </div>
 
     </nav>
+    </div>
     <div class="title-row">
           <div  class ="title-block" >
 
@@ -62,7 +78,9 @@
         </div>
     </div>
     </div>
-    <div class="container flex-item">
+     <div class="wait-block">Загрузка страницы</div>
+    <div class="container-fluid flex-item">
+
         <div class="content-block" id="content-block">
 		{% block content %}
 		{% endblock %}
@@ -71,12 +89,20 @@
 	</div>
 
      <div class = "footer raw-item  ">
-     <div class="container">
+         <div class="footer-add-row">
+             <div class="container-fluid">
+                 {%  block footer-row %}
+                  {% endblock %}
+             </div>
+         </div>
+        <div class="footer-main-row">
+             <div class="container">
 
-            {%  block footer %}
-            {% endblock %}
+                    {%  block footer %}
+                    {% endblock %}
 
-     </div>
+             </div>
+        </div>
      </div>
      <div class="container-fluid">
       {% block  shownblock %}
@@ -87,9 +113,13 @@
 
     {% endblock body %}
   </div>
+
   <script src="{% static 'libraries/jquery-3.2.1.min.js'%}"> </script>
+
   <script src="{% static 'libraries/popper.min.js'%}"> </script>
+
   <script src="{% static 'libraries/boostrap/js/bootstrap.js'%}"> </script>
+
 
 
   {% block scripts %}

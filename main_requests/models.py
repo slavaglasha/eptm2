@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+from django.utils.timezone import localtime
 
 from places.models import Places
 from work_profiles.models import Profile
@@ -35,11 +36,10 @@ class MainRequest(models.Model):
 
     def clean(self):
         tomorrow = timezone.now().__add__(timedelta(days=2))
-        yestarday = timezone.now().__add__(timedelta(days=-1))
+        yesterday = timezone.now().__add__(timedelta(days=-1))
         errors = {}
         print('valid', self.get_deferred_fields().__len__())
-        for el in self.get_deferred_fields():
-            print(el)
+
         print("'request_dateTime' in self.get_deferred_fields() " ,'request_dateTime' in self.get_deferred_fields())
         print(self.number)
         if (self.request_user is None) and (self.request_outer_User is None):
@@ -52,21 +52,22 @@ class MainRequest(models.Model):
             errors['request_outer_status']='Нужно ввести должность заявителя!'
         if (self.place_outer is None) and (self.place is None):
             errors['place']='Нужно ввести место!'
-        if ('request_dateTime' in self.get_deferred_fields()) or (self.pk is None):
-            if self.request_dateTime < yestarday:
-                errors['request_dateTime'] = 'Не может быть раньше  вчера'
-        if self.request_dateTime > tomorrow:
-            errors['request_dateTime']= 'Не может быть позже завтра'
+        if self.pk is None:
+            if ('request_dateTime' in self.get_deferred_fields()) or (self.pk is None):
+                if self.request_dateTime < yesterday:
+                    errors['request_dateTime'] = 'Не может быть раньше '+localtime(yesterday).strftime('%d.%m.%Y %H:%M')
+            if self.request_dateTime > tomorrow:
+                errors['request_dateTime']= 'Не может быть позже '+localtime(tomorrow).strftime('%d.%m.%Y %H:%M')
         if ((self.receive_dateTime is None) and (self.receive_user is not None)) or (
                     (self.receive_dateTime is not None) and (self.receive_user is None)):
 
-                errors['receive_user']='Дата принятия и пользоваель принявший заявку должны быит определены!'
+                errors['receive_user']=' Нужно ввести  дату принятия и пользоваеля принявшего заявку!'
         if (self.close_dateTime is None) and (self.close_user is not None):
                     errors['close_dateTime']='Дата закрытия  заявки должна быть определена!'
 
         if  (self.receive_dateTime is not None) and (self.receive_user is None):
 
-                errors['close_user']='пользоваель закрывший  заявку должныбыит определен!'
+                errors['close_user']='пользоваель закрывший  заявку должен быть определен!'
         print(errors)
         if len(errors)>0:
             raise ValidationError(errors)

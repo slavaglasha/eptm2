@@ -20,12 +20,16 @@ def input_class(bound_field):
 
     if bound_field.form.is_bound:
         if bound_field.errors:
-            css_class = 'is-invalid'
+            css_class = 'is-invalid this-invalid'
         elif field_type(bound_field) != 'PasswordInput':
-            css_class = 'is-valid'
+            css_class = 'is-valid this-valid'
 
     if bound_field.field.widget.__class__.__name__=='DateTimeInput':
         css_class=css_class+' datepicker-need '
+    if bound_field.name.find('datetime')>0:
+        css_class = css_class + ' datepicker-need '
+    if bound_field.name.find('dateTime') > 0:
+            css_class = css_class + ' datepicker-need '
 
     return 'form-control form-control-sm {0} '.format(css_class)
 
@@ -34,7 +38,7 @@ def grid_input_class(bound_field):
     if bound_field.field.widget.__class__.__name__=='Textarea':
         return 'col-sm-12 col-md-12  col-12'
 
-    return 'col-sm-12 col-md-6 col-lg-6 col-12'
+    return 'col-sm-12 col-md-12 col-lg-6 col-12'
 
 @register.filter
 def grid_label_class(bound_field):

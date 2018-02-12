@@ -13,3 +13,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.last_name+' '+self.user.first_name
+
+    @property
+    def user_group_first_id(self):
+        return self.user.groups.all()[0].id

@@ -1,16 +1,19 @@
 from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.db.models import Max
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+from departures.forms import DeparturesFormSet, CustomDepartureFormSet
 from .models import MainRequest
 from .forms import newMainRequestForm, filterForm, updateMainRequestForm
 from work_profiles.models import Profile
@@ -23,24 +26,23 @@ from .filter import MainRequestFilter
 def home(request):
     dt = timezone.now().__add__(timedelta(days=-5))
     form = filterForm(initial={'input_dateTime_start': dt,
-                               'input_dateTime_end':'',
-                               'input_user':'',
-                               'request_user':'',
-                               'request_outer_user':'',
-                               'request_dateTime_start':'',
-                               'request_dateTime_end':'',
-                               'receive_user':'',
-                               'receive_dateTime_start':'',
-                               'receive_dateTime_end':'',
-                               'close_user':'',
-                               'close_dateTime_start':'',
-                               'close_dateTime_end':''
+                               'input_dateTime_end': '',
+                               'input_user': '',
+                               'request_user': '',
+                               'request_outer_user': '',
+                               'request_dateTime_start': '',
+                               'request_dateTime_end': '',
+                               'receive_user': '',
+                               'receive_dateTime_start': '',
+                               'receive_dateTime_end': '',
+                               'close_user': '',
+                               'close_dateTime_start': '',
+                               'close_dateTime_end': ''
                                })
-
-
 
     requests = MainRequest.objects.all().filter(input_datetime__gte=dt).order_by('-pk')
     return render(request, 'home.html', {'main_requests': requests, 'form': form})
+
 
 @login_required
 def new_request(request):
@@ -65,10 +67,11 @@ def new_request(request):
     else:
         form = newMainRequestForm()
     profiles = Profile.objects.all()
-    return render(request, 'new_request.html', {'form': form, "profiles":profiles})
+    return render(request, 'new_request.html', {'form': form, "profiles": profiles})
+
 
 def getfilterRequests(filterForm):
-    requsts= requests = MainRequest.objects.all()
+    requsts = requests = MainRequest.objects.all()
     if filterForm.data.get('input_dateTime_start') != '':
         requests = requests.filter(input_datetime__gte=filterForm.cleaned_data['input_dateTime_start'])
     if filterForm.data.get('input_dateTime_end') != '':
@@ -84,18 +87,17 @@ def getfilterRequests(filterForm):
         requests = requests.filter(request_user=filterForm.cleaned_data['request_user'])
     if filterForm.data.get('request_outer_user') != '':
         requests = requests.filter(request_outer_User=filterForm.cleaned_data['request_outer_user'])
-    if  filterForm.data.get('place') != '':
+    if filterForm.data.get('place') != '':
         requests = requests.filter(place=filterForm.cleaned_data['place'])
     return requests
 
+
 @login_required
 def filter_requests(request):
-
     if request.method == 'GET':
         form = filterForm(request.GET or None)
         print(form.data.get('request_user'))
         requests = MainRequest.objects.all()
-
 
         if form.is_valid():
             requests = getfilterRequests(form)
@@ -111,21 +113,22 @@ def filter_requests(request):
 
 @login_required
 def correct_request(request, id_request):
-
     if request.method == 'GET':
         mainRequestObject = MainRequest.objects.get(id=id_request)
         if mainRequestObject.request_outer_status is None:
-            mainRequestObject.request_outer_status =Profile.objects.get(id=mainRequestObject.request_user.id).user_position
+            mainRequestObject.request_outer_status = Profile.objects.get(
+                id=mainRequestObject.request_user.id).user_position
         if mainRequestObject.request_outer_department is None:
-            mainRequestObject.request_outer_department=Profile.objects.get(id=mainRequestObject.request_user.id).deparment.name
+            mainRequestObject.request_outer_department = Profile.objects.get(
+                id=mainRequestObject.request_user.id).deparment.name
         user = request.user
-        form_request = updateMainRequestForm(None,instance=mainRequestObject)
+        form_request = updateMainRequestForm(None, instance=mainRequestObject)
         groups = user.groups.all().values_list('id', flat=True)
         enableReceive = False
-        if 2 in groups:  # bcgjkybntkb
+        if 2 in groups:  # исполнители
             form_request.fields['receive_user'].widget.attrs['disabled'] = True
 
-            if mainRequestObject.input_user.user != user:                      
+            if mainRequestObject.input_user.user != user:
                 form_request.fields['request_user'].widget.attrs['disabled'] = True
                 form_request.fields['request_outer_User'].widget.attrs['disabled'] = True
                 form_request.fields['request_outer_status'].widget.attrs['disabled'] = True
@@ -134,13 +137,13 @@ def correct_request(request, id_request):
                 form_request.fields['place'].widget.attrs['disabled'] = True
                 form_request.fields['about'].widget.attrs['disabled'] = True
                 form_request.fields['place'].widget.attrs['disabled'] = True
-            if mainRequestObject.receive_user  is None:
+            if mainRequestObject.receive_user is None:
                 enableReceive = True
         else:
-            if not ( 1 in groups):
-            
+            if not (1 in groups):
+
                 if mainRequestObject.input_user.user != user:
-                    for field in  form_request.fields:
+                    for field in form_request.fields:
                         print(field)
                         form_request.fields[field].widget.attrs['disabled'] = True
 
@@ -151,20 +154,23 @@ def correct_request(request, id_request):
                     form_request.fields['close_user'].widget.attrs['disabled'] = True
                     form_request.fields['close_dateTime'].widget.attrs['disabled'] = True
         profiles = Profile.objects.all()
-        return  render(request, 'correct_request.html',{'form':form_request, 'pk':id_request, 'number':mainRequestObject.number,'profiles':profiles,'enableReceive':enableReceive})
-    if request.method =="POST":
+        return render(request, 'correct_request.html',
+                      {'form': form_request, 'pk': id_request, 'number': mainRequestObject.number, 'profiles': profiles,
+                       'enableReceive': enableReceive})
+    if request.method == "POST":
         mainRequestObject = MainRequest.objects.get(id=id_request)
-        form_request = updateMainRequestForm(request.POST or None, instance=mainRequestObject )
+        form_request = updateMainRequestForm(request.POST or None, instance=mainRequestObject)
         if form_request.is_valid():
-            form_new_request=form_request.save(commit=False)
+            form_new_request = form_request.save(commit=False)
             form_new_request.save()
             return HttpResponse("Success")
         else:
             return HttpResponse(form_request.errors.as_json(escape_html=True),
-                content_type="application/json")
+                                content_type="application/json")
 
 
 # Base view
+@login_required
 class ListViewRequest(ListView):
     model = MainRequest
     context_object_name = 'main_requests'
@@ -180,19 +186,20 @@ class ListViewRequest(ListView):
 
 
 # filter
+@login_required
 def ListFilterView(request):
     dt = timezone.now().__add__(timedelta(days=-5))
 
     f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
-    row_count= request.GET.get('col-row')
+    row_count = request.GET.get('col-row')
     if row_count == None:
-        row_count=10
+        row_count = 10
     print(row_count)
-    paginator = Paginator(f.qs,row_count)
+    paginator = Paginator(f.qs, row_count)
     page = request.GET.get('page', 1)
     print(page)
 
-    list_requests = f.qs
+
 
     try:
         list_requests = paginator.page(page)
@@ -201,32 +208,103 @@ def ListFilterView(request):
     except EmptyPage:
         list_requests = paginator.page(paginator.num_pages)
 
-    return render(request, 'baseviews/requests_list.html',{'filter':f,'form':f.form, 'list_requests':list_requests,'rows':row_count})
+    return render(request, 'baseviews/requests_list.html',
+                  { 'form': f.form, 'list_requests': list_requests, 'rows': row_count})
+    #'filter': f,
 
 # для тестов
 def simple(request):
-    return  render(request,'simple.html')
+    return render(request, 'simple.html')
+
 
 # создание новой заявки
-
-class CreateNewRequest(CreateView):
+class CreateNewRequest(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
+    redirect_field_name = '/base/filter-request/'
     form_class = newMainRequestForm
-    template_name = 'includes/new_request/new_request.html'
+    template_name = 'baseviews/new_request/new_request.html'
     success_url = '/base/filter-request/'
+
+    def get_context_data(self, **kwargs):
+        profiles = Profile.objects.all()
+        data = super(CreateNewRequest, self).get_context_data(**kwargs)
+        data['profiles'] = profiles
+        return data
+
+    def get_success_url(self):
+        print(self.request.META['HTTP_REFERER'])
+        return redirect('base_create_view_success', number=1)
 
     def form_valid(self, form):
         new_request = form.save(commit=False)
-
         user = self.request.user
         new_request.input_user = Profile.objects.get(user=user)
         old_number = MainRequest.objects.all().aggregate(Max('number'))
-
         new_request.number = old_number['number__max'] + 1
         if new_request.request_user is not None:
             new_request.request_outer_status = None
             new_request.request_outer_department = None
-
         new_request.save()
-        return super().form_valid(form)
+        return render(self.request,'baseviews/new_request/success_new_request.html', {'number':new_request.number})
+        #return super().form_valid(form)
+
+def new_request_success(request):
+    return render(request, 'baseviews/new_request/success_new_request.html')
+
+
+class UpdateRequest(UpdateView):# изменеие формы заявок
+    form_class = updateMainRequestForm
+    model = MainRequest
+    template_name = 'baseviews/update_view/update.html'
+    success_url = '/simplle/'
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateRequest, self).get_form_kwargs()
+        kwargs.update({'place_user': self.request.user})
+
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        data = super(UpdateRequest, self).get_context_data(**kwargs)
+        
+        if self.request.POST:
+            data['departures'] = CustomDepartureFormSet(self.request.POST, instance=self.object, dep_user = self.request.user )
+        else:
+            data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user = self.request.user)
+        return data
+
+
+
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        departures = context['departures']
+        # try to delete object before valid
+
+
+
+        if form.is_valid():
+            print("Form valid")
+            for dep in departures.forms:
+                if dep in departures.deleted_forms:
+                    print("Delete")
+            if departures.is_valid():
+                print( "deparures valid")
+                with transaction.atomic(): # что это за  хрень?
+                    self.object = form.save()
+                    departures.instance = self.object
+                    for formdep in departures.forms:
+                        departure = formdep.save(commit=False)
+                        departure.input_user = Profile.objects.get(user=self.request.user)
+                departures.save()
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                return self.render_to_response(self.get_context_data(form=form,
+                                                                     departures=departures))
+
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form = form))
+
 
 

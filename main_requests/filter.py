@@ -20,16 +20,16 @@ class MainRequestFilter(django_filters.FilterSet):
                                                   queryset=Profile.objects.filter())
     request_outer_User = django_filters.CharFilter(label='')
 
-    receive_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата ghbyznbz',lookup_expr='rangdbe')
+    receive_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата принятия',lookup_expr='rangdbe')
     receive_user = django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter())
 
-    close_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата ghbyznbz',lookup_expr='range')
+    close_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата закрытия',lookup_expr='range')
     close_user =django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter())
 
 
     class Meta:
         model = MainRequest
-        fields=['number','input_datetime','input_user']
+        fields=['number','input_datetime','input_user','request_dateTime','request_user']
 
         filter_overrides = {
 
