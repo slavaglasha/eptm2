@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.timezone import localtime
 
 from places.models import Places
+from work3.settings import DATETIME_INPUT_FORMATS
 from work_profiles.models import Profile
 
 
@@ -114,3 +115,24 @@ class MainRequest(models.Model):
                 return self.request_user.user_position
         else:
             return self.request_outer_status
+
+#lkz ghtj,hfpjdfybz d json
+    def to_dict(selfe):
+        if selfe.place is None:
+            pl=''
+        else:
+            pl=selfe.place.name
+
+
+        return {"id":selfe.id,
+                "number":selfe.number,
+                "about":selfe.about,
+                "request_dateTime":selfe.request_dateTime.strftime(DATETIME_INPUT_FORMATS[0]),
+                "str_user_request":selfe.str_user_request,
+                "str_user_status":selfe.str_user_status,
+                "str_user_deparment":selfe.str_user_deparment,
+                "place":pl,
+                "receive-user-name":'' if selfe.receive_user == None else selfe.receive_user.user.first_name,
+                "str_receive_dateTime":selfe.str_receive_dateTime,
+                "close-user-name":'' if selfe.close_user == None else selfe.close_user.user.first_name,
+                "str_close_dateTime":selfe.str_close_dateTime}

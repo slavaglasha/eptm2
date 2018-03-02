@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>RC</title>
+    <link rel="stylesheet" href = "{% static 'libraries/boostrap/css/bootstrap.min.css' %}" >
+    <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.theme.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{%  static 'css/flex.css' %}">
+	<link rel="stylesheet" href = "{% static 'test2/css/base.css' %}" >
+    <link rel="stylesheet" href = "{% static '/css/form-correct.css' %}" >
+
+
+    <link rel="stylesheet" href="{% static 'libraries/air-datepicker-master/css/datepicker.min.css'%}">
+
+    <link rel="stylesheet" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    {% block stylesheet %} {% endblock %}
+</head>
+<body>
+{%  block body %}
+<div id="flex-container">
+  <div >
+    <div class="header-row">
+      <div class="container-my">
+          <div class="left-menu">
+            <div class="logo">
+              RC
+            </div>
+          </div>
+
+          <div class="right-menu" tabindex="0">
+            <label class="help-label" for="help-checkbox-menu" >
+              {% if user.is_authenticated %}
+                  <div class="user">
+                    <div class="user-name">{{ user.username }}</div>
+                    <span   class="icon fas fa-user"></span>
+                 </div>
+                 <span class="controls fas fa-cog"></span>
+                {% else %}
+                    <a href="{% url 'login' %}" class=" btn  btn-sm">Вход</a>
+                {% endif %}
+
+           </label>
+           {% if user.is_authenticated %}
+
+               <input type="checkbox" class="help-checkbox" id="help-checkbox-menu" >
+               <div class="pop-menu">
+                <ul>
+                  <li class="user-list"><a href="#">{{ user.username }}</a></li>
+                  <li><a href="#">Аккаунт </a></li>
+                  <li><a href="#">Выход</a></li>
+                </ul>
+               </div>
+          {%endif%}
+      </div>
+    </div>
+    </div>
+    <div class="title-row">
+      {% block title-table%}
+      <div class="col">Some</div>
+      <div class="col">Some</div>
+      <div class="col">Some</div>
+      <div class="col">Some</div>
+      {% endblock %}
+    </div>
+  </div>
+
+  <div class="main-container flex-item" id="scrolled-table">
+  {% block content %}
+  {% endblock %}
+
+
+  </div>
+  <div >
+  <div class="footer">
+    <div class="my-container">
+    {% block footer %}
+    {% endblock %}
+    </div>
+  </div>
+  <div class="footer-hidden">
+      {% block wind1  %}
+      {% endblock %}
+  </div>
+  </div>
+</div>
+{% block  scripts%}
+
+{% endblock %}
+{% endblock %}
+</body>
+</html>

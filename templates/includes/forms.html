@@ -8,15 +8,16 @@
 			{% endfor %}
 			</div>
 		{% endif %}
-        <div class="form-group  row">
+        <div class="form-group  row ">
 		{% for field in form %}
 
-			<div class="form-group  row {{   field|grid_input_class }}">
+			<div class="form-group   row {{   field|grid_input_class }}">
                 <div class="  col-form-label-sm {{ field|grid_label_class }}" >
 				    {{field.label_tag}}
 
                 </div>
                 <div class="col-8   ">
+
 
 				{% render_field field class=field|input_class %}
 				{% for error in field.errors %}

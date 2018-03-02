@@ -7,24 +7,29 @@ from .models import MainRequest
 from work_profiles.models import Profile
 
 
+class MyRangeWidget(django_filters.widgets.RangeWidget):
 
+    def format_output(self, rendered_widgets):
+        # Method was removed in Django 1.11.
+        return '<span>-</span>'.join(rendered_widgets)
 
 
 class MainRequestFilter(django_filters.FilterSet):
     number = django_filters.NumberFilter(label='№',lookup_expr='exact')
-    input_datetime = django_filters.DateTimeFromToRangeFilter(label='Дата вводда', lookup_expr='range', widget=django_filters.widgets.RangeWidget(attrs={'display': 'inline', 'class':'datetimepicker'}))
+    input_datetime = django_filters.DateTimeFromToRangeFilter(label='Дата вводда', lookup_expr='range', widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datetimepicker'}))
     input_user = django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter())
 
     request_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата подачи заявки', lookup_expr='range')
-    request_user = django_filters.ModelChoiceFilter(label='Пользователь', lookup_expr='exact',
+    request_user = django_filters.ModelChoiceFilter(label='Подал', lookup_expr='exact',
                                                   queryset=Profile.objects.filter())
     request_outer_User = django_filters.CharFilter(label='')
 
     receive_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата принятия',lookup_expr='rangdbe')
-    receive_user = django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter())
+    receive_user = django_filters.ModelChoiceFilter(label = 'Принял', lookup_expr='exact', queryset=Profile.objects.filter())
 
     close_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата закрытия',lookup_expr='range')
-    close_user =django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter())
+    close_user =django_filters.ModelChoiceFilter(label = 'Закрыл', lookup_expr='exact', queryset=Profile.objects.filter())
+
 
 
     class Meta:

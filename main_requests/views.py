@@ -3,9 +3,10 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+import json
 from django.db import transaction
 from django.db.models import Max
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
@@ -18,6 +19,8 @@ from .models import MainRequest
 from .forms import newMainRequestForm, filterForm, updateMainRequestForm
 from work_profiles.models import Profile
 from .filter import MainRequestFilter
+
+import  main_requests.JSONEncoder
 
 
 # Create your views here.
@@ -190,7 +193,9 @@ class ListViewRequest(ListView):
 def ListFilterView(request):
     dt = timezone.now().__add__(timedelta(days=-5))
 
+
     f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
+
     row_count = request.GET.get('col-row')
     if row_count == None:
         row_count = 10
@@ -306,5 +311,53 @@ class UpdateRequest(UpdateView):# изменеие формы заявок
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form = form))
 
+# для тестов
+@login_required
+def test_base(request):
+    return render(request, 'test2/request-list.html')
 
+# фильтр json
+# filter
+@login_required
+def ListFilterJsonView(request):
+
+    get_form = request.GET.get("get_form")
+    if get_form is not None:
+        if get_form:
+            f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk')[0:1])
+            return render(request,'includes/filter/filter_modal_form.html',{'form':f.form})
+
+    dt = timezone.now()
+    first_id=request.GET.get('first_id')
+    row_count = 20
+    if first_id == None:
+        f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
+    else:
+        f = MainRequestFilter(request.GET,
+                              queryset=MainRequest.objects.all().order_by('-pk'))
+
+    if first_id == None:
+        list_requests = f.qs[0:row_count]
+    else:
+        list_requests = f.qs.filter('id_lt', first_id)[0:row_count]
+
+
+
+    dt = timezone.now()
+    list = f.qs
+    json_res=[]
+    for req in list_requests:
+
+        json = req.to_dict()
+        json_res.append(json)
+
+
+    if f.form.is_valid():
+         return JsonResponse({'success': True,'requests':json_res,'dt':dt,'max_rows':row_count})
+    else:
+        return JsonResponse({'success': False,
+                      'errors': [(k, v[0]) for k, v in f.form.errors.items()]}, safe=False)
+   # return render(request, 'test2/parts/request-list/content-json.html',
+    #              {'form': f.form, 'list_requests': list_requests, 'rows': row_count,'dt':dt})
+    # 'filter': f,
 

@@ -1,0 +1,6 @@
+{% load static %}
+{"dt":{{ dt }}
+"list_requests" : [ {% for req in list_requests %}
+ "id":{{ req.id }}, ""
+{% endfor %}]
+}

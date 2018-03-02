@@ -246,8 +246,36 @@ function new_request_initWidjects(){
 
     }
 
+  function filter_initWidjects2(idmain) {
 
-  function correct_request_initWidgets(){
+        $("#"+idmain+" #id_request_user").combobox({
+            "id_innput": idmain+" #id_request_outer_User",
+            "enabaleOther": true
+        });
+
+        $("#"+idmain).find(".custom-combobox-input").addClass("form-control form-control-sm mr-sm-0");
+        $("#"+idmain).find(".custom-combobox").addClass("input-group mb-2 mb-sm-0");
+        $("#"+idmain).find(".custom-combobox a").addClass("input-group-addon");
+
+        // $(".datepicker-need").datepicker({
+        //
+        //             todayButton:true,
+        //             clearButton:true,
+        //             timepicker: true,
+        //             data_time_format: 'hh:ii'
+        //
+        //     });
+
+      $(".datepicker-need").datepicker({todayButton:false,
+                    clearButton:true,
+                    timepicker: true,
+                    data_time_format: 'hh:ii'});
+
+
+    }
+
+
+ function correct_request_initWidgets(){
        $("#correct_request-block #id_request_user").combobox({"id_innput":"correct_request-block #id_request_outer_User",
                                                                 "enabaleOther":true,
                                                                 "doOnSelect":searchDep,

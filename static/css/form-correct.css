@@ -1,3 +1,114 @@
+/*beautiful buttons*/
+.btn::before {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-box-shadow: #959595 0 2px 5px;
+    -moz-box-shadow: #959595 0 2px 5px;
+    border-radius: 3px;
+    box-shadow: #959595 0 2px 3px;
+    content: "";
+    display: block;
+    height: 100%;
+    left: 0;
+    padding: 2px 0 0;
+    position: absolute;
+    top: 0;
+    width: 100%; }
+
+.btn:active::before,
+.btn_disabled{ padding: 1px 0 0; }
+
+.btn {
+
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: #343a40;
+    border: solid 1px #232930;
+
+    box-shadow: inset 0 0 0 1px #424242;
+    color: #b1b1b1;
+
+    border-bottom: solid 3px #232930;
+    border-radius: 3px;
+    display: inline-block;
+    font: normal 12px 'Audiowide', Arial, Helvetica, Clean, sans-serif;
+
+    margin: 0 1em 0 0;
+    padding: 0.5em 0.5em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+   }
+
+.btn:not(.btn_disabled):hover
+{
+    background: #e4e4e4;
+    border: solid 1px #b6b6b6;
+    border-bottom: solid 3px #b2b1b1;
+    box-shadow: inset 0 0 0 1px #efefef;
+    cursor:pointer;
+    color: #777777;
+}
+
+
+.btn:active,
+a.btn.btn-primary.btn_disabled{
+  background: #b7b7b7;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#b7b7b7), to(#c2c2c2));
+    background: -moz-linear-gradient(#b7b7b7, #c2c2c2);
+    background: linear-gradient(#b7b7b7, #c2c2c2);
+    border: solid 1px #a2a2a2;
+    border-bottom: solid 3px #878787;
+    box-shadow: inset 0 0 0 1px #d4d4d4;
+    top:2px;
+    color: #777777;
+}
+
+a.btn.btn-primary::before {
+    -webkit-box-shadow: #605c95 0 2px 5px;
+    -moz-box-shadow: #605c95 0 2px 5px;
+    box-shadow: #767595 0 2px 5px;
+   }
+
+
+
+a.btn.btn-primary {
+
+    background: #181a40;
+    border-color:  #020930;
+    box-shadow: inset 0 0 0 1px #1f2042;
+    color: #8687b1;
+
+    border-bottom-color: #0e1230;
+
+   }
+
+a.btn.btn-primary.disabled{
+   background: #6d6d91;
+}
+/*блок ожидания*/
+.wait-block{
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgb(32, 32, 32);
+    width: 100%;
+
+    content: "WAIT";
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    padding-top: 30vh;
+    z-index: 1000;
+
+    font-weight: bold;
+
+
+}
+
+/*календарик*/
 .datepicker-here {
     max-width:200px;
 }
@@ -9,13 +120,12 @@
 
 .modal-content{
     border-radius: 0;
-    box-shadow: 0 0 5px 0px #3638a1;
+    box-shadow: 0 0 5px 0 #3638a1;
 
 }
 
 .modal-header{
-    padding: 0.5em;
-    padding-left: 1em;
+    padding: 0.5em 0.5em 0.5em 1em;
     background: #5b687a;
     color: white;
     border-radius: 0;
@@ -41,8 +151,13 @@
 
 
 .form-control{
-    border-radius: 0;
+    border-radius: 0; !important;
+    border-bottom-left-radius: 0; !important;
     box-shadow: 0 0 2px 0 #e6e6e6;
+}
+
+.form-control span{
+    border-radius: 0; !important;
 }
 
 .form-control.is-valid.this-valid{
@@ -51,17 +166,17 @@
 
 .form-control.is-valid.this-valid:focus{
   border-color: #8b98b4;
-  box-shadow: inset 2px 2px 6px 0px rgba(70, 68, 121, 0.96);
+  box-shadow: inset 2px 2px 6px 0 rgba(70, 68, 121, 0.96);
 }
 
 .form-control.is-invalid.this-invalid{
     border-color: #8b98b4;
-    box-shadow: inset 2px 2px 6px 0px rgba(121, 74, 73, 0.96);
+    box-shadow: inset 2px 2px 6px 0 rgba(121, 74, 73, 0.96);
 }
 
 .form-control.is-invalid.this-invalid:focus{
   border-color: #8b98b4;
-  box-shadow: inset 2px 2px 6px 0px rgba(121, 74, 73, 0.96);
+  box-shadow: inset 2px 2px 6px 0 rgba(121, 74, 73, 0.96);
 }
 
 .invalid-feedback{
@@ -75,8 +190,8 @@
     box-shadow: inset 2px 2px 6px 0 rgba(121, 121, 121, 0.96);
 }
 
-.datepicker{
-    z-index: 1100;
+.datepickers-container{
+    z-index: 2100;
     border-radius: 0;
     background-color: #e2edf4;
 }
@@ -119,6 +234,35 @@
     color: black;
     border: 1px solid #050809;
 }
+.datepicker--cell-day{
+
+}
+.datepicker--cell.datepicker--cell-day.-current-{
+ color: black;
+}
+
+.datepicker--cell.datepicker--cell-day.-focus- {
+  color: #100f11;
+  background-color: #6a7d85;
+}
+
+.datepicker--cell.datepicker--cell-day.-selected-{
+    background-color: #787b7f;
+}
+
+.datepicker--cell.datepicker--cell-day.-current-.-selected-{
+    background-color: #787b7f;
+}
+
+.datepicker--cell.datepicker--cell-day.-selected-.-focus-{
+    background-color: #787b7f;
+}
+
+
+.datepicker--time-row input[type="range"]{
+    color: black;
+    background-color: black;
+}
 
 .datepicker--cell.-selected-, .datepicker--cell.-selected-.-current- {
 background-color: #00008b;
@@ -140,34 +284,34 @@ background-color: #00008b;
     color: white;
 }
 
-.datepicker--time-row input[type="range"]::-moz-range-thumb{
+#datepickers-container .datepicker--time-row input[type="range"]::-moz-range-thumb{
     background:#010115;
-    border: none;
+
 }
-.datepicker--time-row input[type='range']::-ms-thumb {
+#datepickers-container  .datepicker--time-row input[type='range']::-ms-thumb {
         background: #010115;
         border-color: #010115; }
 
-.datepicker--time-row input[type='range']::-webkit-slider-thumb{
+ #datepickers-container  .datepicker--time-row input[type='range']::-webkit-slider-thumb{
         background: #010115;
         border-color: #010115;
 }
 
-.datepicker--time-row input[type="range"]:hover::-moz-range-thumb {
+ #datepickers-container  .datepicker--time-row input[type="range"]:hover::-moz-range-thumb {
     border: 1px solid black;
 }
 
-.datepicker--time-row{
+#datepickers-container  .datepicker--time-row{
     background: linear-gradient(to right, #331515, #080611) left 50%/100% 1px no-repeat;
 }
 
-.datepicker--button{
+#datepickers-container .datepicker--button{
     color: black;
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
 
 }
 
-.datepicker--button:hover{
+#datepickers-container .datepicker--button:hover{
     color: white;
     background-color: #232930;
     border-radius: 0;
@@ -175,4 +319,37 @@ background-color: #00008b;
 
 .modal-open .ui-front {
  z-index:2000;
+}
+
+/*filter form*/
+#filterModal .form-control.is-valid.this-valid{
+    border-color: #bcbcbc;
+}
+
+#filterModal .form-inline{
+    padding-right: 0;
+}
+
+.divider{
+    padding: 2px 0  3px;
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+
+}
+
+#filterModal .form-control-sm {
+
+    font-size: 12px;
+    width: 100%; !important;
+    background-color: white; !important;
+    /*padding-top: 5px;*/
+    /*padding-bottom: 6px;*/
+
+}
+
+#filterModal .datepicker-need{
+   min-width:9em;
+}
+#filterModal .modal-body{
+
 }

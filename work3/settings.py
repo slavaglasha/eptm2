@@ -139,4 +139,4 @@ STATICFILES_DIRS = [
 
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/base/filter-request/'
+LOGIN_REDIRECT_URL = '/test2/base/'

@@ -35,6 +35,8 @@ urlpatterns = [
      url(r'^base/new-request/success/',main_views.new_request_success, name='base_create_view_success'),
      url(r'^base/update-request/(?P<pk>\d+)/$', main_views.UpdateRequest.as_view(), name='base_update_veiw'),
      url(r'^simplle/',main_views.simple, name='view'),
+     url(r'^test2/base/',main_views.test_base, name='view'),
+     url(r'^test2/filter-request-json/$',main_views.ListFilterJsonView, name='list_json'),
     url(r'^admin/', admin.site.urls),
 
 ]
