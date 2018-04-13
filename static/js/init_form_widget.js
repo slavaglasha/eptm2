@@ -1,13 +1,15 @@
 function connectUser(form){
-           el = $(form).find("#id_request_outer_User");
+           var el = $(form).find("#id_request_outer_User");
            el.parent().parent().remove();
            $(form).find("#id_request_user").parent().append(el) ;
         }
 function connectArcticUser(form, onSearch, onClear) {
-    el = $(form).find("#id_request_outer_User");
+    var el = $(form).find("#id_request_outer_User");
     el.parent().parent().parent().parent().remove();
     $(el).insertAfter($(form).find("#id_request_user"));
-    var disa = ($(el).attr("disabled") == 'disabled' );
+    var attr = $(el).attr('readonly');
+
+    var disa =  (attr && attr!==false) ;
 
     if ((onSearch === undefined) || (onClear === undefined)) {
         $(form).find("#id_request_user").combobox({
@@ -30,24 +32,45 @@ function connectArcticUser(form, onSearch, onClear) {
 }
 function setWidgets(form){
            $(form).find("#id_number").spinner({min:0,step:1});
-           $.each($(form).find("select:not(#id_request_user):not([multiple])") function (el) {
-            if ($(el).hasAttribute("readonly")){
+          // $(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
+           $.each($(form).find("select:not(#id_request_user):not([multiple])"), function () {
+               var attr = $(this).attr('readonly');
+               if (attr && attr!==false) {
+                   $(this).selectmenu({disabled:true});
+                   $(this).removeAttr('disabled');
+               }else{
+                   $(this).selectmenu();
+               }
+            });
 
-            }
-    })
-           $(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
 
-           $(form).find(".datepicker-need:first-child").datepicker({todayButton:false,
+           //$(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
+           $.each($(form).find(".datepicker-need:first-child"), function () {
+
+                var attr = $(this).attr('readonly');
+                if (attr!=undefined && attr!==false){
+                    $(this).attr("disabled",'');
+                }
+                 $(this).datepicker({todayButton:false,
                     clearButton:true,
                     timepicker: true,
                     data_time_format: 'hh:ii',
-                                      position: 'bottom left',
-               autoClose: true});
-           $(form).find(".datepicker-need:nth-child(3)").datepicker({todayButton:false,
-                    clearButton:true,
-                    timepicker: true,
-                    data_time_format: 'hh:ii',
-                                      position: 'bottom right',autoClose: true});
+                    position: 'bottom left',
+                    autoClose: true
+                    });
+                 $(this).removeAttr('disabled');
+           });
+          $.each($(form).find(".datepicker-need:nth-child(3)"), function() {
+              var attr = $(this).attr('readonly');
+              $(this).datepicker({
+                  todayButton: false,
+                  clearButton: true,
+                  timepicker: true,
+                  data_time_format: 'hh:ii',
+                  position: 'bottom right', autoClose: true
+
+              });
+          });
         }
 
 function connectPlace(form){

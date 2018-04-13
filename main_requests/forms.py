@@ -107,58 +107,58 @@ class updateMainRequestForm(forms.ModelForm):
         if 2 in groups:  # исполнители
 
             if instance.input_user.pk != user.id: #корректирует не сво. заявку мо;ет только принять
-                self.fields['request_user'].widget.attrs['disabled'] = True
-                self.fields['request_outer_User'].widget.attrs['disabled'] = True
-                self.fields['request_outer_status'].widget.attrs['disabled'] = True
-                self.fields['request_outer_department'].widget.attrs['disabled'] = True
-                self.fields['request_dateTime'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['about'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
+                self.fields['request_user'].widget.attrs['readonly'] = True
+                self.fields['request_outer_User'].widget.attrs['readonly'] = True
+                self.fields['request_outer_status'].widget.attrs['readonly'] = True
+                self.fields['request_outer_department'].widget.attrs['readonly'] = True
+                self.fields['request_dateTime'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['about'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
             if  instance.receive_user is not None:
                 if instance.receive_user.id != user.id:
-                    self.fields['receive_user'].widget.attrs['disabled'] = True
-                    self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+                    self.fields['receive_user'].widget.attrs['readonly'] = True
+                    self.fields['receive_dateTime'].widget.attrs['readonly'] = True
                 else:
                     self.fields['receive_user'].queryset = Profile.objects.filter(pk=user.id)  # можно поставить только себя
             else:
                 self.fields['receive_user'].queryset = Profile.objects.filter(pk=user.id)  # можно поставить только себя
 
-            self.fields['close_user'].widget.attrs['disabled'] = True
-            self.fields['close_dateTime'].widget.attrs['disabled'] = True
+            self.fields['close_user'].widget.attrs['readonly'] = True
+            self.fields['close_dateTime'].widget.attrs['readonly'] = True
 
             if instance.is_closed:
-                self.fields['request_user'].widget.attrs['disabled'] = True
-                self.fields['request_outer_User'].widget.attrs['disabled'] = True
-                self.fields['request_outer_status'].widget.attrs['disabled'] = True
-                self.fields['request_outer_department'].widget.attrs['disabled'] = True
-                self.fields['request_dateTime'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['about'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['receive_user'].widget.attrs['disabled'] = True
-                self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+                self.fields['request_user'].widget.attrs['readonly'] = True
+                self.fields['request_outer_User'].widget.attrs['readonly'] = True
+                self.fields['request_outer_status'].widget.attrs['readonly'] = True
+                self.fields['request_outer_department'].widget.attrs['readonly'] = True
+                self.fields['request_dateTime'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['about'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['receive_user'].widget.attrs['readonly'] = True
+                self.fields['receive_dateTime'].widget.attrs['readonly'] = True
 
 
 
         if 3 in groups: #пользователи
-            self.fields['receive_user'].widget.attrs['disabled'] = True
-            self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+            self.fields['receive_user'].widget.attrs['readonly'] = True
+            self.fields['receive_dateTime'].widget.attrs['readonly'] = True
 
-            self.fields['close_user'].widget.attrs['disabled'] = True
-            self.fields['close_dateTime'].widget.attrs['disabled'] = True
+            self.fields['close_user'].widget.attrs['readonly'] = True
+            self.fields['close_dateTime'].widget.attrs['readonly'] = True
             if instance.input_user.pk != user.id or instance.is_closed:
-                self.fields['request_user'].widget.attrs['disabled'] = True
-                self.fields['request_outer_User'].widget.attrs['disabled'] = True
-                self.fields['request_outer_status'].widget.attrs['disabled'] = True
-                self.fields['request_outer_department'].widget.attrs['disabled'] = True
-                self.fields['request_dateTime'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['about'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
+                self.fields['request_user'].widget.attrs['readonly'] = True
+                self.fields['request_outer_User'].widget.attrs['readonly'] = True
+                self.fields['request_outer_status'].widget.attrs['readonly'] = True
+                self.fields['request_outer_department'].widget.attrs['readonly'] = True
+                self.fields['request_dateTime'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['about'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
 
 
-        # self.fields['sku'].widget.attrs['disabled'] = True
+        # self.fields['sku'].widget.attrs['readonly'] = True
 
 
 

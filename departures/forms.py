@@ -36,6 +36,14 @@ class MainDepartureForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance != None:
             print("dep_user - {0} pk -{1} ".format(user, instance.pk))
+            parent_main_request = instance.main_request
+            if parent_main_request.is_closed:
+                self.fields['start_datetime'].widget.attrs['readonly'] = True
+                self.fields['end_datetime']
+                self.fields['works']
+                self.fields['about']
+                self.fields['execute_users']
+
         else:
             print("dep_user - {0} none object} ".format(user))
         user_enabled = []
@@ -46,6 +54,7 @@ class MainDepartureForm(forms.ModelForm):
         users = User.objects.filter(groups__id__in=[1, 2])
         prof= Profile.objects.filter(user__in=users )
         self.fields['execute_users'].queryset = prof
+
 
 
         # for i_user in User.objects.all():
