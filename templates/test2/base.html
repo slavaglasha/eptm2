@@ -9,10 +9,11 @@
     <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.theme.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{%  static 'css/flex.css' %}">
 	<link rel="stylesheet" href = "{% static 'test2/css/base.css' %}" >
-    <link rel="stylesheet" href = "{% static '/css/form-correct.css' %}" >
+
 
 
     <link rel="stylesheet" href="{% static 'libraries/air-datepicker-master/css/datepicker.min.css'%}">
+    <link rel="stylesheet" href = "{% static '/css/form-correct.css' %}" >
 
     <link rel="stylesheet" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     {% block stylesheet %} {% endblock %}
@@ -47,9 +48,9 @@
                <input type="checkbox" class="help-checkbox" id="help-checkbox-menu" >
                <div class="pop-menu">
                 <ul>
-                  <li class="user-list"><a href="#">{{ user.username }}</a></li>
-                  <li><a href="#">Аккаунт </a></li>
-                  <li><a href="#">Выход</a></li>
+                  <li class="user-list"><a href="#">{{ user.username }}</a><div id="user-id" class="hidden">{{ user.id }}</div></li>
+                  <!-- <li><a href="#">Аккаунт </a></li> -->
+                  <li><a href="{% url 'logout' %}">Выход</a></li>
                 </ul>
                </div>
           {%endif%}

@@ -1,6 +1,6 @@
 import django_filters
 import django_filters.widgets
-from django.forms import CheckboxSelectMultiple, NullBooleanSelect,CheckboxInput
+from django.forms import CheckboxSelectMultiple, NullBooleanSelect,CheckboxInput, NumberInput
 from django.db import models
 
 from .models import MainRequest
@@ -13,15 +13,26 @@ class MyRangeWidget(django_filters.widgets.RangeWidget):
         # Method was removed in Django 1.11.
         return '<span>-</span>'.join(rendered_widgets)
 
+class HelpfulFilterSet(django_filters.FilterSet):
+    @classmethod
+    def filter_for_field(cls, f, name, lookup_expr):
+        filter = super(HelpfulFilterSet, cls).filter_for_field(f, name, lookup_expr)
+        filter.extra['help_text'] = f.help_text
 
-class MainRequestFilter(django_filters.FilterSet):
-    number = django_filters.NumberFilter(label='№',lookup_expr='exact')
-    input_datetime = django_filters.DateTimeFromToRangeFilter(label='Дата вводда', lookup_expr='range', widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datetimepicker'}))
-    input_user = django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter())
+        return filter
+
+
+
+
+
+class MainRequestFilter(HelpfulFilterSet):
+    number = django_filters.NumberFilter(label='№',lookup_expr='exact',widget = NumberInput(attrs={'new_line':'true'}))
+    input_datetime = django_filters.DateTimeFromToRangeFilter(label='Дата вводда', lookup_expr='range', widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datepicker-need'}))
+    input_user = django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter() )
 
     request_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата подачи заявки', lookup_expr='range')
     request_user = django_filters.ModelChoiceFilter(label='Подал', lookup_expr='exact',
-                                                  queryset=Profile.objects.filter())
+                                                  queryset=Profile.objects.filter(), help_text='Можно ввести с клавиатуры')
     request_outer_User = django_filters.CharFilter(label='')
 
     receive_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата принятия',lookup_expr='rangdbe')

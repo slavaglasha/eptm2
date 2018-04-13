@@ -1,0 +1,106 @@
+{% extends 'test2/base.html' %}
+{% load static %}
+  {% block stylesheet %}
+
+      <link rel="stylesheet" href="{% static 'libraries/jquery.arcticmodal-0.3.css' %}">
+
+      <link rel="stylesheet" href="{% static 'libraries/themes/simple.css' %}">
+      <link rel="stylesheet" href="{% static 'test2/css/corectarctic.css' %}">
+   {% endblock %}
+ {% block title-table%}
+     <div class="container-fluid">
+        <div class="row">
+             <div class="col-1 centered">
+                  №
+              </div>
+              <div class="col-3 col-sm-5 col-lg-3 d-none d-sm-block">
+                О чем заявлено
+              </div>
+
+               <div class="col-2 d-none d-lg-block">
+                    Поступила
+                </div>
+                <div class="col-1 d-none d-lg-block">
+                     Место
+                </div>
+                <div class="col-3 d-none d-lg-block">
+                     Выезды
+                </div>
+
+                <div class="col-1 d-none d-lg-block">
+                    Куратор
+                </div>
+                <div class="col-1 d-none d-lg-block">
+                    Закрыл
+                </div>
+                <div class="col-11 col-md-6 col-sm-6 visible-md d-block d-lg-none">
+                    Инфрмация
+                </div>
+        </div>
+     </div>
+{% endblock %}
+{% block content %}
+    {% include 'test2/parts/request-list/content.html' %}
+{% endblock %}
+{% block footer %}
+    <div class="container">
+     <div class="row">
+        <button id="open-filter"     class="btn  btn-sm" type="button" data-toggle="modal"  >Фильтр</button>
+        <button id="btn-new-request" class="btn  btn-sm" type="button"  >Новая заявка</button>
+     </div>
+    </div>
+
+{% endblock %}
+{% block wind1 %}
+    <div id="filter-container"></div>
+    <div id="new-form-container">
+        <div id="newModal"  style="display: none;">
+
+            <div class="box-modal" id="newForm">
+               <div class="block top-block">
+                <div class="box-modal_close arcticmodal-close">X</div>
+                      <div class="number-new" id="number-new">Новая заявка</div>
+                </div>
+                <div class="block main-block">
+                </div>
+                <div class="block">
+
+                    <button  type="button" class="btn btn-smm" id="save-new-request">Сохранить</button>
+
+
+                    <button type="button" class="btn btn-smm arcticmodal-close"  id="new-request__btn-close" > Отменть  </button>
+                    <button type="button" class="btn btn-smm  hiden"  id="new-request__btn-new" > Новая заявка  </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="update_container">
+        <div id="updateModal"  style="display: none;" >
+
+        </div>
+
+    </div>
+
+{#            <div class="wait-block">Сохранение заявки</div>#}
+
+
+{% endblock %}
+{% block scripts %}
+  <script src="{% static 'libraries/jquery-3.2.1.min.js'%}"> </script>
+
+
+
+<!--  <script src="{% static 'libraries/boostrap/js/bootstrap.js'%}"> </script>-->
+  <script src="{% static 'libraries/jquery.arcticmodal-0.3.min.js' %}"></script>
+ <script src="{% static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.js'%}"></script>
+<script src="{% static 'libraries/air-datepicker-master/js/datepicker.js' %}"></script>
+
+ <script src="{% static 'js/select-widjet.js' %}"></script>
+ <script src="{% static 'js/init_form_widget.js' %}"></script>
+ <script src="{% static 'test2/script/open.js'%}"></script>
+ <script src="{% static 'js/new-request.js'%}"></script>
+ <script src="{% static 'js/update-request.js'%}"></script>
+
+
+{% endblock %}

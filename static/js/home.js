@@ -208,7 +208,7 @@ $(document).ready(function() {
         $(".outer_block").show();
         $.ajax({
             type: "GET",
-            url: "/new_request/",
+            url: "/base/new-request/",
             cache: false,
             success: (function (html) {
                 $("#new-request-block").html(html);

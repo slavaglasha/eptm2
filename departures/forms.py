@@ -55,6 +55,10 @@ class MainDepartureForm(forms.ModelForm):
         # self.fields['execute_users'].queryset = Profile.objects.filter(pk__in =user_enabled)#
 
 
+
+
+
+
 class CustomFormSet(BaseInlineFormSet):
     def __init__(self):
         super().__init__(self)
@@ -72,7 +76,7 @@ class CustomDepartureFormSet(DeparturesFormSet):
         self.user = kwargs.pop('dep_user')  # нужно передать во View при создании формы
         print("CustomDepartureFormSet init")
         super(DeparturesFormSet, self).__init__(*args, **kwargs)
-        self.queryset = self.queryset.order_by('-pk')
+        self.queryset = self.queryset.order_by('pk')
 
     def _construct_form(self, *args, **kwargs):
         kwargs['dep_user'] = self.user

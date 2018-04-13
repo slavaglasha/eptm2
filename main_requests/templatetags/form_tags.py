@@ -70,6 +70,7 @@ def has_group(user):
 
 @register.filter('set_enabled')
 def initenabledfield(boundfild):
+
     if boundfild.field.widget.attrs['disabled'] == True:
         return "disabled"
     return ""

@@ -1,0 +1,48 @@
+{% load  form_arctic_tags widget_tweaks %}
+
+{% if form.non_field_errors %}
+    <div class="row">
+			<div class="alert alert-danger" role="alert">
+			{% for error in form.non_field_errors %}
+				<p>{{ error }}</p>
+			{% endfor %}
+			</div>
+    </div>
+{% endif %}
+<div class="row">
+    {% for field in form %}
+        {% comment %} для коротких полей ввода{% endcomment %}
+        <div class="{{field|set_field_grid}}"> <!-- col-12 textarea  col-sm-12 col-lg-6 col-xl-6-->
+              <div class="row field {{   field|invalid_input_class }}">
+                  <div class="{{  field|set_label_grid }}">
+                      {{field.label_tag}}
+                  </div>
+                  <div class="{{  field|set_input_grid }} ">
+                   <div class="{{ field|set_timeclass }}">
+                      {% render_field field class=field|input_class%}
+                   </div>
+
+
+                       <div class="error-text">
+                       {% if  field.errors %}
+                               {% for error in field.errors %}
+                                    <p>{{ error }}</p>
+                              {% endfor %}
+                       {% endif %}
+                       </div>
+
+                  <div class="help-text">
+                    {{ field.new_line|safe  }}
+                  </div>
+                       {% if field.help_text %}
+					        <div class="help-text">
+						        {{ field.help_text|safe }}
+                                {{ field.new_line }}
+					        </div>
+				       {% endif %}
+
+                  </div>
+              </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,418 @@
+
+
+
+.alert{
+    width: 100%;
+    background: lightgray;
+    padding: 1em;
+    margin: 0 1em ;
+    border: darkgray;
+
+}
+
+.alert-danger{
+    color: red;
+    background: #ffaaaa;
+    border: 2px solid red;
+}
+
+.box-modal{
+     padding: 0;
+    width: 100%;
+    min-width: 350px;
+    max-width: 1060px;
+    margin:0 auto;
+    border-radius: 0;
+    outline: none;
+    box-shadow: 0 0 8px 1px darkblue;
+    color: black;
+    font: normal 14px  Arial, Helvetica, Clean, sans-serif; !important;
+}
+
+.box-modal .block{
+    padding: 1em;
+}
+
+.box-modal .field{
+    padding-bottom: 1em;
+}
+
+.box-modal .top-block{
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+.box-modal  .box-modal_close.arcticmodal-close{
+    color: white;
+    font-family: sans-serif;
+    background: #222222;
+    padding: 0.5em;
+
+
+}
+
+
+
+
+label{
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+}
+
+.help-text, .error-text{
+    font-size:0.8em;
+    margin-top: 0.5em;
+}
+
+
+.help-text{
+    color: grey;
+}
+.error-text{
+    color: darkred;
+}
+
+.field .error-text {
+    display: none
+}
+
+.field.invalid label{
+    color: red;
+}
+
+
+.field.invalid textarea{
+  resize: both;
+
+}
+
+.field input,
+.field select,
+.field textarea{
+    font-size: 0.9em;
+
+}
+.field.invalid input,
+.field.invalid select,
+.field.invalid textarea
+{
+    border-color: darkred;
+    box-shadow: darkred 0 0 1px 1px;
+}
+
+
+.field.invalid .error-text{
+    display: block;
+}
+
+select:focus, textarea:focus, input:focus{
+    border: 1px solid grey;
+    outline: none;
+}
+
+.box-modal .field [class*='col-' ]:nth-child(2){
+
+    padding-left: 0;
+
+}
+
+
+/*jquery*/
+
+
+.box-modal .ui-spinner{
+
+
+    box-shadow: inset 0 0 1px 1px rgba(125,125,125, 1);
+    border-radius:0;
+}
+
+.box-modal .invalid .ui-spinner,
+.box-modal .invalid .ui-selectmenu-button{
+    box-shadow: inset 0 0 1px 1px rgba(125,0,0, 1);
+
+}
+
+.box-modal a.ui-button{
+    background-color:rgba(125,125,125,1);
+    border-radius: 0;
+    border: none;
+    outline: 1px solid rgba(125,125,125,1);
+}
+
+.box-modal .ui-button span{
+    color: white;
+    background-image:url("../../libraries/jquery-ui-1.12.1.custom/images/ui-icons_ffffff_256x240.png");
+
+
+}
+
+.box-modal  .ui-selectmenu-button{
+     box-shadow: 0 0 1px 1px  rgba(125,125,125,1);
+
+
+}
+.box-modal  .ui-selectmenu-button .ui-selectmenu-text{
+
+
+}
+.box-modal.invalid  .ui-selectmenu-button{
+     box-shadow: 0 0 1px 1px  rgba(125,0,0,1);
+}
+.box-modal .invalid a.ui-button,
+.box-modal .invalid  .ui-selectmenu-button .ui-icon  {
+    background-color: darkred;
+}
+.box-modal .ui-widget{
+    background: white;
+}
+ .box-modal select,
+.box-modal textarea,
+.box-modal input{
+    box-shadow: 0 0 2px 1px  rgb(125,125,125);
+     width: 100%;
+    padding: 0.4em 0.7em;
+    border:none;
+    border-radius: 0;
+}
+
+
+.box-modal .ui-widget{
+    background: white;
+}
+
+.box-modal .ui-widget-content input{
+    width: 100%;
+    padding: 0.2em 0.7em;
+    box-shadow:none;
+    border-radius: 0;
+
+}
+
+
+.box-modal .ui-spinner input:focus{
+    border: none;
+}
+
+ .ui-front{
+    z-index: 1020;
+}
+
+.box-modal .custom-combobox input{
+    width: inherit;
+    padding: 0.35em 3em 0.35em 1em;
+    box-sizing: border-box;
+
+    color: black;
+
+}
+.box-modal  .invalid .custom-combobox  .custom-combobox-input{
+    box-shadow:  0 0 1px 1px  rgba(125,0,0,1);
+}
+.custom-combobox{
+    display: block;
+    position: relative;
+    width: 100%;
+}
+.custom-combobox a{
+    position:absolute;
+    height: 100%;
+    right: -1px;
+
+}
+
+
+
+
+
+.box-modal .ui-selectmenu-button,
+.ui-spinner{
+    outline: none;
+    width:100%;
+}
+.box-modal .ui-spinner .ui-button{
+    z-index: 1021;
+
+}
+.box-modal .ui-selectmenu-icon.ui-icon-triangle-1-s{
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    height: 100%;
+    width: 2em;
+    background:url("../../libraries/jquery-ui-1.12.1.custom/images/ui-icons_ffffff_256x240.png") rgba(125,125,125,1) -58px -10px;
+    outline:  1px solid rgba(125,125,125, 1);
+
+}
+
+.box-modal span.ui-button, #exampleModal span.ui-widget {
+    border-radius: 0;
+}
+.box-modal span.ui-selectmenu-text{
+    background:white;
+    color: black;
+    font-size: 0.9em   ;
+}
+
+.box-modal .ui-corner-right{
+    position: absolute;
+    right: -1px;
+
+}
+
+ .ui-state-active,
+ .ui-widget-content .ui-state-active,
+ .ui-widget-header .ui-state-active,
+.box-modal a.ui-button:active,
+.box-modal .ui-button:active,
+.box-modal .ui-button.ui-state-active:hover {
+
+	background:  #8b98b4;
+	font-weight: normal;
+	color: #ffffff;
+    font-size: 0.9em   ;
+}
+
+.box-modal .ui-button span{
+
+    background-image: url("../../libraries/jquery-ui-1.12.1.custom/images/ui-icons_ffffff_256x240.png");
+}
+.ui-selectmenu-button {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+.ui-button-icon-only{width:2em;}
+
+
+
+/* datetimer*/
+
+.interval{
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+   height: 2em;
+}
+
+.interval input{
+    margin-left: 0;
+    min-width: 3em;
+}
+
+
+.interval span{
+    display: block;
+
+   box-shadow:  0 0 1px 1px rgba(125,125,125,1);
+
+    padding: 0 0.7em;
+        background:grey;
+    color: white;
+}
+.box-modal .invalid .interval input{
+    box-shadow: 0 0 1px 1px rgba(125,0,0, 1);
+}
+
+.invalid .interval span{
+    background: darkred;
+}
+
+.box-modal  .datepicker-need{
+    font-size: 0.8em;
+    padding: 0.5em;
+}
+
+.datepicker{
+    z-index: 1021;
+}
+
+/*.datepicker--nav{
+    background: black;
+    color: white;
+}
+.datepicker--nav-action{
+    border-radius: 0;
+}
+
+
+
+.datepicker--content .datepicker--days-names .datepicker--day-name{
+    color: #121212;
+}
+
+.datepicker--content .datepicker--cell{
+    border-radius: 0;
+}
+.datepicker--cell-day.-selected-{
+    border-radius: 0;
+    background: darkblue;
+    color: white;
+}
+.datepicker--cell-day.-selected-.-focus-{
+    background: darkblue;
+}
+
+.datepicker--cell-day.-focus-{
+    background: darkgray;
+    border-radius: 0;
+}
+.datepicker--cell-day.-current-.-selected-{
+    background: darkblue;
+}
+.datepicker--cell-day.-current-{
+  color: blue;
+}
+
+.datepicker--time-row input[type=range]{
+    background-color: white;
+}
+
+ .datepicker--time-row input[type='range']::-webkit-slider-thumb {
+            border-radius: 0;
+            background: #555;
+      }
+.datepicker--time-row input[type='range']::-moz-range-thumb {
+            border-radius: 0;
+            background: #555; }
+.datepicker--time-row input[type='range']::-ms-thumb {
+          border-radius: 0;
+            background: #555;}
+.datepicker--time-row input[type='range']:hover::-webkit-slider-thumb {
+      border-color: #000; }
+.datepicker--time-row input[type='range']:hover::-moz-range-thumb {
+      border-color: #000; }
+.datepicker--time-row input[type='range']:hover::-ms-thumb {
+      border-color: #000; }
+.datepicker--time-row input[type='range']:focus::-webkit-slider-thumb {
+        background: #000;
+        border-color: #000; }
+ .datepicker--time-row input[type='range']:focus::-moz-range-thumb {
+        background: #000;
+        border-color: #000; }
+ .datepicker--time-row input[type='range']:focus::-ms-thumb {
+        background: #000;
+        border-color: #000; }
+.datepicker--button{
+    color: gray;
+    background: black;
+    border-radius: 0;
+}
+
+
+.datepicker--button:hover{
+        border: 1px solid black;
+        color: black;
+    }
+*/
+
+#newModal_wait{
+    display: none;
+}
+
+
+
+

@@ -48,51 +48,7 @@
 	width: 100%;
 }
 
-#pagination-row{
-    background: #343a40;
-    border: none;
-}
-#pagination-row .row{
-    background: #343a40;
-    box-shadow: none;
-    text-align: center;
-}
 
-#pagination-row .container{
-    padding: 0;
-}
-
-#pagination-row .col-12{
-    padding: 0;
-    /*background: #343a40;*/
-}
-
-#pagination-row ul{
-    margin: 0;
-    padding: 0;
-}
-
-#pagination-row ul li a{
-    font-family: 'Audiowide', sans-serif;
-    background: transparent;
-    color: white;
-    border: none;
-    font-weight: normal;
-    font-size: 0.8em;
-    text-shadow:   1px 1px 2px  black;
-    border-radius: 0 !important;
-}
-
-#pagination-row ul li a:hover{
-    color: grey;
-}
-
- #pagination-row .active a.page-link{
-     text-shadow: 1px 1px 5px #3a25ab;
-     color: #eeeeee;
-     background: black;
-
-}
 
 .content-block .row .centered{
 	text-align: center;

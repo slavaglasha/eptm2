@@ -1,4 +1,15 @@
 @font-face {
+			font-family: "OpenSansRegular";
+			src: url("../../fonts/OpemSans/OpenSansRegular/OpenSansRegular.eot");
+			src: url("../../fonts/OpemSans/OpenSansRegular/OpenSansRegular.eot?#iefix")format("embedded-opentype"),
+			url("../../fonts/OpemSans/OpenSansRegular/OpenSansRegular.woff") format("woff"),
+			url("../../fonts/OpemSans/OpenSansRegular/OpenSansRegular.ttf") format("truetype");
+			font-style: normal;
+			font-weight: normal;
+	}
+
+
+@font-face {
   font-family: 'Audiowide';
   font-style: normal;
   font-weight: 400;
@@ -19,6 +30,7 @@ a:hover{
 }
 body{
     font-size: 14px;
+    font-family: 'OpenSansRegular', sans-serif;
 }
 
 .wait-block{
@@ -113,7 +125,7 @@ body{
 
 .icon, .controls {
 	content: "";
-	font-family: FontAwesome;
+	font-family: 'FontAwesome',sans-serif;
 	padding-left:1.7em;
     padding-right:0;
     text-decoration:none;
@@ -309,7 +321,7 @@ padding: 0.4em;
 
   .user-list a:before{
     content: "\f007";
-    font-family: FontAwesome;
+    font-family: 'FontAwesome' ,sans-serif;
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;

@@ -1,222 +1,22 @@
-from datetime import timedelta
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-import json
 from django.db import transaction
 from django.db.models import Max
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
-from departures.forms import DeparturesFormSet, CustomDepartureFormSet
-from .models import MainRequest
-from .forms import newMainRequestForm, filterForm, updateMainRequestForm
+from departures.forms import CustomDepartureFormSet
+from main_requests.model_additional import MainRequestAddition
 from work_profiles.models import Profile
 from .filter import MainRequestFilter
-
-import  main_requests.JSONEncoder
+from .forms import newMainRequestForm, updateMainRequestForm
+from .models import MainRequest
 
 
 # Create your views here.
 # @login_required
-@login_required
-def home(request):
-    dt = timezone.now().__add__(timedelta(days=-5))
-    form = filterForm(initial={'input_dateTime_start': dt,
-                               'input_dateTime_end': '',
-                               'input_user': '',
-                               'request_user': '',
-                               'request_outer_user': '',
-                               'request_dateTime_start': '',
-                               'request_dateTime_end': '',
-                               'receive_user': '',
-                               'receive_dateTime_start': '',
-                               'receive_dateTime_end': '',
-                               'close_user': '',
-                               'close_dateTime_start': '',
-                               'close_dateTime_end': ''
-                               })
-
-    requests = MainRequest.objects.all().filter(input_datetime__gte=dt).order_by('-pk')
-    return render(request, 'home.html', {'main_requests': requests, 'form': form})
-
-
-@login_required
-def new_request(request):
-    print(request.POST)
-    if request.method == 'POST':
-        form = newMainRequestForm(request.POST)
-        if form.is_valid():
-            new_request = form.save(commit=False)
-            user = request.user
-            new_request.input_user = Profile.objects.get(user=user)
-            old_number = MainRequest.objects.all().aggregate(Max('number'))
-
-            new_request.number = old_number['number__max'] + 1
-            if new_request.request_user is not None:
-                new_request.request_outer_status = None
-                new_request.request_outer_department = None
-
-            new_request.save()
-            return HttpResponse("Success")
-        else:
-            return render(request, 'new_request.html', {'form': form})
-    else:
-        form = newMainRequestForm()
-    profiles = Profile.objects.all()
-    return render(request, 'new_request.html', {'form': form, "profiles": profiles})
-
-
-def getfilterRequests(filterForm):
-    requsts = requests = MainRequest.objects.all()
-    if filterForm.data.get('input_dateTime_start') != '':
-        requests = requests.filter(input_datetime__gte=filterForm.cleaned_data['input_dateTime_start'])
-    if filterForm.data.get('input_dateTime_end') != '':
-        requests = requests.filter(input_datetime__lte=filterForm.cleaned_data['input_dateTime_end'])
-    if filterForm.data.get('input_user') != '':
-        requests = requests.filter(input_user=filterForm.cleaned_data['input_user'])
-
-    if filterForm.data.get('request_dateTime_start') != '':
-        requests = requests.filter(request_dateTime__gte=filterForm.cleaned_data['request_dateTime_start'])
-    if filterForm.data.get('request_dateTime_end') != '':
-        requests = requests.filter(request_dateTime__lte=filterForm.cleaned_data['request_dateTime_end'])
-    if filterForm.data.get('request_user') != '':
-        requests = requests.filter(request_user=filterForm.cleaned_data['request_user'])
-    if filterForm.data.get('request_outer_user') != '':
-        requests = requests.filter(request_outer_User=filterForm.cleaned_data['request_outer_user'])
-    if filterForm.data.get('place') != '':
-        requests = requests.filter(place=filterForm.cleaned_data['place'])
-    return requests
-
-
-@login_required
-def filter_requests(request):
-    if request.method == 'GET':
-        form = filterForm(request.GET or None)
-        print(form.data.get('request_user'))
-        requests = MainRequest.objects.all()
-
-        if form.is_valid():
-            requests = getfilterRequests(form)
-            requests = requests.order_by('-pk')
-            return render(request, 'home-content.html', {'main_requests': requests})
-        else:
-            print((form.errors))
-            return render(request, 'includes/filterform.html', {'form': form})
-    else:
-        form = filterForm()
-        return render(request, 'includes/filterform.html', {'form': form})
-
-
-@login_required
-def correct_request(request, id_request):
-    if request.method == 'GET':
-        mainRequestObject = MainRequest.objects.get(id=id_request)
-        if mainRequestObject.request_outer_status is None:
-            mainRequestObject.request_outer_status = Profile.objects.get(
-                id=mainRequestObject.request_user.id).user_position
-        if mainRequestObject.request_outer_department is None:
-            mainRequestObject.request_outer_department = Profile.objects.get(
-                id=mainRequestObject.request_user.id).deparment.name
-        user = request.user
-        form_request = updateMainRequestForm(None, instance=mainRequestObject)
-        groups = user.groups.all().values_list('id', flat=True)
-        enableReceive = False
-        if 2 in groups:  # исполнители
-            form_request.fields['receive_user'].widget.attrs['disabled'] = True
-
-            if mainRequestObject.input_user.user != user:
-                form_request.fields['request_user'].widget.attrs['disabled'] = True
-                form_request.fields['request_outer_User'].widget.attrs['disabled'] = True
-                form_request.fields['request_outer_status'].widget.attrs['disabled'] = True
-                form_request.fields['request_outer_department'].widget.attrs['disabled'] = True
-                form_request.fields['request_dateTime'].widget.attrs['disabled'] = True
-                form_request.fields['place'].widget.attrs['disabled'] = True
-                form_request.fields['about'].widget.attrs['disabled'] = True
-                form_request.fields['place'].widget.attrs['disabled'] = True
-            if mainRequestObject.receive_user is None:
-                enableReceive = True
-        else:
-            if not (1 in groups):
-
-                if mainRequestObject.input_user.user != user:
-                    for field in form_request.fields:
-                        print(field)
-                        form_request.fields[field].widget.attrs['disabled'] = True
-
-
-                else:
-                    form_request.fields['receive_user'].widget.attrs['disabled'] = True
-                    form_request.fields['receive_dateTime'].widget.attrs['disabled'] = True
-                    form_request.fields['close_user'].widget.attrs['disabled'] = True
-                    form_request.fields['close_dateTime'].widget.attrs['disabled'] = True
-        profiles = Profile.objects.all()
-        return render(request, 'correct_request.html',
-                      {'form': form_request, 'pk': id_request, 'number': mainRequestObject.number, 'profiles': profiles,
-                       'enableReceive': enableReceive})
-    if request.method == "POST":
-        mainRequestObject = MainRequest.objects.get(id=id_request)
-        form_request = updateMainRequestForm(request.POST or None, instance=mainRequestObject)
-        if form_request.is_valid():
-            form_new_request = form_request.save(commit=False)
-            form_new_request.save()
-            return HttpResponse("Success")
-        else:
-            return HttpResponse(form_request.errors.as_json(escape_html=True),
-                                content_type="application/json")
-
-
-# Base view
-@login_required
-class ListViewRequest(ListView):
-    model = MainRequest
-    context_object_name = 'main_requests'
-    template_name = 'baseviews/requests_list.html'
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        """
-        Декорируем диспетчер функцией login_required, чтобы запретить просмотр отображения неавторизованными
-        пользователями
-        """
-        return super(ListViewRequest, self).dispatch(request, *args, **kwargs)
-
-
-# filter
-@login_required
-def ListFilterView(request):
-    dt = timezone.now().__add__(timedelta(days=-5))
-
-
-    f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
-
-    row_count = request.GET.get('col-row')
-    if row_count == None:
-        row_count = 10
-    print(row_count)
-    paginator = Paginator(f.qs, row_count)
-    page = request.GET.get('page', 1)
-    print(page)
-
-
-
-    try:
-        list_requests = paginator.page(page)
-    except PageNotAnInteger:
-        list_requests = paginator.page(1)
-    except EmptyPage:
-        list_requests = paginator.page(paginator.num_pages)
-
-    return render(request, 'baseviews/requests_list.html',
-                  { 'form': f.form, 'list_requests': list_requests, 'rows': row_count})
-    #'filter': f,
-
 # для тестов
 def simple(request):
     return render(request, 'simple.html')
@@ -230,10 +30,32 @@ class CreateNewRequest(LoginRequiredMixin, CreateView):
     template_name = 'baseviews/new_request/new_request.html'
     success_url = '/base/filter-request/'
 
+    def get_form_kwargs(self):
+        kwargs = super(CreateNewRequest, self).get_form_kwargs()
+        user = self.request.user
+        prof = Profile.objects.get(user=user)
+        dep = prof.deparment.name
+        position = prof.user_position
+        print('kwargs')
+        kwargs.update({'user': user})
+        print(kwargs)
+        initial = kwargs.pop('initial')
+        initial.update({'request_outer_department': dep})
+        initial.update({'request_outer_status': position})
+        initial.update({'request_user': prof})
+
+        kwargs.update({'initial': initial})
+        print(kwargs)
+
+        # kwargs.update({'request_outer_department': dep})
+        # kwargs.update({'request_outer_status': position})
+        return kwargs
+
     def get_context_data(self, **kwargs):
         profiles = Profile.objects.all()
         data = super(CreateNewRequest, self).get_context_data(**kwargs)
         data['profiles'] = profiles
+
         return data
 
     def get_success_url(self):
@@ -250,14 +72,22 @@ class CreateNewRequest(LoginRequiredMixin, CreateView):
             new_request.request_outer_status = None
             new_request.request_outer_department = None
         new_request.save()
-        return render(self.request,'baseviews/new_request/success_new_request.html', {'number':new_request.number})
-        #return super().form_valid(form)
+        return JsonResponse({'success': True,
+                             'number': new_request.number})
+        # return render(self.request,'baseviews/new_request/success_new_request.html', {'number':new_request.number})
+        # return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return JsonResponse({'success': False,
+                             'errors': [(k, v[0]) for k, v in form.errors.items()]})
+
 
 def new_request_success(request):
     return render(request, 'baseviews/new_request/success_new_request.html')
 
 
-class UpdateRequest(UpdateView):# изменеие формы заявок
+# изменеие формы заявок
+class UpdateRequest(UpdateView):
     form_class = updateMainRequestForm
     model = MainRequest
     template_name = 'baseviews/update_view/update.html'
@@ -271,93 +101,120 @@ class UpdateRequest(UpdateView):# изменеие формы заявок
 
     def get_context_data(self, **kwargs):
         data = super(UpdateRequest, self).get_context_data(**kwargs)
-        
+        profiles = Profile.objects.all()
+        data['profiles'] = profiles
         if self.request.POST:
-            data['departures'] = CustomDepartureFormSet(self.request.POST, instance=self.object, dep_user = self.request.user )
+            data['departures'] = CustomDepartureFormSet(self.request.POST, instance=self.object,
+                                                        dep_user=self.request.user)
         else:
-            data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user = self.request.user)
+            data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user=self.request.user)
         return data
-
-
-
 
     def form_valid(self, form):
         context = self.get_context_data()
         departures = context['departures']
         # try to delete object before valid
-
-
-
+        dep_ids = []
         if form.is_valid():
             print("Form valid")
             for dep in departures.forms:
+                print('dep obj')
                 if dep in departures.deleted_forms:
                     print("Delete")
+
+
+            counter = 0
             if departures.is_valid():
-                print( "deparures valid")
-                with transaction.atomic(): # что это за  хрень?
+                print("deparures valid")
+                with transaction.atomic():  # что это за  хрень?
                     self.object = form.save()
+                    assert isinstance(departures, CustomDepartureFormSet)
                     departures.instance = self.object
                     for formdep in departures.forms:
                         departure = formdep.save(commit=False)
                         departure.input_user = Profile.objects.get(user=self.request.user)
+                        print(counter)
+                        print(formdep.instance.id)
+                        counter += 1
+                        dep_id=[{'id':formdep.instance.id,'number':counter}]
+                        if formdep in departures.deleted_forms:
+                          dep_id.append({'id_deleted':'true'})
+                        dep_ids.append(dep_id)
                 departures.save()
-                return HttpResponseRedirect(self.get_success_url())
-            else:
-                return self.render_to_response(self.get_context_data(form=form,
-                                                                     departures=departures))
 
+
+
+
+                return JsonResponse({'success': True,'dep_ids':dep_ids})
+            else:
+                print(departures.non_form_errors)
+                print(departures.errors)
+                deps_errors = []
+                counter = 0
+                for dep_form in departures.forms:
+                    counter += 1
+                    if not dep_form.is_valid:
+                        dep_errors = {counter: [(k, v[0]) for k, v in form.errors.items()]}
+
+                return JsonResponse({'success': False,
+                                     'departures_errors': [{'departures': departures.errors}],
+                                     'dep_ids': dep_ids,
+                                     'errors':[]}, safe=False)
 
     def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form = form))
+        return JsonResponse({'success': False,
+                             'errors': [(k, v[0]) for k, v in form.errors.items()]}, safe=False)
+
 
 # для тестов
 @login_required
 def test_base(request):
     return render(request, 'test2/request-list.html')
 
+
 # фильтр json
 # filter
 @login_required
 def ListFilterJsonView(request):
-
     get_form = request.GET.get("get_form")
-    if get_form is not None:
-        if get_form:
-            f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk')[0:1])
-            return render(request,'includes/filter/filter_modal_form.html',{'form':f.form})
+    if get_form is not None and get_form:
+        f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk')[0:1])
+        return render(request, 'includes/arctic-form/filter-form', {'form': f.form})
 
     dt = timezone.now()
-    first_id=request.GET.get('first_id')
+    first_id = request.GET.get('first_id')
     row_count = 20
-    if first_id == None:
-        f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
-    else:
-        f = MainRequestFilter(request.GET,
-                              queryset=MainRequest.objects.all().order_by('-pk'))
+    f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
 
-    if first_id == None:
+    print(first_id)
+    if first_id != None:
+        if first_id.isdigit():
+            if int(first_id) > 0:
+                list_requests = f.qs.filter(id__lt=first_id)[0:row_count]
+            else:
+                list_requests = f.qs[0:row_count]
+        else:
+            list_requests = f.qs[0:row_count]
+    else:
         list_requests = f.qs[0:row_count]
-    else:
-        list_requests = f.qs.filter('id_lt', first_id)[0:row_count]
-
-
 
     dt = timezone.now()
-    list = f.qs
-    json_res=[]
+    json_res = []
     for req in list_requests:
+        json = req.to_dict
+        add_main_req = MainRequestAddition(req)
+        print(add_main_req.main_request)
+        json1 = add_main_req.to_dict_add()
+        json_res.append(json1)
 
-        json = req.to_dict()
-        json_res.append(json)
-
-
+        # json_res - yjdsq lkz ghjrhenrb
+        # json_new - dyjdm ghtitibt
+        # json-change - bpvtybdibtcz#
     if f.form.is_valid():
-         return JsonResponse({'success': True,'requests':json_res,'dt':dt,'max_rows':row_count})
+        return JsonResponse({'success': True, 'requests': json_res, 'dt': dt, 'max_rows': row_count})
     else:
         return JsonResponse({'success': False,
-                      'errors': [(k, v[0]) for k, v in f.form.errors.items()]}, safe=False)
-   # return render(request, 'test2/parts/request-list/content-json.html',
-    #              {'form': f.form, 'list_requests': list_requests, 'rows': row_count,'dt':dt})
-    # 'filter': f,
-
+                             'errors': [(k, v[0]) for k, v in f.form.errors.items()]}, safe=False)
+        # return render(request, 'test2/parts/request-list/content-json.html',
+        #              {'form': f.form, 'list_requests': list_requests, 'rows': row_count,'dt':dt})
+        # 'filter': f,

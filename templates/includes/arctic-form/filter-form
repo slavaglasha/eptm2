@@ -1,0 +1,36 @@
+<div id="filterModal"  style="display: none;">
+    <div class="box-modal" id="filterForm">
+       <div class="block top-block">
+        <div class="box-modal_close arcticmodal-close">X</div>
+
+        Поиск
+        </div>
+        <div class="block">
+            <form action="" id="filterForm-form">
+                <div class="container-fluid">
+                        {% include 'includes/arctic-form/form.html' %}
+
+                        <div>
+                            <div class="col-8 ">
+                                         <input type="number" id="last-id" name="first_id">
+                            </div>
+                            <div class="col-8  ">
+                                          <input type="text" id="last-dt" name="last-dt">
+                            </div>
+                         </div>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="block">
+
+            <button  type="button" class="btn btn-smm" id="do-filter">Применить</button>
+
+            <button type="button" class="btn btn-smm arcticmodal-close"  >
+                                Отменть
+            </button>
+
+        </div>
+    </div>
+</div>

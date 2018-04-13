@@ -1,37 +1,62 @@
 {% load static %}
+ <div class="box-modal" id="updateForm">
+                <div class="block top-block">
+                      <div class="box-modal_close arcticmodal-close">X</div>
+                      <div class="number-new" id="number-new">Заявка № {{ form.instance.number }} <span class="status-closed"></span> </div>
 
-    <form  id="update-request-form" method="post" novalidate id="update-request-form">
-        <div class="id hiden" id="id">{{ form.instance.id }}</div>
-          {% csrf_token %}
-           <div id="update-request-error-message"></div>
-          {% include 'includes/forms.html' %}
-        <!-- <a id="btn_save_new"  class="btn btn btn-primary  mt-2 btn-sm" >Сохранить</a> -->
-        <div id="departures">
-        <h2>Выезды</h2>
-         <div class="row" id="add-dep-row"><div class="col-4 col-offset-4"><a id="add-departure" class="btn  btn-sm btn-outline-secondary">Новый выезд</a>  </div></div>
-        </div>
-        {{ departures.management_form }}
-        <div id="empty-form">
-            <div class="row"><div class="col-12">Выезд №<span class="dep-number"></span></div></div>
-            {%  with   departures.empty_form as form %}
+                </div>
+                <div class="block main-block">
+                    <div class="wait-block" id="updateModal_wait"></div>
 
-             {% include 'includes/forms.html' %}
-            {% endwith %}
-        </div>
-
-            {%  for form in   departures.forms %}
-            <div id ="form_departure-{{forloop.counter }}" > <!-- {% if forloop.last %} class="hiden" {% endif %}-->
-            <div class="row">Выезд №<span class="dep-number">{{ forloop.revcounter }}</span></div>
-            {% include 'includes/forms.html' %}
-            <div class="row"><div class="col-4 col-offset-4"><a id="del-{{forloop.revcounter }}" class="btn  btn-sm btn-outline-secondary">Удалить</a>  </div></div>
-            </div>
-
-        {% endfor %}
+                    <form  id="update-request-form" method="post" novalidate >
+                        <div id="update-from-main-form">
+                            <div class="id hiden" id="id">{{ form.instance.id }}</div>
+                            {% csrf_token %}
+                            <div id="update-request-error-message"></div>
+                            {% include 'includes/arctic-form/form.html' %}
+                            {% include 'includes/hiden_profiles.html' %}
+                             <div class="hidden"></div>
+                             <div class="row">
+                                    <div class="alert hidden" id="update-form__message">
+                                        <p></p>
+                                    </div>
+                            </div>
+                        </div>
+                        <div id="departures">
+                            <h2>Выезды</h2>
 
 
-          <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
-                               Выйти
-                        </button> -->
+                            {{ departures.management_form }}
+                            <div  id="empty-form" class="departure-part-form">
+                                <div class="row"><div class="col-12">Выезд №<span class="dep-number"></span></div></div>
+                                {%  with   departures.empty_form as form %}
+
+                                 {% include 'includes/arctic-form/form.html' %}
+                                {% endwith %}
+                            </div>
+
+                            {%  for form in   departures.forms %}
+                            <div class="departure-part-form" id ="form_departure-{{forloop.counter  }}" > <!-- {% if forloop.last %} class="hiden" {% endif %}-->
+                            <div class="row">Выезд №<span class="dep-number">{{ forloop.counter }}</span></div> <!--{{ forloop.revcounter }} -->
+                            {% include 'includes/arctic-form/form.html' %}
+                          <!--  <div class="row"><div class="col-4 col-offset-4"><a id="del-{{forloop.revcounter }}" class="btn  btn-sm btn-outline-secondary">Удалить</a>  </div></div> -->
+                            </div>
+
+                            {% endfor %}
+                          <div class="row" id="add-dep-row"><div class="col-4 col-offset-4"><a id="add-departure" class="btn  btn-sm btn-outline-secondary">Новый выезд</a>  </div></div>
+                        </div>
+
+                          <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
+                                               Выйти
+                                        </button> -->
 
 
-    </form>
+                    </form>
+                </div>
+                <div class="block">
+                    <button  type="button" class="btn btn-smm" id="save-update-request">Сохранить</button>
+                    <button type="button" class="btn btn-smm arcticmodal-close"  id="update-request__btn-close" > Выход  </button>
+
+
+                </div>
+ </div>

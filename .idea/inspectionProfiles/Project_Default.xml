@@ -9,5 +9,13 @@
         </list>
       </option>
     </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="dict.to_dict" />
+          <option value="dict.pk" />
+        </list>
+      </option>
+    </inspection_tool>
   </profile>
 </component>

@@ -14502,6 +14502,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_precisionOf: function( num ) {
+		if (num === null){ num=0;}
 		var str = num.toString(),
 			decimal = str.indexOf( "." );
 		return decimal === -1 ? 0 : str.length - decimal - 1;

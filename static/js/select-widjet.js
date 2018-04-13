@@ -2,22 +2,31 @@ $(document).ready(function() {
 
     $.widget("custom.combobox", {
         _create: function () {
-
             this.wrapper = $("<span>")
                 .addClass("custom-combobox")
                 .insertAfter(this.element);
-
+            if  (this.options.disabled){
+                this.wrapper.addClass('ui-state-disabled');
+            }
             this.element.hide();
             parent_block = $(this.element).parents("form").first();
             this._createAutocomplete();
             this._createShowAllButton();
             if (this.options.enabaleOther) {
                 outinput = $("#" + this.options.id_innput);
-                if (outinput.val() != "") {
+                if (outinput.val() !== "") {
                     this.input.val(outinput.val());
                 }
                 outinput.hide();
+            }else {}
+            if (this.element.children(":selected")!==undefined){
+                var selected = this.element.children(":selected"),
+                value = selected.val() ;
+                if (value!==''){}
+                    this.input.val(selected.text());
+
             }
+
         },
 
         _createAutocomplete: function () {
@@ -166,20 +175,6 @@ $(document).ready(function() {
             this.element.show();
         }
     });
-
-    function searchDep(val){
-        $("#new-request-block #user_department").children("option").map(function(){
-                        var tv = this.value;
-                        var t=$(this).text();
-                        if (tv===val){
-                            $("#new-request-block #id_request_outer_department").val($(this).text());
-                        }
-                    });
-    }
-
-    function clearval(){
-        $("#user_department").val("");
-    }
 });
 
 function searchDep(val,parent_block){
@@ -187,14 +182,14 @@ function searchDep(val,parent_block){
                         var tv = this.value;
                         var t=$(this).text();
                         if (tv===val){
-                            $("#id_request_outer_department").val($(this).text());
+                            $(parent_block).find("#id_request_outer_department").val($(this).text());
                         }
                     });
         $(parent_block).find("#user_position").children("option").map(function(){
                         var tv = this.value;
                         var t=$(this).text();
                         if (tv===val){
-                            $("#id_request_outer_status").val($(this).text());
+                            $(parent_block).find("#id_request_outer_status").val($(this).text());
                         }
                     });
     }
@@ -205,7 +200,7 @@ function clearDep(parent_block){
 }
 
 function new_request_initWidjects(){
-            $("#new-request-block #id_request_user").combobox({"id_innput":"new-request-block #id_request_outer_User",
+            $("#new-request-block").find("#id_request_user").combobox({"id_innput":"new-request-block #id_request_outer_User",
                                                                 "enabaleOther":true,
                                                                 "doOnSelect":searchDep,
                                                                 "doOnClear":clearDep            });

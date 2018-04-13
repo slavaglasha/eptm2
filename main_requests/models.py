@@ -1,4 +1,6 @@
+
 from datetime import timedelta
+
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -8,6 +10,8 @@ from django.utils.timezone import localtime
 from places.models import Places
 from work3.settings import DATETIME_INPUT_FORMATS
 from work_profiles.models import Profile
+
+
 
 
 class MainRequest(models.Model):
@@ -65,10 +69,18 @@ class MainRequest(models.Model):
                 errors['receive_user']=' Нужно ввести  дату принятия и пользоваеля принявшего заявку!'
         if (self.close_dateTime is None) and (self.close_user is not None):
                     errors['close_dateTime']='Дата закрытия  заявки должна быть определена!'
+        if (self.close_dateTime is not  None) and (self.close_user is  None):
+            errors['close_user'] = 'пользоваель закрывший  заявку должен быть определен!'
 
         if  (self.receive_dateTime is not None) and (self.receive_user is None):
 
-                errors['close_user']='пользоваель закрывший  заявку должен быть определен!'
+                errors['close_user']= "пользоваель принявший  заявку должен быть определен!"
+        if (self.close_dateTime is not None ) and (self.receive_user is None or  self.request_dateTime is None):
+            errors['close_dateTime'] =" нужно сначала принять заявку!"
+        if (self.close_user is not None) and (self.receive_user is None or self.request_dateTime is None):
+                errors['close_user'] = " нужно сначала принять заявку!"
+
+
         print(errors)
         if len(errors)>0:
             raise ValidationError(errors)
@@ -80,14 +92,14 @@ class MainRequest(models.Model):
         if self.receive_dateTime is None:
             return ''
         else:
-            return self.receive_dateTime
+            return timezone.localtime(self.receive_dateTime).strftime(DATETIME_INPUT_FORMATS[0])
 
     @property
     def str_close_dateTime(self):
         if self.close_dateTime is None:
             return ''
         else:
-            return self.close_dateTime
+            return timezone.localtime(self.close_dateTime).strftime(DATETIME_INPUT_FORMATS[0])
 
     @property
     def str_user_request(self):
@@ -116,7 +128,15 @@ class MainRequest(models.Model):
         else:
             return self.request_outer_status
 
-#lkz ghtj,hfpjdfybz d json
+    @property
+    def is_closed(self):
+        if self.close_user is not None and self.close_dateTime is not None:
+            return True
+        else:
+            return False
+
+#для преобразования в json
+    @property
     def to_dict(selfe):
         if selfe.place is None:
             pl=''
@@ -127,12 +147,12 @@ class MainRequest(models.Model):
         return {"id":selfe.id,
                 "number":selfe.number,
                 "about":selfe.about,
-                "request_dateTime":selfe.request_dateTime.strftime(DATETIME_INPUT_FORMATS[0]),
+                "request_dateTime":timezone.localtime((selfe.request_dateTime)).strftime(DATETIME_INPUT_FORMATS[0]),
                 "str_user_request":selfe.str_user_request,
                 "str_user_status":selfe.str_user_status,
                 "str_user_deparment":selfe.str_user_deparment,
                 "place":pl,
                 "receive-user-name":'' if selfe.receive_user == None else selfe.receive_user.user.first_name,
-                "str_receive_dateTime":selfe.str_receive_dateTime,
+                "str_receive_dateTime": selfe.str_receive_dateTime,
                 "close-user-name":'' if selfe.close_user == None else selfe.close_user.user.first_name,
-                "str_close_dateTime":selfe.str_close_dateTime}
+                "str_close_dateTime":  selfe.str_close_dateTime}
