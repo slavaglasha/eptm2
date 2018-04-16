@@ -17,18 +17,34 @@
                             {% include 'includes/hiden_profiles.html' %}
                              <div class="hidden"></div>
                              <div class="row">
-                                    <div class="alert hidden" id="update-form__message">
-                                        <p></p>
-                                    </div>
+
+                                   <div style="display: none;">
+                                       <div class=" alert box-modal message-model" id="update-form__message">
+                                           <div class="block top-block">
+                                             <div class="box-modal_close arcticmodal-close">X</div>
+                                           </div>
+                                           <div class="block main-block">
+                                                <p>
+
+                                                </p>
+                                              <button type="button" class="btn btn-smm arcticmodal-close"   > Выход  </button>
+                                            </div>
+                                       </div>
+                                   </div>
                             </div>
                         </div>
                         <div id="departures">
-                            <h2>Выезды</h2>
+                                <div class="row">
+                                    <div class="col-12">
+                                    <h2>выезды</h2>
+                                    </div>
+                                </div>
+
 
 
                             {{ departures.management_form }}
                             <div  id="empty-form" class="departure-part-form">
-                                <div class="row"><div class="col-12">Выезд №<span class="dep-number"></span></div></div>
+                                <div class="row"><div class="col-12"><h3>Выезд №<span class="dep-number"></span></h3></div></div>
                                 {%  with   departures.empty_form as form %}
 
                                  {% include 'includes/arctic-form/form.html' %}
@@ -37,14 +53,19 @@
 
                             {%  for form in   departures.forms %}
                             <div class="departure-part-form" id ="form_departure-{{forloop.counter  }}" > <!-- {% if forloop.last %} class="hiden" {% endif %}-->
-                            <div class="row">Выезд №<span class="dep-number">{{ forloop.counter }}</span></div> <!--{{ forloop.revcounter }} -->
-                            {% include 'includes/arctic-form/form.html' %}
+                                <div class="row"><div class="col-12"><h3>Выезд №<span class="dep-number">{{ forloop.counter }}</span></h3></div></div> <!--{{ forloop.revcounter }} -->
+                                <div class="col-12">
+                                    {% include 'includes/arctic-form/form.html' %}
+                                 </div>
                           <!--  <div class="row"><div class="col-4 col-offset-4"><a id="del-{{forloop.revcounter }}" class="btn  btn-sm btn-outline-secondary">Удалить</a>  </div></div> -->
-                            </div>
+                                </div>
 
                             {% endfor %}
-                          <div class="row" id="add-dep-row"><div class="col-4 col-offset-4"><a id="add-departure" class="btn  btn-sm btn-outline-secondary">Новый выезд</a>  </div></div>
-                        </div>
+
+                            {% if add_departure in perms %}
+                              <div class="row" id="add-dep-row"><div class="col-4 col-offset-4"><a id="add-departure" class="btn  btn-sm btn-outline-secondary">Новый выезд</a>  </div></div>
+                            {% endif %}
+                            </div>
 
                           <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
                                                Выйти
@@ -54,9 +75,14 @@
                     </form>
                 </div>
                 <div class="block">
-                    <button  type="button" class="btn btn-smm" id="save-update-request">Сохранить</button>
+                <div class="row">
+                <div class="col-12">
+                    {% if can_save %}
+                     <button  type="button" class="btn btn-smm"  id="save-update-request">Сохранить</button>
+                    {% endif %}
                     <button type="button" class="btn btn-smm arcticmodal-close"  id="update-request__btn-close" > Выход  </button>
 
-
+                </div>
+                </div>
                 </div>
  </div>

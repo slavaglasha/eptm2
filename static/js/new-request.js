@@ -96,7 +96,8 @@
                 },
                 error:function(xhr,errmsg,err){
 
-                    $("#new-request-error-message").text(error_text_messsage+err);
+                    $("#new-form__message").removeClass("hidden").addClass('alert-danger').children("p").text(error_created);
+
                     $("#newModal_wait").fadeOut(100);
                 }
             });

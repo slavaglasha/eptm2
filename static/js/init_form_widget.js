@@ -27,6 +27,7 @@ function connectArcticUser(form, onSearch, onClear) {
             "disabled": disa
         });
     }
+    $(el).removeAttr('disabled');
     setWidgets(form);
 
 }
@@ -42,6 +43,15 @@ function setWidgets(form){
                    $(this).selectmenu();
                }
             });
+           $.each($(form).find("select[multiple='multiple']"), function () {
+
+               var attr = $(this).attr('readonly');
+               if (attr && attr!==false) {
+                   alert("multiple");
+                   $(this).attr("disabled","");
+               }
+           });
+
 
 
            //$(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
@@ -50,15 +60,17 @@ function setWidgets(form){
                 var attr = $(this).attr('readonly');
                 if (attr!=undefined && attr!==false){
                     $(this).attr("disabled",'');
-                }
-                 $(this).datepicker({todayButton:false,
-                    clearButton:true,
-                    timepicker: true,
-                    data_time_format: 'hh:ii',
-                    position: 'bottom left',
-                    autoClose: true
+                } else {
+                    $(this).datepicker({
+                        todayButton: false,
+                        clearButton: true,
+                        timepicker: true,
+                        data_time_format: 'hh:ii',
+                        position: 'bottom left',
+                        autoClose: true
                     });
-                 $(this).removeAttr('disabled');
+                }
+                // $(this).removeAttr('disabled');
            });
           $.each($(form).find(".datepicker-need:nth-child(3)"), function() {
               var attr = $(this).attr('readonly');

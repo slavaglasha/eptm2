@@ -82,6 +82,7 @@ function prepareUpdateForm(){
        setWidgets(this);
      });
      setClosedStatus();
+     alert($("#updateForm").find("input:not([readonly]):not([disabled])").length);
 
 
 
@@ -138,11 +139,12 @@ function saveUpdateRequest() {
                         $(".error-text").html("");
                         $(".invalid").removeClass('invalid');
                        if (json.success){
-                           $("#update-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(success_update);
+                           $("#update-form__message").removeClass('alert-danger').find("p").text(success_update);
+                           $("#update-form__message").arcticmodal();
                            setClosedStatus();
                        }
                        else{
-                           $("#update-form__message").removeClass("hidden").addClass('alert-danger').children("p").text(error_update);
+                           $("#update-form__message").addClass('alert-danger').find("p").text(error_update);
                            $.each(json.errors, function(key, item) {
                               var id= item[0];
                               var field =  $("#update-request-form").find("#id_"+item[0]);
@@ -164,6 +166,7 @@ function saveUpdateRequest() {
                                });
 
                            });
+                           $("#update-form__message").arcticmodal();
                            /*$.each(json.departures_errors[0].departures, function (dep_errors) {
                               $.each(dep_errors, function (key, item) {
                                   var pref = '-'+num;
@@ -180,7 +183,8 @@ function saveUpdateRequest() {
                     error: function (xhr, errmsg) {
 
 
-                        $("#update-form__message").text(error_text_messsage);
+                        $("#update-form__message").addClass('alert-danger').find("p").text(error_text_messsage);
+                        $("#update-form__message").arcticmodal();
                         $("#updateModal_wait").fadeOut(100);
 
                     }

@@ -26,8 +26,10 @@
 
          $("a[id*='del-']").click(function(){
 
-         alert($(this).parent().parent().prev().find("input[id*='-DELETE']").attr("id"))
+         //alert($(this).parent().parent().prev().find("input[id*='-DELETE']").attr("id"));
          $(this).parent().parent().prev().find("input[id*='-DELETE']").attr({"checked":true});
+
+
        });
     }
 

@@ -108,6 +108,8 @@ class UpdateRequest(UpdateView):
                                                         dep_user=self.request.user)
         else:
             data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user=self.request.user)
+        can_save = self.object.can_save(self.request.user)
+        data['can_save'] = can_save
         return data
 
     def form_valid(self, form):
@@ -117,10 +119,10 @@ class UpdateRequest(UpdateView):
         dep_ids = []
         if form.is_valid():
             print("Form valid")
-            for dep in departures.forms:
-                print('dep obj')
-                if dep in departures.deleted_forms:
-                    print("Delete")
+            # for dep in departures.forms:
+            #     print('dep obj')
+            #     if dep in departures.deleted_forms:
+            #         print("Delete")
 
 
             counter = 0
