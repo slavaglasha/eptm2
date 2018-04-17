@@ -34,6 +34,7 @@
                             </div>
                         </div>
                         <div id="departures">
+
                                 <div class="row">
                                     <div class="col-12">
                                     <h2>выезды</h2>
@@ -62,10 +63,11 @@
 
                             {% endfor %}
 
-                            {% if add_departure in perms %}
+                            {% if can_add_departure %}
                               <div class="row" id="add-dep-row"><div class="col-4 col-offset-4"><a id="add-departure" class="btn  btn-sm btn-outline-secondary">Новый выезд</a>  </div></div>
                             {% endif %}
-                            </div>
+
+                         </div>
 
                           <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
                                                Выйти

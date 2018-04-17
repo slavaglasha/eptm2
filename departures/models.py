@@ -81,12 +81,13 @@ class Departure(models.Model):
             if ((self.end_datetime) > tomorrow):
                   errors['end_datetime'] = 'Дата окончания работ не может быть больше ' + localtime(tomorrow).strftime('%d.%m.%Y %H:%M')
 
+        if (not (self.start_datetime is None)) and (not (self.end_datetime is None)):
+            if self.start_datetime>self.end_datetime:
+                errors['end_datetime'] = 'Дата не может быть меньше даты рачала работ '+ localtime(self.start_datetime).strftime('%d.%m.%Y %H:%M')
         main_request_model = self.main_request
-        if main_request_model is not None:
-            if main_request_model.receive_dateTime>self.start_datetime:
-                errors['start_datetime'] = 'Дата начала работ не может быть меньше даты принятия заявки' + main_request_model.receive_dateTime(
-                    '%d.%m.%Y %H:%M')
-
+        if main_request_model is not None and main_request_model.receive_dateTime > self.start_datetime:
+            mes = 'Дата начала работ не может быть меньше даты принятия заявки'
+            errors['start_datetime'] = mes + localtime(main_request_model.receive_dateTime).strftime('%d.%m.%Y %H:%M')
 
 
         #disp_users = ''

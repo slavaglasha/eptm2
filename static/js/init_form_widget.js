@@ -1,3 +1,14 @@
+function getDateTime(str) {
+    var dt = str.split(" ")[0];
+    var tt = str.split(" ")[1];
+    var dd =dt.split(".")[0];
+    var mm=dt.split(".")[1]-1;
+    var yy = dt.split(".")[2];
+    var hh = tt.split(":")[0];
+    var mmt = tt.split(":")[1];
+    return new Date(yy,mm,dd,hh,mmt);
+
+}
 function connectUser(form){
            var el = $(form).find("#id_request_outer_User");
            el.parent().parent().remove();
@@ -61,14 +72,32 @@ function setWidgets(form){
                 if (attr!=undefined && attr!==false){
                     $(this).attr("disabled",'');
                 } else {
-                    $(this).datepicker({
-                        todayButton: false,
+                    var setd =  undefined;
+                    if ($(this).attr("value")!=undefined) {
+                        setdt = getDateTime($(this).attr("value"));
+                         $(this).datepicker({
+                        todayButton: new Date(),
                         clearButton: true,
                         timepicker: true,
                         data_time_format: 'hh:ii',
                         position: 'bottom left',
-                        autoClose: true
+                        autoClose: true,
+                        startDate:setdt,
+                        needselecedtDate :setdt
                     });
+
+
+                    }else {
+                        $(this).datepicker({
+                            todayButton: false,
+                            clearButton: true,
+                            timepicker: true,
+                            data_time_format: 'hh:ii',
+                            position: 'bottom left',
+                            autoClose: true
+                        });
+                    }
+                    //.selectDate()
                 }
                 // $(this).removeAttr('disabled');
            });

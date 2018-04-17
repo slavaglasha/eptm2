@@ -1,3 +1,4 @@
+
   function show_departure() {
 
 
@@ -97,8 +98,9 @@
     newElement.find(".dep-number").text(total);
 
     var id="#id-"+(total-1)+"-start_datetime";
-    newElement.find(id).attr({"value":$("id_-__prefix__-start_datetime").attr('value')});
-    newElement.find(id).text($("id_-__prefix__-start_datetime").attr('value'));
+    alert(getCurDate());
+
+
     newElement.append("<div class='row'><div class='col-4 col-offset-4'><a id='del--0' >Удалить</a>  </div></div>");
     newElement.find("#del--0").addClass("btn").addClass("btn-sm").addClass("btn-outline-secondary");
     newElement.find("#del--0").attr({"id":"del-"+(total-1)});

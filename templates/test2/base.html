@@ -34,7 +34,7 @@
             <label class="help-label" for="help-checkbox-menu" >
               {% if user.is_authenticated %}
                   <div class="user">
-                    <div class="user-name">{{ user.username }}</div>
+                    <div class="user-name">{{ user.last_name }} {{ user.first_name }}</div>
                     <span   class="icon fas fa-user"></span>
                  </div>
                  <span class="controls fas fa-cog"></span>

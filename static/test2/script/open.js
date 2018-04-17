@@ -127,6 +127,53 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
 
 
                     });
+                    var last_el = $("#first-row");
+                   $.each(json.new_requests, function(key, item) {
+                        var newrow =$("#first-row").clone();
+                        $.each(item , function (inkey, val) {
+                            $(newrow).find("."+inkey).html(val);
+
+                        });
+                        var deps;
+                        deps = item.departures;
+                        $.each(deps, function (inkey, val) {
+
+                            $(newrow).find(".departures").append("<small class=\"text-muted d-block\">"+val.start+"</small>");
+                            $(newrow).find(".departures").append("<small class=\"text-muted d-block\">"+val.end+"</small>");
+                            $(newrow).find(".departures").append("<span class=\"d-block\">"+val.users+"</span>")
+                        });
+                        $(newrow).attr('id','row-'+item.id ).removeClass("hidden");
+                        $(last_el).after(newrow);
+
+                        last_el = newrow;
+                        isLoaded=false;
+
+
+
+                    });
+                   $.each(json.changed_requests, function(key, item) {
+                        var currow =$("#main-list").find("#row-"+item.id);
+                        if (currow!==undefined) {
+                            $.each(item, function (inkey, val) {
+                                $(currow).find("." + inkey).html(val);
+
+                            });
+                            var deps;
+                            deps = item.departures;
+                            $(currow).find(".departures").html("");
+                            $.each(deps, function (inkey, val) {
+
+                                $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                            });
+                        }
+
+                        isLoaded=false;
+
+
+
+                    });
                     var filterForm=$('#filterForm');
                     $(filterForm).find("#last-id").val(id);
                     $(filterForm).find("#last-dt").val(json.dt);
