@@ -3,6 +3,8 @@ var correct_number = ' Введите правильный номер';
 var error_load_data='Ошибка загрузки данных!';
 var error_messages_lg="НЕ загрузился фильтр";
 var isLoaded=false;
+var isTimerEnabled=true;
+var timerUpdateListId;
 
 function correctNumber(strnumber){
     if ((strnumber.trim())!==''){
@@ -15,7 +17,7 @@ function correctNumber(strnumber){
 }
 function  converttodate(dateString){
     //match date in format DD.MM.YYYY
-      var  m = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20\d{2}) ([0-1]\d{1}|[2][0-3])\:([0-5][0-9])$/.exec(dateString);
+      var  m = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20\d{2}) ([0-1]\d|[2][0-3])\:([0-5][0-9])$/.exec(dateString);
 
     if (m) {
         $("#result").html(true);
@@ -92,7 +94,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
 
  }
 
- function   loadData() {
+ function   loadData(need_closed) {
 
          isLoaded=true;
         var id;
@@ -103,84 +105,87 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                url: "/test2/filter-request-json/",
                data: $('#filterForm').find('form').serialize(),
                success:function(json){
+                   if (json.success) {
+                       $.each(json.requests, function (key, item) {
+                           var newrow = $("#first-row").clone();
+                           $.each(item, function (inkey, val) {
+                               $(newrow).find("." + inkey).html(val);
+
+                           });
+                           var deps;
+                           deps = item.departures;
+                           $.each(deps, function (inkey, val) {
+
+                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>")
+                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>")
+                               $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                           });
+                           $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
+                           $("#main-list").append(newrow);
+                           id = item.id;
 
 
-                   $.each(json.requests, function(key, item) {
-                        var newrow =$("#first-row").clone();
-                        $.each(item , function (inkey, val) {
-                            $(newrow).find("."+inkey).html(val);
+                       });
+                       var last_el = $("#first-row");
+                       $.each(json.new_requests, function (key, item) {
+                           var newrow = $("#first-row").clone();
+                           $.each(item, function (inkey, val) {
+                               $(newrow).find("." + inkey).html(val);
 
-                        });
-                        var deps;
-                        deps = item.departures;
-                        $.each(deps, function (inkey, val) {
+                           });
+                           var deps;
+                           deps = item.departures;
+                           $.each(deps, function (inkey, val) {
 
-                            $(newrow).find(".departures").append("<small class=\"text-muted d-block\">"+val.start+"</small>")
-                            $(newrow).find(".departures").append("<small class=\"text-muted d-block\">"+val.end+"</small>")
-                            $(newrow).find(".departures").append("<span class=\"d-block\">"+val.users+"</span>")
-                        });
-                        $(newrow).attr('id','row-'+item.id ).removeClass("hidden");
-                        $("#main-list").append(newrow);
-                        id=item.id;
-                        isLoaded=false;
+                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                               $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                           });
+                           $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
+                           $(last_el).after(newrow);
 
-
-
-                    });
-                    var last_el = $("#first-row");
-                   $.each(json.new_requests, function(key, item) {
-                        var newrow =$("#first-row").clone();
-                        $.each(item , function (inkey, val) {
-                            $(newrow).find("."+inkey).html(val);
-
-                        });
-                        var deps;
-                        deps = item.departures;
-                        $.each(deps, function (inkey, val) {
-
-                            $(newrow).find(".departures").append("<small class=\"text-muted d-block\">"+val.start+"</small>");
-                            $(newrow).find(".departures").append("<small class=\"text-muted d-block\">"+val.end+"</small>");
-                            $(newrow).find(".departures").append("<span class=\"d-block\">"+val.users+"</span>")
-                        });
-                        $(newrow).attr('id','row-'+item.id ).removeClass("hidden");
-                        $(last_el).after(newrow);
-
-                        last_el = newrow;
-                        isLoaded=false;
+                           last_el = newrow;
 
 
+                       });
+                       if (json.changed_requests!==undefined) {
+                           $.each(json.changed_requests, function (key, item) {
+                               var currow = $("#main-list").find("#row-" + item.id);
+                               if (currow !== undefined) {
+                                   $.each(item, function (inkey, val) {
+                                       $(currow).find("." + inkey).html(val);
 
-                    });
-                   $.each(json.changed_requests, function(key, item) {
-                        var currow =$("#main-list").find("#row-"+item.id);
-                        if (currow!==undefined) {
-                            $.each(item, function (inkey, val) {
-                                $(currow).find("." + inkey).html(val);
+                                   });
+                                   var deps;
+                                   deps = item.departures;
+                                   $(currow).find(".departures").html("");
+                                   $.each(deps, function (inkey, val) {
 
-                            });
-                            var deps;
-                            deps = item.departures;
-                            $(currow).find(".departures").html("");
-                            $.each(deps, function (inkey, val) {
-
-                                $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
-                                $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
-                                $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
-                            });
-                        }
-
-                        isLoaded=false;
+                                       $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                       $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                       $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                   });
+                               }
 
 
+                           });
+                       }
+                       var filterForm = $('#filterForm');
+                       $(filterForm).find("#last-id").val(id);
+                       $(filterForm).find("#last-dt").val(json.dt);
+                       need_more = json.max_rows === json.requests.length;
 
-                    });
-                    var filterForm=$('#filterForm');
-                    $(filterForm).find("#last-id").val(id);
-                    $(filterForm).find("#last-dt").val(json.dt);
-                    need_more = json.max_rows === json.requests.length;
-                    var el = $("#last-id");
-                    setRowUpdater(); //установка собітия на строки окно просмотра заявок
-                     $("#wait").fadeOut(100);
+                       setRowUpdater(); //установка собітия на строки окно просмотра заявок
+                       $("#wait").fadeOut(100);
+                       if (need_closed !== undefined) {
+                           if (need_closed === true) {
+                               $(filterForm).arcticmodal('close');
+                           }
+                       }
+                       isLoaded = false;
+                       setTimeUpdate();
+
+                   }
 
 
 
@@ -188,13 +193,107 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
 
                },
                error: function (xhr, errmsg ) {
-                $(".wait-block").html(error_load_data);
+                $(".wait-block").html(error_load_data + '-'+errmsg);
                 isLoaded= false;
 
             }
            });
 
 
+ }
+
+ function updateList() {
+     if (!isLoaded && isTimerEnabled) {
+         isLoaded = true;
+         $.ajax({
+             type: "get",
+             cache: false,
+             url: "/test2/filter-request-json/",
+             data: $('#filterForm').find('form').serialize(),
+             success: function (json) {
+                 if (json.success) {
+                     var last_el = $("#first-row");
+                     $.each(json.new_requests, function (key, item) {
+                         var newrow = $("#first-row").clone();
+                         $.each(item, function (inkey, val) {
+                             $(newrow).find("." + inkey).html(val);
+
+                         });
+                         var deps;
+                         deps = item.departures;
+                         $.each(deps, function (inkey, val) {
+
+                             $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                             $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                             $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                         });
+                         $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
+                         $(last_el).after(newrow);
+
+                         last_el = newrow;
+
+
+                     });
+                     $.each(json.changed_requests, function (key, item) {
+                         var currow = $("#main-list").find("#row-" + item.id);
+                         if (currow !== undefined) {
+                             $.each(item, function (inkey, val) {
+                                 $(currow).find("." + inkey).html(val);
+
+                             });
+                             var deps;
+                             deps = item.departures;
+                             $(currow).find(".departures").html("");
+                             $.each(deps, function (inkey, val) {
+
+                                 $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                 $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                 $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                             });
+                         }
+
+
+                     });
+                     var filterForm = $('#filterForm');
+
+                     if (json.dt !== undefined) {
+                         $(filterForm).find("#last-dt").val(json.dt);
+                     }
+                     isLoaded = false;
+                     setTimeUpdate();
+
+
+                 }else{
+                     isTimerEnabled=false;
+                 }
+             }
+             ,
+             error: function (xhr, errmsg) {
+                 $(".wait-block").html(error_load_data + '  - ' + errmsg);
+                 isLoaded = false;
+                 isTimerEnabled=false;
+
+             }
+         });
+     }
+
+ }
+
+ function setTimeUpdate() {
+     var interval = 1;
+     timerUpdateListId = setTimeout(updateList,interval*60*1000);
+
+ }
+
+ function stopTimerUpdae() {
+     if (timerUpdateListId!==undefined) {
+         clearTimeout(timerUpdateListId);
+     }
+     isTimerEnabled = false;
+ }
+
+ function enableTimerUpdae() {
+     isTimerEnabled = true;
  }
 
  function DoFilter(need_closed){
@@ -208,10 +307,8 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
          $("#main-list").find(">:not(#first-row)").remove();
 
          $('#filterForm').find("#last-id").val(0);
-          if (need_closed === true) {
-             $("#filterForm").arcticmodal('close');
-         }
-         loadData();
+
+         loadData(need_closed);
 
 
      }
@@ -245,14 +342,14 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
 
  $(document).ready(function() {
 
- function addRangeClasses(id_rifst){
-     $('#'+id_rifst+'_0').addClass('col-6').next().addClass("divider").parent().addClass('form-inline');
-     $('#'+id_rifst+'_1').addClass('col-5');
- }
+ // function addRangeClasses(id_rifst){
+ //     $('#'+id_rifst+'_0').addClass('col-6').next().addClass("divider").parent().addClass('form-inline');
+ //     $('#'+id_rifst+'_1').addClass('col-5');
+ // }
 
 
  function loadFilterForm() {
-     var isload, need_more;
+     var isload;
      isload = false;
      $.ajax({
                type: "get",
@@ -265,6 +362,8 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                    $(el).html(htmll);
                    connectArcticUser($(el).find('form'));
                    $("#do-filter").click(function (){DoFilter(true); });
+                   $("#btn-update-list").click(function(){updateList();});
+                   setTimeUpdate();
                    //preparefilterForm();
 
                    /*if (func!=undefined){func();}*/
@@ -303,6 +402,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
     $("#open-filter").click(function () {
       //  $('#flex-container').hide();
          $("#filterForm").arcticmodal();
+         stopTimerUpdae();
 
     });
 
@@ -320,10 +420,8 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
     });
 
     $("#btn-new-request").click(function(){
-        var str='Not';
         var main_list = $("#main-list");
         if ($(main_list).find(".row:last-child").position().top+$(main_list).find(".row:last-child").height()<$("#scrolled-table").next().position().top){
-            str='Load';
         }
 
         /*alert($("#scrolled-table").scrollTop()+" \t "+$("#scrolled-table").position().top +"\t"+$("#scrolled-table").next().position().top+"\t\t"+($("#main-list .row:last-child").position().top+$("#main-list .row:last-child").height()));*/
@@ -331,5 +429,6 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
 
  loadFilterForm();
  isLoaded=true;
+
 
  });

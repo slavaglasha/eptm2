@@ -28,6 +28,7 @@ class MainRequest(models.Model):
     close_user = models.ForeignKey(Profile, related_name='mainRequestClose', null=True, blank=True)
     place = models.ForeignKey(Places, related_name='main_requests_places', null=True, blank=True)
     place_outer = models.CharField(max_length=200, null=True, blank=True)
+    changed_datetime = models.DateTimeField(auto_now=True, null=False, blank=False)
 
     class Meta:
         verbose_name = "Главная заявка"

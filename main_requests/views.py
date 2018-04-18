@@ -9,6 +9,7 @@ from django.views.generic import CreateView, UpdateView
 
 from departures.forms import CustomDepartureFormSet
 from main_requests.model_additional import MainRequestAddition
+from work3.settings import DATETIME_INPUT_FORMATS
 from work_profiles.models import Profile
 from .filter import MainRequestFilter
 from .forms import newMainRequestForm, updateMainRequestForm
@@ -110,6 +111,8 @@ class UpdateRequest(UpdateView):
             data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user=self.request.user)
         can_save = self.object.can_save(self.request.user)
         data['can_save'] = can_save
+
+        data['can_add_departure'] = self.request.user.has_perms('add_departure')
         return data
 
     def form_valid(self, form):
@@ -184,23 +187,31 @@ def ListFilterJsonView(request):
         return render(request, 'includes/arctic-form/filter-form', {'form': f.form})
 
     dt = timezone.now()
+    dt_input = request.GET.get('last-dt')
     first_id = request.GET.get('first_id')
     row_count = 20
     f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
 
     print(first_id)
+    list_new_requests = []
+    list_changed_request = []
     if first_id != None:
         if first_id.isdigit():
             if int(first_id) > 0:
                 list_requests = f.qs.filter(id__lt=first_id)[0:row_count]
             else:
                 list_requests = f.qs[0:row_count]
+            if dt_input is not None:
+                list_new_requests = f.qs.filter(input_datetime__gt=dt_input)
+                list_changed_request = f.qs.filter(changed_datetime__gt=dt_input)
         else:
             list_requests = f.qs[0:row_count]
     else:
         list_requests = f.qs[0:row_count]
 
     dt = timezone.now()
+
+    print('dt_input - ',dt_input)
     json_res = []
     for req in list_requests:
         json = req.to_dict
@@ -212,8 +223,33 @@ def ListFilterJsonView(request):
         # json_res - yjdsq lkz ghjrhenrb
         # json_new - dyjdm ghtitibt
         # json-change - bpvtybdibtcz#
+    print('-------------------new-requests---------------------------')
+    json_new = []
+    for req in list_new_requests:
+        json = req.to_dict
+        add_main_req = MainRequestAddition(req)
+        print(add_main_req.main_request)
+        json1 = add_main_req.to_dict_add()
+        if not req in list_requests:
+            json_new.append(json1)
+            print('append')
+    print('-------------------new-changed---------------------------')
+    json_change = []
+    for req in list_changed_request:
+        json = req.to_dict
+        add_main_req = MainRequestAddition(req)
+        print(add_main_req.main_request)
+        json1 = add_main_req.to_dict_add()
+        if not req in list_requests and not req in list_new_requests:
+            json_change.append(json1)
+            print('append')
+
+
     if f.form.is_valid():
-        return JsonResponse({'success': True, 'requests': json_res, 'dt': dt, 'max_rows': row_count})
+        return JsonResponse({'success': True, 'requests': json_res,
+                                              'new_requests':json_new,
+                                              'changed_requests':json_change,
+                             'dt': dt, 'max_rows': row_count})
     else:
         return JsonResponse({'success': False,
                              'errors': [(k, v[0]) for k, v in f.form.errors.items()]}, safe=False)

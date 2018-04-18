@@ -68,7 +68,7 @@
          $("#newModal_wait").fadeIn(100);
          if (validform()){
              if (need_saved){
-                 alert('save');
+
                  need_saved = false;
 
                  $.ajax({
@@ -77,7 +77,7 @@
                      data: $("#new-request-form").serialize(),
                      success: function (json) {
                          if (json.success) {
-                             alert(json.number);
+
                              $("#number-new").text(rec_number + json.number);
                              $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(success_created);
                              newSaved = true;
@@ -116,12 +116,15 @@
 
      function setStatusOpen(data, el){
          newSaved = false;
+         stopTimerUpdae();
 
      }
 
      function reloadAfterSave(data, el){
+         enableTimerUpdae();
+         updateList();
          if (newSaved){
-             DoFilter();
+
              //loadNewRequestForm($("#newForm").find(".main-block"));
              resetNewRequestForm();
              //$("#newForm").find(".main-block").find('form')[0].reset();
@@ -194,9 +197,9 @@
         $("#new-request__btn-new").hide();
 
         $("#new-form__message").hide();
-        alert($("#id_request_user").next("span").find("input").attr('class'));
+
         var te = $("#new_form-user-name").text();
-        //alert(te);
+
         $("#newForm").find("#id_request_user").next("span").find("input").val(te);
 
     }

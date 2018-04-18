@@ -23,40 +23,43 @@ function getCurrentDateTime(){
 
 
 function setRowUpdater(){
+        $.each( $("#main-list").find(".row"),
+            function(){
+                $(this).unbind();
+                $(this).click(        function(){
+                // после прокрутки внгихз а потом вверх срабатіваетнесколько раз собітие нажатия на кнопку!
+                stopTimerUpdae();
+                if (opened === false) {
+                    var id = $(this).find(".id").html();
+                    opened = true;
+                    $.arcticmodal({
+                        type: 'ajax',
+                        url: "/base/update-request/" + id + "/",
+                        ajax: {
+                            type: 'GET',
+                            cache: false
+                        },
+                        beforeClose: function () {
+                            $("#updateForm").hide();
+                        },
 
-        $("#main-list").find(".row").click(function(){
-            // после прокрутки внгихз а потом вверх срабатіваетнесколько раз собітие нажатия на кнопку!
-            if (opened === false) {
-                var id = $(this).find(".id").html();
-
-                opened = true;
-                $.arcticmodal({
-                    type: 'ajax',
-                    url: "/base/update-request/" + id + "/",
-                    ajax: {
-                        type: 'GET',
-                        cache: false
-                    },
-                    beforeClose: function () {
-                        $("#updateForm").hide();
-                    },
-
-                    afterLoadingOnShow: function (data, el) {
-                        prepareUpdateForm();
-                    },
-                    errorLoading: function () {
-                    },
-                    afterClose: function () {
-                        opened = false;
-                        if (ischanged===true){
-                            reloadAfterSave();
+                        afterLoadingOnShow: function (data, el) {
+                            prepareUpdateForm();
+                        },
+                        errorLoading: function () {
+                        },
+                        afterClose: function () {
+                            opened = false;
+                            if (ischanged===true){
+                                reloadAfterSave();
+                            }
                         }
-                    }
 
 
-                });
-            }
-    });
+                    });
+                }
+            });
+        });
 
 }
 
@@ -74,10 +77,11 @@ function prepareUpdateForm(){
 
         changeReceiveUser($("#updateForm").find("#id_receive_user").val());
     });
-
+    $("#updateForm").find("#save-update-request").unbind();
     $("#updateForm").find("#save-update-request").click(saveUpdateRequest);
     $("#updateModal_wait").fadeOut(100);
-     $("#add-departure").click(function(){
+    $("#add-departure").unbind();
+    $("#add-departure").click(function(){
              cloneMore($("#empty-form"),"__prefix__");
          });
 
@@ -85,14 +89,6 @@ function prepareUpdateForm(){
        setWidgets(this);
      });
      setClosedStatus();
-     alert($("#updateForm").find("input:not([readonly]):not([disabled])").length);
-
-
-
-
-
-
-
 }
 
 function enabledDepartures(){
@@ -130,6 +126,7 @@ function validForm() {
 
 function saveUpdateRequest() {
         var id = $("#id").text();
+         // language=JQuery-CSS
          $("#updateModal_wait").fadeIn(100);
          if (validForm()){
              $.ajax({
@@ -241,7 +238,8 @@ function saveUpdateRequest() {
   //  newElement.find(id).attr({"value":$("id_-__prefix__-start_datetime").attr('value')});
   //  newElement.find(id).text($("id_-__prefix__-start_datetime").attr('value'));
        alert(getCurrentDateTime());
-       newElement.find(id).attr({"value":getCurrentDateTime()});
+       var strDate = getCurrentDateTime();
+       newElement.find(id).val(strDate);
        newElement.find(id).text(getCurrentDateTime());
 
     //newElement.append("<div class='row'><div class='col-4 col-offset-4'><a id='del--0' >Удалить</a>  </div></div>");
@@ -267,8 +265,10 @@ function saveUpdateRequest() {
 }
 
 function reloadAfterSave(data, el){
+         enableTimerUpdae();
+         updateList();
          if (ischanged){
-             DoFilter();
+             //DoFilter();
 
 
 

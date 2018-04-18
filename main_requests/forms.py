@@ -105,6 +105,7 @@ class updateMainRequestForm(forms.ModelForm):
         self.fields['receive_user'].queryset = Profile.objects.filter(user__groups__in=[1,2])
         self.fields['close_user'].queryset = Profile.objects.filter(user__groups__in=[1, 2])
         self.fields['input_user'].widget.attrs['readonly'] = True
+
         if 2 in groups:  # исполнители
 
             if instance.input_user.pk != user.id: #корректирует не сво. заявку мо;ет только принять
