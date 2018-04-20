@@ -78,7 +78,7 @@ class newMainRequestForm(forms.ModelForm):
 
 class updateMainRequestForm(forms.ModelForm):
     about = forms.CharField(widget=forms.Textarea(attrs={'rows':4}), max_length=500, help_text="Максимальная длинна сообщения  500 "
-                                                                               "символов.")
+                                                                               "символов.",label="О чем заявлено" )
 
 
 
@@ -89,10 +89,11 @@ class updateMainRequestForm(forms.ModelForm):
               'request_dateTime', 'place', 'about','receive_user','receive_dateTime', 'close_user', 'close_dateTime']
         labels = {'input_user':'Ввел заявку','request_user': 'Заявитель', 'request_outer_User': 'Внешний заявитель',
               'request_outer_status': 'Должность', 'request_outer_department': ' Подразделение',
-              'request_dateTime': 'Дата подачи заявки', 'about': 'О чем заявлено',
-              'place': 'Место',
+              'request_dateTime': 'Дата подачи заявки',
+              'place': 'Место','about': 'О чем заявлено',
               'receive_user':'Принял','receive_dateTime':'Дата принятия',
              'close_user':'Закрыл', 'close_dateTime':'Дата закрытия'}
+
 
 
 
@@ -129,7 +130,7 @@ class updateMainRequestForm(forms.ModelForm):
             self.fields['close_user'].widget.attrs['readonly'] = True
             self.fields['close_dateTime'].widget.attrs['readonly'] = True
 
-            if instance.is_closed:
+            if instance.is_closed==3:
                 self.fields['request_user'].widget.attrs['readonly'] = True
                 self.fields['request_outer_User'].widget.attrs['readonly'] = True
                 self.fields['request_outer_status'].widget.attrs['readonly'] = True
@@ -155,7 +156,7 @@ class updateMainRequestForm(forms.ModelForm):
             self.fields['request_outer_department'].widget.attrs['readonly'] = True
             print("user pk - input_pk -  ",instance.input_user.user.id,user.id, )
 
-            if instance.input_user.user.id != user.id or instance.receive_user is not None or instance.is_closed:
+            if instance.input_user.user.id != user.id or instance.receive_user is not None or instance.is_closed==3:
 
 
                 self.fields['request_dateTime'].widget.attrs['readonly'] = True

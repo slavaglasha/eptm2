@@ -14,7 +14,7 @@ from work_profiles.models import Profile
 from .filter import MainRequestFilter
 from .forms import newMainRequestForm, updateMainRequestForm
 from .models import MainRequest
-
+from departures import  models as model_departure
 
 # Create your views here.
 # @login_required
@@ -111,8 +111,10 @@ class UpdateRequest(UpdateView):
             data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user=self.request.user)
         can_save = self.object.can_save(self.request.user)
         data['can_save'] = can_save
+        print('Permitions ---',self.request.user.has_perms('add_departure'))
 
-        data['can_add_departure'] = self.request.user.has_perms('add_departure')
+
+        data['can_add_departure'] = self.object.can_add_dep(self.request.user)
         return data
 
     def form_valid(self, form):
@@ -139,7 +141,7 @@ class UpdateRequest(UpdateView):
                         departure = formdep.save(commit=False)
                         departure.input_user = Profile.objects.get(user=self.request.user)
                         print(counter)
-                        print(formdep.instance.id)
+                        print('dperture - ',formdep.instance.id,' ',formdep.instance.main_request )
                         counter += 1
                         dep_id=[{'id':formdep.instance.id,'number':counter}]
                         if formdep in departures.deleted_forms:
@@ -191,8 +193,11 @@ def ListFilterJsonView(request):
     first_id = request.GET.get('first_id')
     row_count = 20
     f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
-
-    print(first_id)
+    not_closed_departure = request.GET.get('not_closed_departure')
+    deps_queryset = []
+    # if not_closed_departure>0:
+    #     deps_queryset = model_departure.Departure.objects.filter(end_datetime__isnull=True)
+    print(not_closed_departure)
     list_new_requests = []
     list_changed_request = []
     if first_id != None:

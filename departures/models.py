@@ -15,7 +15,7 @@ from django.utils.timezone import localtime
 
 
 class Departure(models.Model):
-    main_request = models.ForeignKey(main_request_model.MainRequest, related_name='+',verbose_name='Заявка', null=False)
+    main_request = models.ForeignKey(main_request_model.MainRequest, verbose_name='Заявка', null=False)
     input_datetime = models.DateTimeField(auto_now_add=True, null=False, blank=False, verbose_name='Дата ввода')
     start_datetime = models.DateTimeField(null=True, blank=True, default=timezone.now, verbose_name='Начало работ')
     end_datetime = models.DateTimeField(auto_now_add=False, null=True, blank=True, verbose_name='Окончание работ')

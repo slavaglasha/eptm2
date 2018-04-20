@@ -1,0 +1,43 @@
+{% extends 'base_account.html' %}
+{% load static %}
+{% load  form_arctic_tags widget_tweaks %}
+
+
+{% block tittle %} RC     <span class="header-russion-font">Настройки</span>     {% endblock %}
+{% block columns %}
+    <div class="col-lg-6 col-md-10 col-sm-12">
+  {% endblock %}
+{% block h1 %} {{ user.get_full_name }} {% endblock %}
+
+{%  block card_form %}
+    <div class="h2">{{ user.username }}</div>
+                            <form method="post" novalidate>
+                                {% csrf_token %}
+
+
+
+                                {% define   user_form as form %}
+                                {% include 'includes/formsonecolumn.html' %}
+                                {% define   profile_form as form %}
+                                {% include 'includes/formsonecolumn.html' %}
+                                <button class="btn btn-primary btn-block mt-2">
+                                    {% block button-caption %}
+                                    Сохранить
+                                    {% endblock %}
+                                </button>
+                            </form>
+{% endblock %}
+</div>
+{%  block card-footer %}
+{% endblock %}
+
+
+  {% block footer %}
+                <div class="text-center py-2">
+                    <a href="{% url  'view' %}" class="text-muted">
+                        Вернуться к заявкам
+                    </a>
+                </div>
+                {% endblock %}
+
+

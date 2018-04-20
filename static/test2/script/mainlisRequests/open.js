@@ -107,22 +107,26 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                success:function(json){
                    if (json.success) {
                        $.each(json.requests, function (key, item) {
-                           var newrow = $("#first-row").clone();
-                           $.each(item, function (inkey, val) {
-                               $(newrow).find("." + inkey).html(val);
+                           if (item!==null) {
+                               var newrow = $("#first-row").clone();
+                               $.each(item, function (inkey, val) {
+                                   $(newrow).find("." + inkey).html(val);
 
-                           });
-                           var deps;
-                           deps = item.departures;
-                           $.each(deps, function (inkey, val) {
+                               });
+                           }
+                           if (item!==null) {
+                               var deps;
+                               deps = item.departures;
+                               $.each(deps, function (inkey, val) {
 
-                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>")
-                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>")
-                               $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
-                           });
-                           $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
-                           $("#main-list").append(newrow);
-                           id = item.id;
+                                   $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>")
+                                   $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>")
+                                   $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                               });
+                               $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
+                               $("#main-list").append(newrow);
+                               id = item.id;
+                           }
 
 
                        });
@@ -259,12 +263,14 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                      if (json.dt !== undefined) {
                          $(filterForm).find("#last-dt").val(json.dt);
                      }
+                     setRowUpdater(); //установка собітия на строки окно просмотра заявок
                      isLoaded = false;
                      setTimeUpdate();
 
 
                  }else{
                      isTimerEnabled=false;
+                     stopTimerUpdae();
                  }
              }
              ,
@@ -272,6 +278,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                  $(".wait-block").html(error_load_data + '  - ' + errmsg);
                  isLoaded = false;
                  isTimerEnabled=false;
+                 stopTimerUpdae();
 
              }
          });
@@ -282,6 +289,8 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
  function setTimeUpdate() {
      var interval = 1;
      timerUpdateListId = setTimeout(updateList,interval*60*1000);
+     isTimerEnabled = true;
+
 
  }
 
@@ -357,6 +366,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                url: "/test2/filter-request-json/",
                data: {get_form:true},
                success:function(htmll){
+
 
                    var el =  $('#filter-container');
                    $(el).html(htmll);

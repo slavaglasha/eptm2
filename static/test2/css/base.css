@@ -25,6 +25,10 @@
     padding: 0;
     text-decoration: none;
 }
+
+.user-name a{
+    color: white;
+}
 a:hover{
     text-decoration: none;
 }
@@ -160,6 +164,10 @@ body{
 .user-name{
     color: #979a9e;
 
+}
+
+.user-name a{
+    color: #979a9e;
 }
 
 

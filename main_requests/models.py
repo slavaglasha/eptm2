@@ -8,6 +8,7 @@ from django.utils.timezone import localtime
 from places.models import Places
 from work3.settings import DATETIME_INPUT_FORMATS
 from work_profiles.models import Profile
+from main_requests import model_connect
 
 
 class MainRequest(models.Model):
@@ -44,8 +45,11 @@ class MainRequest(models.Model):
         origin = None
         if self.pk is not None:
             origin = MainRequest.objects.get(pk=self.pk)
-            print(timezone.localtime((MainRequest.objects.get(pk=self.pk).request_dateTime)).strftime(
-                DATETIME_INPUT_FORMATS[0]))
+            print(timezone.localtime((origin.request_dateTime)).strftime(
+                DATETIME_INPUT_FORMATS[0]), '--',
+                timezone.localtime((self.request_dateTime)).strftime(
+                    DATETIME_INPUT_FORMATS[0]), '--', (self.request_dateTime), origin.request_dateTime)
+            print(self.request_dateTime - origin.request_dateTime)
 
         print('valid', self.get_deferred_fields().__len__())
 
@@ -67,8 +71,12 @@ class MainRequest(models.Model):
         if self.request_dateTime > tomorrow:
             errors['request_dateTime'] = 'Не может быть позже ' + localtime(tomorrow).strftime('%d.%m.%Y %H:%M')
         if origin is not None:
-            if self.request_dateTime != origin.request_dateTime:
-                errors['request_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime('%d.%m.%Y %H:%M')
+            if timezone.localtime(self.request_dateTime).strftime(
+                    DATETIME_INPUT_FORMATS[0]) != timezone.localtime(origin.request_dateTime).strftime(
+                DATETIME_INPUT_FORMATS[0]):
+                if self.request_dateTime < yesterday:
+                    errors['request_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
+                        '%d.%m.%Y %H:%M')
         if (self.receive_dateTime is None) and (self.receive_user != None):
             errors['receive_dateTime'] = ' Нужно ввести  дату принятия  заявки!'
         if (self.receive_user is None) and (self.receive_dateTime != None):
@@ -88,7 +96,7 @@ class MainRequest(models.Model):
                     errors['receive_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
                         '%d.%m.%Y %H:%M')
             else:
-                if origin.receive_dateTime != self.receive_dateTime:
+                if timezone.localtime(origin.receive_dateTime) != timezone.localtime(self.receive_dateTime):
                     if self.receive_dateTime < yesterday:
                         errors['receive_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
                             '%d.%m.%Y %H:%M')
@@ -96,7 +104,7 @@ class MainRequest(models.Model):
             errors['close_dateTime'] = "Нужно сначала принять заявку!"
         if (self.close_user is not None) and (self.receive_user is None or self.request_dateTime is None):
             errors['close_user'] = "Нужно сначала принять заявку!"
-        if  self.receive_dateTime is not None and self.close_dateTime is not None:
+        if self.receive_dateTime is not None and self.close_dateTime is not None:
             if self.receive_dateTime > self.close_dateTime:
                 errors['close_dateTime'] = "Дата закрытия заявки должна быть больше даты ее принятия!"
 
@@ -148,9 +156,23 @@ class MainRequest(models.Model):
     @property
     def is_closed(self):
         if self.close_user is not None and self.close_dateTime is not None:
-            return True
+            return 3
         else:
-            return False
+            return 2
+
+    @property
+    def is_recived(self):
+        return self.receive_dateTime is not None and self.receive_user is not None
+
+    @property
+    def status(self):
+        if self.is_recived:
+            return 1
+        if self.is_closed == 3:
+            print('isclosed')
+            return 2
+        return 0
+
 
         # для преобразования в json
 
@@ -172,22 +194,41 @@ class MainRequest(models.Model):
                 "receive-user-name": '' if selfe.receive_user == None else selfe.receive_user.user.first_name,
                 "str_receive_dateTime": selfe.str_receive_dateTime,
                 "close-user-name": '' if selfe.close_user == None else selfe.close_user.user.first_name,
-                "str_close_dateTime": selfe.str_close_dateTime}
+                "str_close_dateTime": selfe.str_close_dateTime
+                }
 
     def can_save(self, request_user):
         group_user = request_user.groups.all().values_list('id', flat=True)
+        print('CAN SAVE group user -', group_user, 'is-closed - ', self.is_closed)
+        for g in group_user:
+            print(g)
         if 1 in group_user:
             return True
         if 2 in group_user:
-            if self.is_closed:
+            if self.is_closed == 3:
+                print('F')
                 return False
             else:
+                print('T')
                 return True
         if 3 in group_user:
-            if self.is_closed == True:
+            if self.is_closed == 3:
                 return False
             else:
                 if self.input_user.user.pk == request_user.pk and self.receive_user is None:
                     return True
                 else:
                     return False
+
+    def can_add_dep(self, request_user):
+        group_user = request_user.groups.all().values_list('id', flat=True)
+        if self.close_dateTime is not None or self.close_dateTime is not None:
+            return False
+
+        if 3 in group_user:
+            return False
+
+        if 2 in group_user:
+            return True
+        if 1 in group_user:
+            return True

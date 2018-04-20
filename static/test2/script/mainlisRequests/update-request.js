@@ -29,35 +29,38 @@ function setRowUpdater(){
                 $(this).click(        function(){
                 // после прокрутки внгихз а потом вверх срабатіваетнесколько раз собітие нажатия на кнопку!
                 stopTimerUpdae();
-                if (opened === false) {
-                    var id = $(this).find(".id").html();
-                    opened = true;
-                    $.arcticmodal({
-                        type: 'ajax',
-                        url: "/base/update-request/" + id + "/",
-                        ajax: {
-                            type: 'GET',
-                            cache: false
-                        },
-                        beforeClose: function () {
-                            $("#updateForm").hide();
-                        },
+                    if (opened !== false) {
+                    } else {
+                        var id = $(this).find(".id").html();
+                        opened = true;
+                        $.arcticmodal({
+                            type: 'ajax',
+                            url: "/base/update-request/" + id + "/",
+                            ajax: {
+                                type: 'GET',
+                                cache: false
+                            },
+                            beforeClose: function () {
+                                $("#updateForm").hide();
+                            },
 
-                        afterLoadingOnShow: function (data, el) {
-                            prepareUpdateForm();
-                        },
-                        errorLoading: function () {
-                        },
-                        afterClose: function () {
-                            opened = false;
-                            if (ischanged===true){
-                                reloadAfterSave();
+                            afterLoadingOnShow: function (data, el) {
+                                prepareUpdateForm();
+                            },
+                            errorLoading: function () {
+                            },
+                            afterClose: function () {
+                                opened = false;
+                                enableTimerUpdae();
+                                updateList();
+                                if (ischanged === true) {
+                                    reloadAfterSave();
+                                }
                             }
-                        }
 
 
-                    });
-                }
+                        });
+                    }
             });
         });
 
@@ -158,7 +161,7 @@ function saveUpdateRequest() {
 
                                    $.each(er_vals, function (fieldname, value) {
 
-                                       var field_inner = $("#id_-"+key+'-'+fieldname);
+                                       var field_inner = $("#id_departure_set-"+key+'-'+fieldname);
                                        if (!field_inner!=undefined) setErrortext(field_inner, value);
                                    })
 
@@ -265,8 +268,7 @@ function saveUpdateRequest() {
 }
 
 function reloadAfterSave(data, el){
-         enableTimerUpdae();
-         updateList();
+
          if (ischanged){
              //DoFilter();
 

@@ -62,15 +62,18 @@ def set_field_grid(bound_field):
 @register.filter
 def set_timeclass(bound_field):
     if (bound_field.name.find('datetime') > 0) or (bound_field.name.find('dateTime') > 0):
-        return 'interval'
-    else:
-        return ''
-
+        if bound_field.field.widget.__class__.__name__ != 'NullBooleanSelect':
+            return 'interval'
+    return ''
 
 @register.filter
 def input_class(bound_field):
-    if (bound_field.name.find('datetime') > 0) or (bound_field.name.find('dateTime') > 0):
-        return 'datepicker-need'
+
+    #if bound_field.field.widget.__class__.__name__!= 'NullBooleanSelect'
+    if (bound_field.name.find('datetime') > 0) or (bound_field.name.find('dateTime') > 0) :
+        if bound_field.field.widget.__class__.__name__!= 'NullBooleanSelect':
+            return 'datepicker-need'
+            print(bound_field.name, ' --datepicker-need')
     return ''
 
 
@@ -80,3 +83,7 @@ def new_line(bound_field):
     # for ex, val in bound_field.field.widget.attrs.items:
     #     resu = resu + ex+' ' +val+'; '
     return 'lll'
+
+@register.assignment_tag
+def define(val=None):
+  return val

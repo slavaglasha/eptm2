@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from main_requests import views as main_views
 from account import views as account_views
-
+from work_profiles import  views as profile_view
 # from django.views.generic.base import TemplateView
 
 # set' object is not reversible keyError :'ru' Еужно во всех url gjcnfdbnm КВАДРАТНЫЕСКОБКИ
@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^signup/', account_views.signup, name='signup'),
     url(r'^login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/', auth_views.LogoutView.as_view(template_name='simple.html'), name='logout'),
+
+    url(r'^user-change/',profile_view.update_profile, name='update_profile'),
 
     url(r'^base/new-request/$', main_views.CreateNewRequest.as_view(), name='base_create_view'),
     url(r'^base/new-request/success/', main_views.new_request_success, name='base_create_view_success'),

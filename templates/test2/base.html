@@ -34,7 +34,7 @@
             <label class="help-label" for="help-checkbox-menu" >
               {% if user.is_authenticated %}
                   <div class="user">
-                    <div class="user-name">{{ user.last_name }} {{ user.first_name }}</div>
+                      <div class="user-name"><a href="{% url 'update_profile' %}"> {{ user.get_full_name  }}</a></div>
                     <span   class="icon fas fa-user"></span>
                  </div>
                  <span class="controls fas fa-cog"></span>
@@ -48,7 +48,7 @@
                <input type="checkbox" class="help-checkbox" id="help-checkbox-menu" >
                <div class="pop-menu">
                 <ul>
-                  <li class="user-list"><a href="#">{{ user.username }}</a><div id="user-id" class="hidden">{{ user.id }}</div></li>
+                  <li class="user-list"><a href="{% url 'update_profile' %} ">{{ user.get_full_name }}</a><div id="user-id" class="hidden">{{ user.id }}</div></li>
                   <!-- <li><a href="#">Аккаунт </a></li> -->
                   <li><a href="{% url 'logout' %}">Выход</a></li>
                 </ul>
