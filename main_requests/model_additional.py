@@ -1,7 +1,13 @@
+from django.contrib.auth.models import User
+
 from work3.settings import DATETIME_INPUT_FORMATS
 from django.utils import timezone
+
+from work_profiles.models import Profile
 from .models import MainRequest
 from departures.models import Departure
+from places.models import  Places
+
 
 
 class MainRequestAddition:
@@ -10,7 +16,9 @@ class MainRequestAddition:
     def __init__(self, main__request):
         print("Init MainRequestAddition")
         print(main__request)
-        self.main_request = main__request
+        self.main_request =main__request
+
+
 
 
     def to_dict_add(self):

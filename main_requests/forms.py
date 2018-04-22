@@ -63,10 +63,10 @@ class newMainRequestForm(forms.ModelForm):
         print(3 in groups)
 
         if 3 in groups:
-            self.fields['request_outer_status'].disabled = True
-            self.fields['request_outer_department'].disabled = True
-            self.fields['request_user'].disabled = True
-            self.fields['request_outer_User'].disabled = True
+            self.fields['request_outer_status'].widget.attrs['readonly'] = True
+            self.fields['request_outer_department'].widget.attrs['readonly'] = True
+            self.fields['request_user'].widget.attrs['readonly'] = True
+            self.fields['request_outer_User'].widget.attrs['readonly'] = True
 
 
 
@@ -78,21 +78,22 @@ class newMainRequestForm(forms.ModelForm):
 
 class updateMainRequestForm(forms.ModelForm):
     about = forms.CharField(widget=forms.Textarea(attrs={'rows':4}), max_length=500, help_text="Максимальная длинна сообщения  500 "
-                                                                               "символов.")
+                                                                               "символов.",label="О чем заявлено" )
 
 
 
     class Meta:
         model = MainRequest
 
-        fields = ['request_user', 'request_outer_User', 'request_outer_status', 'request_outer_department',
+        fields = ['input_user','request_user', 'request_outer_User', 'request_outer_status', 'request_outer_department',
               'request_dateTime', 'place', 'about','receive_user','receive_dateTime', 'close_user', 'close_dateTime']
-        labels = {'request_user': 'Заявитель', 'request_outer_User': 'Внешний заявитель',
+        labels = {'input_user':'Ввел заявку','request_user': 'Заявитель', 'request_outer_User': 'Внешний заявитель',
               'request_outer_status': 'Должность', 'request_outer_department': ' Подразделение',
-              'request_dateTime': 'Дата подачи заявки', 'about': 'О чем заявлено',
-              'place': 'Место',
+              'request_dateTime': 'Дата подачи заявки',
+              'place': 'Место','about': 'О чем заявлено',
               'receive_user':'Принял','receive_dateTime':'Дата принятия',
              'close_user':'Закрыл', 'close_dateTime':'Дата закрытия'}
+
 
 
 
@@ -104,61 +105,67 @@ class updateMainRequestForm(forms.ModelForm):
         groups = user.groups.all().values_list('id', flat=True)
         self.fields['receive_user'].queryset = Profile.objects.filter(user__groups__in=[1,2])
         self.fields['close_user'].queryset = Profile.objects.filter(user__groups__in=[1, 2])
+        self.fields['input_user'].widget.attrs['readonly'] = True
+
         if 2 in groups:  # исполнители
 
             if instance.input_user.pk != user.id: #корректирует не сво. заявку мо;ет только принять
-                self.fields['request_user'].widget.attrs['disabled'] = True
-                self.fields['request_outer_User'].widget.attrs['disabled'] = True
-                self.fields['request_outer_status'].widget.attrs['disabled'] = True
-                self.fields['request_outer_department'].widget.attrs['disabled'] = True
-                self.fields['request_dateTime'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['about'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
+                self.fields['request_user'].widget.attrs['readonly'] = True
+                self.fields['request_outer_User'].widget.attrs['readonly'] = True
+                self.fields['request_outer_status'].widget.attrs['readonly'] = True
+                self.fields['request_outer_department'].widget.attrs['readonly'] = True
+                self.fields['request_dateTime'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['about'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
             if  instance.receive_user is not None:
                 if instance.receive_user.id != user.id:
-                    self.fields['receive_user'].widget.attrs['disabled'] = True
-                    self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+                    self.fields['receive_user'].widget.attrs['readonly'] = True
+                    self.fields['receive_dateTime'].widget.attrs['readonly'] = True
                 else:
                     self.fields['receive_user'].queryset = Profile.objects.filter(pk=user.id)  # можно поставить только себя
             else:
                 self.fields['receive_user'].queryset = Profile.objects.filter(pk=user.id)  # можно поставить только себя
 
-            self.fields['close_user'].widget.attrs['disabled'] = True
-            self.fields['close_dateTime'].widget.attrs['disabled'] = True
+            self.fields['close_user'].widget.attrs['readonly'] = True
+            self.fields['close_dateTime'].widget.attrs['readonly'] = True
 
-            if instance.is_closed:
-                self.fields['request_user'].widget.attrs['disabled'] = True
-                self.fields['request_outer_User'].widget.attrs['disabled'] = True
-                self.fields['request_outer_status'].widget.attrs['disabled'] = True
-                self.fields['request_outer_department'].widget.attrs['disabled'] = True
-                self.fields['request_dateTime'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['about'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['receive_user'].widget.attrs['disabled'] = True
-                self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+            if instance.is_closed==3:
+                self.fields['request_user'].widget.attrs['readonly'] = True
+                self.fields['request_outer_User'].widget.attrs['readonly'] = True
+                self.fields['request_outer_status'].widget.attrs['readonly'] = True
+                self.fields['request_outer_department'].widget.attrs['readonly'] = True
+                self.fields['request_dateTime'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['about'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['receive_user'].widget.attrs['readonly'] = True
+                self.fields['receive_dateTime'].widget.attrs['readonly'] = True
 
 
 
         if 3 in groups: #пользователи
-            self.fields['receive_user'].widget.attrs['disabled'] = True
-            self.fields['receive_dateTime'].widget.attrs['disabled'] = True
+            self.fields['receive_user'].widget.attrs['readonly'] = True
+            self.fields['receive_dateTime'].widget.attrs['readonly'] = True
 
-            self.fields['close_user'].widget.attrs['disabled'] = True
-            self.fields['close_dateTime'].widget.attrs['disabled'] = True
-            if instance.input_user.pk != user.id or instance.is_closed:
-                self.fields['request_user'].widget.attrs['disabled'] = True
-                self.fields['request_outer_User'].widget.attrs['disabled'] = True
-                self.fields['request_outer_status'].widget.attrs['disabled'] = True
-                self.fields['request_outer_department'].widget.attrs['disabled'] = True
-                self.fields['request_dateTime'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
-                self.fields['about'].widget.attrs['disabled'] = True
-                self.fields['place'].widget.attrs['disabled'] = True
+            self.fields['close_user'].widget.attrs['readonly'] = True
+            self.fields['close_dateTime'].widget.attrs['readonly'] = True
+            self.fields['request_user'].widget.attrs['readonly'] = True
+            self.fields['request_outer_User'].widget.attrs['readonly'] = True
+            self.fields['request_outer_status'].widget.attrs['readonly'] = True
+            self.fields['request_outer_department'].widget.attrs['readonly'] = True
+            print("user pk - input_pk -  ",instance.input_user.user.id,user.id, )
+
+            if instance.input_user.user.id != user.id or instance.receive_user is not None or instance.is_closed==3:
 
 
-        # self.fields['sku'].widget.attrs['disabled'] = True
+                self.fields['request_dateTime'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+                self.fields['about'].widget.attrs['readonly'] = True
+                self.fields['place'].widget.attrs['readonly'] = True
+
+
+        # self.fields['sku'].widget.attrs['readonly'] = True
 
 
 

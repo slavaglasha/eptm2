@@ -56,7 +56,7 @@ $(document).ready(function() {
                     });
                     var v = ui.item.option.value;
                     if (this.options.doOnSelect != null)
-                        this.options.doOnSelect(v,parent_block);
+                        this.options.doOnSelect(v,$(this.element).parents("form").first());
 
 
 
@@ -150,7 +150,7 @@ $(document).ready(function() {
             //add another value into new fied
             if (this.options.enabaleOther) {
                 if (this.options.doOnClear !== undefined){
-                    this.options.doOnClear(parent_block);
+                    this.options.doOnClear($(this.element).parents("form").first());
 
                 }
                 //this.input.val("");
@@ -178,6 +178,7 @@ $(document).ready(function() {
 });
 
 function searchDep(val,parent_block){
+
         $(parent_block).find("#user_department").children("option").map(function(){
                         var tv = this.value;
                         var t=$(this).text();
@@ -220,6 +221,7 @@ function new_request_initWidjects(){
         }
 
  function filter_initWidjects() {
+
         $("#filter-form-content #id_request_user").combobox({
             "id_innput": "filter-form-content #id_request_outer_user",
             "enabaleOther": true

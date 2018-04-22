@@ -18,23 +18,26 @@
 
 
 	<div class="container">
-        <h1 class="text-center logo mb-4"><span class="header-font">RC</span></h1>
+        <h1 class="text-center logo mb-4"><span class="header-font">{% block tittle %}RC{% endblock %}</span></h1>
         <div class="row justify-content-center">
             {% block columns %}
             <div class="col-lg-4 col-md-6 col-sm-10">
             {% endblock %}
+
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title">{% block h1 %}Log in{% endblock %}</h2>
+                            {%  block card_form %}
                             <form method="post" novalidate>
                                 {% csrf_token %}
                                 {% include 'includes/formsonecolumn.html' %}
-                                <button type="submit" class="btn btn-primary btn-block mt-2">
+                                <button class="btn btn-primary btn-block mt-2">
                                     {% block button-caption %}
                                     Log in
                                     {% endblock %}
                                 </button>
                             </form>
+                            {% endblock %}
                     </div>
                     <div class="card-footer text-center">
                         {% block card-footer %}

@@ -81,7 +81,8 @@
             onChangeYear: '',
             onChangeDecade: '',
             onChangeView: '',
-            onRenderCell: ''
+            onRenderCell: '',
+            needselecedtDate: 0
         },
         hotKeys = {
             'ctrlRight': [17, 39],
@@ -187,6 +188,15 @@
             this.$el.on('clickCell.adp', this._onClickCell.bind(this));
             this.$datepicker.on('mouseenter', '.datepicker--cell', this._onMouseEnterCell.bind(this));
             this.$datepicker.on('mouseleave', '.datepicker--cell', this._onMouseLeaveCell.bind(this));
+
+            if (this.elIsInput){
+               if (this.opts.needselecedtDate!=''){
+                   if (this.opts.needselecedtDate instanceof  Date) {
+                       this.selectDate(this.opts.needselecedtDate);
+                   }
+               }
+
+            }
 
             this.inited = true;
         },

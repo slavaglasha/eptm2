@@ -15,7 +15,7 @@ from django.utils.timezone import localtime
 
 
 class Departure(models.Model):
-    main_request = models.ForeignKey(main_request_model.MainRequest, related_name='+',verbose_name='Заявка', null=False)
+    main_request = models.ForeignKey(main_request_model.MainRequest, verbose_name='Заявка', null=False)
     input_datetime = models.DateTimeField(auto_now_add=True, null=False, blank=False, verbose_name='Дата ввода')
     start_datetime = models.DateTimeField(null=True, blank=True, default=timezone.now, verbose_name='Начало работ')
     end_datetime = models.DateTimeField(auto_now_add=False, null=True, blank=True, verbose_name='Окончание работ')
@@ -44,7 +44,7 @@ class Departure(models.Model):
 
     def clean(self):
         print("Clean Departure {0}".format(self.pk))
-        tomorrow = timezone.now().__add__(timedelta(days=2))
+        tomorrow = timezone.now().__add__(timedelta(days=1))
         yesterday = timezone.now().__add__(timedelta(days=-1))
 
         print("time now-{0}".format(localtime(timezone.now())))
@@ -70,21 +70,24 @@ class Departure(models.Model):
                         errors['start_datetime'] = 'Дата начала работ не может быть меньше ' + localtime(
                             yesterday).strftime('%d.%m.%Y %H:%M')
 
-            print()
+
             if (origin is None):
                   if (self.start_datetime<yesterday):
                       errors['start_datetime'] = 'Дата начала работ не может быть меньше '+localtime(yesterday).strftime('%d.%m.%Y %H:%M')
             if (self.start_datetime>tomorrow):
                       errors['start_datetime'] = 'Дата начала работ не может быть больше ' +localtime(tomorrow).strftime('%d.%m.%Y %H:%M')
-        #
-        #
-        # if ('end_datetime' in self.get_deferred_fields()):
-        #      if ((self.start_datetime) < yestarday):
-        #          errors['end_datetime'] = 'Дата окончания работ не может быть меньше ' + yestarday
+
         if not(self.end_datetime is None):
             if ((self.end_datetime) > tomorrow):
                   errors['end_datetime'] = 'Дата окончания работ не может быть больше ' + localtime(tomorrow).strftime('%d.%m.%Y %H:%M')
 
+        if (not (self.start_datetime is None)) and (not (self.end_datetime is None)):
+            if self.start_datetime>self.end_datetime:
+                errors['end_datetime'] = 'Дата не может быть меньше даты рачала работ '+ localtime(self.start_datetime).strftime('%d.%m.%Y %H:%M')
+        main_request_model = self.main_request
+        if main_request_model is not None and main_request_model.receive_dateTime > self.start_datetime:
+            mes = 'Дата начала работ не может быть меньше даты принятия заявки'
+            errors['start_datetime'] = mes + localtime(main_request_model.receive_dateTime).strftime('%d.%m.%Y %H:%M')
 
 
         #disp_users = ''

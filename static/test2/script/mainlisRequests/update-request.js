@@ -20,40 +20,49 @@ function getCurrentDateTime(){
 
 }
 
+
+
 function setRowUpdater(){
-        $("#main-list").find(".row").click(function(){
-            // после прокрутки внгихз а потом вверх срабатіваетнесколько раз собітие нажатия на кнопку!
-            if (opened === false) {
-                var id = $(this).find(".id").html();
+        $.each( $("#main-list").find(".row"),
+            function(){
+                $(this).unbind();
+                $(this).click(        function(){
+                // после прокрутки внгихз а потом вверх срабатіваетнесколько раз собітие нажатия на кнопку!
+                stopTimerUpdae();
+                    if (opened !== false) {
+                    } else {
+                        var id = $(this).find(".id").html();
+                        opened = true;
+                        $.arcticmodal({
+                            type: 'ajax',
+                            url: "/base/update-request/" + id + "/",
+                            ajax: {
+                                type: 'GET',
+                                cache: false
+                            },
+                            beforeClose: function () {
+                                $("#updateForm").hide();
+                            },
 
-                opened = true;
-                $.arcticmodal({
-                    type: 'ajax',
-                    url: "/base/update-request/" + id + "/",
-                    ajax: {
-                        type: 'GET',
-                        cache: false
-                    },
-                    beforeClose: function () {
-                        $("#updateForm").hide();
-                    },
+                            afterLoadingOnShow: function (data, el) {
+                                prepareUpdateForm();
+                            },
+                            errorLoading: function () {
+                            },
+                            afterClose: function () {
+                                opened = false;
+                                enableTimerUpdae();
+                                updateList();
+                                if (ischanged === true) {
+                                    reloadAfterSave();
+                                }
+                            }
 
-                    afterLoadingOnShow: function (data, el) {
-                        prepareUpdateForm();
-                    },
-                    errorLoading: function () {
-                    },
-                    afterClose: function () {
-                        opened = false;
-                        if (ischanged===true){
-                            reloadAfterSave();
-                        }
+
+                        });
                     }
-
-
-                });
-            }
-    });
+            });
+        });
 
 }
 
@@ -71,10 +80,11 @@ function prepareUpdateForm(){
 
         changeReceiveUser($("#updateForm").find("#id_receive_user").val());
     });
-
+    $("#updateForm").find("#save-update-request").unbind();
     $("#updateForm").find("#save-update-request").click(saveUpdateRequest);
     $("#updateModal_wait").fadeOut(100);
-     $("#add-departure").click(function(){
+    $("#add-departure").unbind();
+    $("#add-departure").click(function(){
              cloneMore($("#empty-form"),"__prefix__");
          });
 
@@ -82,13 +92,6 @@ function prepareUpdateForm(){
        setWidgets(this);
      });
      setClosedStatus();
-
-
-
-
-
-
-
 }
 
 function enabledDepartures(){
@@ -126,6 +129,7 @@ function validForm() {
 
 function saveUpdateRequest() {
         var id = $("#id").text();
+         // language=JQuery-CSS
          $("#updateModal_wait").fadeIn(100);
          if (validForm()){
              $.ajax({
@@ -138,11 +142,12 @@ function saveUpdateRequest() {
                         $(".error-text").html("");
                         $(".invalid").removeClass('invalid');
                        if (json.success){
-                           $("#update-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(success_update);
+                           $("#update-form__message").removeClass('alert-danger').find("p").text(success_update);
+                           $("#update-form__message").arcticmodal();
                            setClosedStatus();
                        }
                        else{
-                           $("#update-form__message").removeClass("hidden").addClass('alert-danger').children("p").text(error_update);
+                           $("#update-form__message").addClass('alert-danger').find("p").text(error_update);
                            $.each(json.errors, function(key, item) {
                               var id= item[0];
                               var field =  $("#update-request-form").find("#id_"+item[0]);
@@ -156,7 +161,7 @@ function saveUpdateRequest() {
 
                                    $.each(er_vals, function (fieldname, value) {
 
-                                       var field_inner = $("#id_-"+key+'-'+fieldname);
+                                       var field_inner = $("#id_departure_set-"+key+'-'+fieldname);
                                        if (!field_inner!=undefined) setErrortext(field_inner, value);
                                    })
 
@@ -164,6 +169,7 @@ function saveUpdateRequest() {
                                });
 
                            });
+                           $("#update-form__message").arcticmodal();
                            /*$.each(json.departures_errors[0].departures, function (dep_errors) {
                               $.each(dep_errors, function (key, item) {
                                   var pref = '-'+num;
@@ -180,7 +186,8 @@ function saveUpdateRequest() {
                     error: function (xhr, errmsg) {
 
 
-                        $("#update-form__message").text(error_text_messsage);
+                        $("#update-form__message").addClass('alert-danger').find("p").text(error_text_messsage);
+                        $("#update-form__message").arcticmodal();
                         $("#updateModal_wait").fadeOut(100);
 
                     }
@@ -231,8 +238,13 @@ function saveUpdateRequest() {
     newElement.find(".dep-number").text(total);
 
     var id="#id-"+(total-1)+"-start_datetime";
-    newElement.find(id).attr({"value":$("id_-__prefix__-start_datetime").attr('value')});
-    newElement.find(id).text($("id_-__prefix__-start_datetime").attr('value'));
+  //  newElement.find(id).attr({"value":$("id_-__prefix__-start_datetime").attr('value')});
+  //  newElement.find(id).text($("id_-__prefix__-start_datetime").attr('value'));
+       alert(getCurrentDateTime());
+       var strDate = getCurrentDateTime();
+       newElement.find(id).val(strDate);
+       newElement.find(id).text(getCurrentDateTime());
+
     //newElement.append("<div class='row'><div class='col-4 col-offset-4'><a id='del--0' >Удалить</a>  </div></div>");
     //newElement.find("#del--0").addClass("btn").addClass("btn-sm").addClass("btn-outline-secondary");
     //newElement.find("#del--0").attr({"id":"del-"+(total-1)});
@@ -256,8 +268,9 @@ function saveUpdateRequest() {
 }
 
 function reloadAfterSave(data, el){
+
          if (ischanged){
-             DoFilter();
+             //DoFilter();
 
 
 

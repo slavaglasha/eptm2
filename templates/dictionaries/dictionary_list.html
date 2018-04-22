@@ -1,0 +1,93 @@
+{% extends 'test2/request-list.html' %}
+{% load static %}
+{% block top-refs %}
+
+{% endblock %}
+{% block top-popu-refs %}
+    <li><a href="{% url 'view' %}" >Заявки</a></li>
+{% endblock %}
+{% block title-two %}
+
+        <div class="header-row dictionary-menu-row">
+            <div class="container-my">
+            <div class="left-menu">
+                  <ul class="row-menu">
+                      <li><a href="#">Департамент</a></li>
+                      <li><a href="#">Станции</a></li>
+                      <li><a href="#">Пользователи</a></li>
+                  </ul>
+              </div>
+            </div>
+            <div class="container-my dictionary-header">
+                <h2>Департаменты</h2>
+            </div>
+        </div>
+
+
+
+
+  {% endblock %}
+{% block title-table%}
+<div class="container">
+        <div class="row">
+             <div class="col-1 align-content-center centered ">
+                 <small><span class="align-content-center number-column number" >№</span></small>
+
+             </div>
+             <div class="col-3 col-sm-5 col-md-3 d-none d-sm-block">
+               Название
+             </div>
+             <div class="col-3 col-sm-5 col-md-8 d-none d-sm-block">
+               Описание
+             </div>
+             <div class="col-11 col-md-6 col-sm-6 visible-md  d-block d-lg-none">
+                    Описание
+             </div>
+        </div>
+</div>
+
+{% endblock %}
+{% block content %}
+    {% include 'dictionaries/deparment-list-content.html' %}
+
+{% endblock %}
+{% block footer %}
+    <div class="container">
+     <div class="row">
+
+        <button id="btn-new-dictionary" class="btn  btn-sm" type="button"  >Новая заявка</button>
+         <button id="btn-update-dictionary" class="btn  btn-sm" type="button"  >Обновить список</button>
+     </div>
+    </div>
+
+{% endblock %}
+{% block wind1 %}
+
+    <div id="new-dictionary-form-container">
+
+    </div>
+    <div id="update_dictionary_container">
+        <div id="updateDictionaryModal"  style="display: none;" >
+
+        </div>
+
+    </div>
+
+{#            <div class="wait-block">Сохранение заявки</div>#}
+
+
+{% endblock %}
+{% block scripts %}
+  <script src="{% static 'libraries/jquery-3.2.1.min.js'%}"> </script>
+
+  <script src="{% static 'libraries/jquery.arcticmodal-0.3.min.js' %}"></script>
+ <script src="{% static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.js'%}"></script>
+<script src="{% static 'libraries/air-datepicker-master/js/datepicker.js' %}"></script>
+
+ <script src="{% static 'js/../../static/test2/script/select-widjet.js' %}"></script>
+ <script src="{% static 'js/../../static/test2/script/init_form_widget.js' %}"></script>
+ <script src="{% static 'js/const_name_ru.js' %}"></script>
+    <script src="{% static 'js/dictionaries/dictionar-open.js' %}"></script>
+
+
+{% endblock %}

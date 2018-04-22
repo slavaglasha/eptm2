@@ -25,27 +25,42 @@ class MainDepartureForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = "No user first"
-        group = -1
+        group = 0
         if kwargs.keys().__contains__('dep_user'):
             user = kwargs.pop('dep_user')  # передали из CustomDepartureFormSet
             group = user.groups.all()[0].id
         else:
             user = "No user"
-        print("MainDepartureForm __штше__ user - {0} group_id -{1} ".format(user, group))
+        print("MainDepartureForm __штше__ user - {0} group_id -{1}, is-closed -  ".format(user, group))
         super(MainDepartureForm, self).__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
-        if instance != None:
-            print("dep_user - {0} pk -{1} ".format(user, instance.pk))
-        else:
-            print("dep_user - {0} none object} ".format(user))
-        user_enabled = []
-        group1 = Group.objects.get(id=1)
-        print(group1.name)
-        users = group1.user_set.all()
+        if 2 == group:
+            if instance != None :
+                print("dep_user - {0} pk -{1} ".format(user, instance.pk))
+                if instance.pk != None:
+                    parent_main_request = instance.main_request
+                    print("is_closd -",parent_main_request.is_closed)
+                    print('main_request-', parent_main_request)
+                    if parent_main_request != None:
+                        if parent_main_request.is_closed==3:
+                            self.fields['start_datetime'].widget.attrs['readonly'] = True
+                            self.fields['end_datetime'].widget.attrs['readonly'] = True
+                            self.fields['works'].widget.attrs['readonly'] = True
+                            self.fields['about'].widget.attrs['readonly'] = True
+                            self.fields['execute_users'].widget.attrs['readonly'] = True
+
+
+        if 3 == group:
+            self.fields['start_datetime'].widget.attrs['readonly'] = True
+            self.fields['end_datetime'].widget.attrs['readonly'] = True
+            self.fields['works'].widget.attrs['readonly'] = True
+            self.fields['about'].widget.attrs['readonly'] = True
+            self.fields['execute_users'].widget.attrs['readonly'] = True
 
         users = User.objects.filter(groups__id__in=[1, 2])
         prof= Profile.objects.filter(user__in=users )
         self.fields['execute_users'].queryset = prof
+
 
 
         # for i_user in User.objects.all():

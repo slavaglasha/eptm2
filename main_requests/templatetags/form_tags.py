@@ -75,3 +75,7 @@ def initenabledfield(boundfild):
         return "disabled"
     return ""
 
+@register.assignment_tag
+def define(val=None):
+  return val
+
