@@ -30,11 +30,11 @@ function connectArcticUser(form, onSearch, onClear) {
 }
 function setWidgets(form){
            $(form).find("#id_number").spinner({min:0,step:1});
-           $.each($(form).find("select:not(#id_request_user):not([multiple])") function (el) {
+           $.each($(form).find("select:not(#id_request_user):not([multiple])"), function (el) {
             if ($(el).hasAttribute("readonly")){
 
             }
-    })
+    });
            $(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
 
            $(form).find(".datepicker-need:first-child").datepicker({todayButton:false,
