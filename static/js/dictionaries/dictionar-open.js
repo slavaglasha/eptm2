@@ -1,5 +1,5 @@
 url_open="/dictionaries/departments-list-json/";
-object_name = "Ltgfhnfvtyns";
+object_name = "Департаменты";
 class DictionaryOpen{
     constructor(url_open, object_name) {
         this.url_open = url_open;

@@ -1,0 +1,19 @@
+{% load static %}
+
+                     <div class="wait-block" id="newModal_wait"></div>
+                     <form method="post" novalidate id="new-dictionary-form">
+                     {% csrf_token %}
+                        <div class="container-fluid">
+                            <div id="new-request-error-message"></div>
+                                {% include 'includes/arctic-form/form.html' %}
+
+                        </div>
+
+                     </form>
+                     <div class="row">
+                        <div class="alert hidden" id="new-form__message">
+                            <p></p>
+                        </div>
+                     </div>
+
+

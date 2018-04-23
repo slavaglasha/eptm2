@@ -62,10 +62,34 @@
 
 {% endblock %}
 {% block wind1 %}
+     <div id="new-form-container">
+        <div id="newModal"  style="display: none;">
 
-    <div id="new-dictionary-form-container">
+            <div class="box-modal" id="new-form-block">
+               <div class="block top-block">
+                <div class="box-modal_close arcticmodal-close">X</div>
+                      <div class="number-new" id="number-new">Новая заявка</div>
+                </div>
+                <div class="block main-block">
+                </div>
+                <div class="block">
 
+                    <button  type="button" class="btn btn-smm" id="save-new-dictionary">Сохранить</button>
+
+
+                    <button type="button" class="btn btn-smm arcticmodal-close"  id="new-dictionary__btn-close" > Отменть  </button>
+                    <button type="button" class="btn btn-smm  hiden"  id="new-dictionary__btn-new" > Новая заявка  </button>
+
+                </div>
+            </div>
+        </div>
     </div>
+    <div id="new-form-container">
+        <div id="newModal"  style="display: none;">
+        </div>
+    </div>
+
+
     <div id="update_dictionary_container">
         <div id="updateDictionaryModal"  style="display: none;" >
 
@@ -87,7 +111,8 @@
  <script src="{% static 'js/../../static/test2/script/select-widjet.js' %}"></script>
  <script src="{% static 'js/../../static/test2/script/init_form_widget.js' %}"></script>
  <script src="{% static 'js/const_name_ru.js' %}"></script>
+    <script src="{% static 'js/workWithForm.js' %}"></script>
     <script src="{% static 'js/dictionaries/dictionar-open.js' %}"></script>
-
+ <script src="{% static 'js/dictionaries/dictionary_new.js' %}"></script>
 
 {% endblock %}
