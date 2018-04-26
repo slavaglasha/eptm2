@@ -26,11 +26,18 @@
       <div class="container-my">
           <div class="left-menu">
             <div class="logo">
-              RC
+                <a href = {% url 'view' %} >RC</a>
+
             </div>
+             {% block nameapp %}  {% endblock %}
+
+
           </div>
 
           <div class="right-menu" tabindex="0">
+            {% block right-menu %}
+
+            {% endblock %}
             <label class="help-label" for="help-checkbox-menu" >
               {% if user.is_authenticated %}
                   <div class="user">

@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Places(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True, verbose_name='Название станции', help_text='Если су объекта есть названеи (станция)'    )
+    name = models.CharField(max_length=200, null=True, blank=True, verbose_name='Название станции', help_text='Если у объекта есть названеи (станция)'    )
     adres =  models.CharField(max_length=200, null=True, unique=False, blank=True)
     geo_point = models.DecimalField(max_digits=5, decimal_places=2,null=True, blank=True)
     note = models.CharField(max_length=500, null=True, blank=True)
@@ -17,3 +17,17 @@ class Places(models.Model):
     class Meta:
         verbose_name = "Место"
         verbose_name_plural = "Обьекты"
+
+    @property
+    def to_dict(selfe):
+
+        return{'id':selfe.id,
+               'name':selfe.name,
+               'adres':selfe.adres,
+               'geo_point':selfe.geo_point,
+               'note':selfe.note,
+               'to_place':'' if selfe.to_Place==None else selfe.to_Place.name
+               }
+
+    def clean(self):
+        print('Geo point model', self.geo_point)

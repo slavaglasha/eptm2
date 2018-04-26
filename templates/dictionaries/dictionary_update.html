@@ -1,0 +1,63 @@
+{% load static %}
+ <div class="box-modal" id="updateForm">
+                <div class="block top-block">
+                      <div class="box-modal_close arcticmodal-close">X</div>
+                    <div class="number-new" id="number-new"> <span id="objname"> </span><span id="obj-name">{{ form.instance.name }} </span><span class="status-closed"></span> </div>
+
+                </div>
+                <div class="block main-block">
+                    <div class="wait-block" id="updateModal_wait"></div>
+
+                    <form  id="update-object-form" method="post" novalidate >
+                        <div id="update-from-main-form">
+                            <div class="id hiden" id="id">{{ form.instance.id }}</div>
+                            {% csrf_token %}
+                            <div id="update-objectt-error-message"></div>
+                            {% include 'includes/arctic-form/form.html' %}
+
+                             <div class="hidden"></div>
+                            <div class="row">
+                        <div class="alert hidden" id="update-inline-form__message">
+                            <p></p>
+                        </div>
+                     </div>
+                             <div class="row">
+
+                                   <div style="display: none;">
+                                       <div class=" alert box-modal message-model" id="update-form__message">
+                                           <div class="block top-block">
+                                             <div class="box-modal_close arcticmodal-close">X</div>
+                                           </div>
+                                           <div class="block main-block">
+                                                <p>
+
+                                                </p>
+                                              <button type="button" class="btn btn-smm arcticmodal-close"   > Выход  </button>
+                                            </div>
+                                       </div>
+                                   </div>
+                            </div>
+                        </div>
+
+
+                          <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
+                                               Выйти
+                                        </button> -->
+
+
+                    </form>
+                </div>
+                <div class="block">
+                <div class="row">
+                <div class="col-12">
+                    {% if can_save %}
+                     <button  type="button" class="btn btn-smm"  id="save-object-update">Сохранить</button>
+                     <button  type="button" class="btn btn-smm"  id="delete-object">Удалить</button>
+
+                    {% endif %}
+                    <button type="button" class="btn btn-smm arcticmodal-close"  id="update-object__btn-close" > Выход  </button>
+
+                </div>
+                </div>
+                </div>
+ </div>

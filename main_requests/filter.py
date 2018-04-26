@@ -10,9 +10,10 @@ from places.models import Places
 
 class MyRangeWidget(django_filters.widgets.RangeWidget):
 
-    def format_output(self, rendered_widgets):
-        # Method was removed in Django 1.11.
-        return '<span>-</span>'.join(rendered_widgets)
+    # def format_output(self, rendered_widgets):
+    #     # Method was removed in Django 1.11.
+    #     return '<span>-</span>'.join(rendered_widgets)
+    template_name = 'reloadwidget/range-widget.html'
 
 class HelpfulFilterSet(django_filters.FilterSet):
     @classmethod
@@ -31,15 +32,15 @@ class MainRequestFilter(HelpfulFilterSet):
     input_datetime = django_filters.DateTimeFromToRangeFilter(label='Дата вводда', lookup_expr='range', widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datepicker-need'}))
     input_user = django_filters.ModelChoiceFilter(label = 'Пользователь', lookup_expr='exact', queryset=Profile.objects.filter() )
 
-    request_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата подачи заявки', lookup_expr='range')
+    request_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата подачи заявки', lookup_expr='range',widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datepicker-need'}))
     request_user = django_filters.ModelChoiceFilter(label='Подал', lookup_expr='exact',
                                                   queryset=Profile.objects.filter(), help_text='Можно ввести с клавиатуры')
     request_outer_User = django_filters.CharFilter(label='')
 
-    receive_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата принятия',lookup_expr='rangdbe')
+    receive_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата принятия',lookup_expr='rangdbe',widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datepicker-need'}))
     receive_user = django_filters.ModelChoiceFilter(label = 'Принял', lookup_expr='exact', queryset=Profile.objects.filter())
 
-    close_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата закрытия',lookup_expr='range')
+    close_dateTime = django_filters.DateTimeFromToRangeFilter(label='Дата закрытия',lookup_expr='range',widget=MyRangeWidget(attrs={'display': 'inline', 'class':'datepicker-need'}))
 
     close_user =django_filters.ModelChoiceFilter(label = 'Закрыл', lookup_expr='exact', queryset=Profile.objects.filter())
     place = django_filters.ModelChoiceFilter(label = 'Место', lookup_expr ='exact', queryset=Places.objects.all())

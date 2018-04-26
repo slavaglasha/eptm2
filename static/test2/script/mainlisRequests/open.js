@@ -189,6 +189,8 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                        isLoaded = false;
                        setTimeUpdate();
 
+                       $(body).css("overflow",'hidden');
+
                    }
 
 

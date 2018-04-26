@@ -12,3 +12,10 @@ var error_messages_lg="НЕ загрузился фильтр";
 
   var new_obj = 'Новый ';
   var need_saved = true;
+  var success_update_object = 'успешно сохранен';
+ var error_update_object = ' не сохранен';
+ var closed_request = 'Заявка закрыта';
+
+ var success_delete = 'успешно удален';
+  var error_delete_object = ' не удален';
+

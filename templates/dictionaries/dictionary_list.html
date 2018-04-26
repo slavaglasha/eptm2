@@ -1,61 +1,50 @@
 {% extends 'test2/request-list.html' %}
 {% load static %}
+   {% block nameapp %} <div class="name_app">Справочники</div> {% endblock %}
 {% block top-refs %}
 
 {% endblock %}
 {% block top-popu-refs %}
     <li><a href="{% url 'view' %}" >Заявки</a></li>
+    <li class="max-hided"><a href="{% url 'dictionary_department' %}" >Департамент</a></li>
+    <li class="max-hided"><a href="{%  url 'dictionary_places' %}">Станции</a></li>
+    <li class="max-hided"><a href="#">Пользователи</a></li>
 {% endblock %}
+{% block right-menu %}
+                    <ul class="row-menu">
+                      <li><a href="{% url 'dictionary_department' %}">Департамент</a></li>
+                      <li><a href="{%  url 'dictionary_places' %}">Станции</a></li>
+                      <li><a href="#">Пользователи</a></li>
+                  </ul>
+            {% endblock %}
 {% block title-two %}
 
         <div class="header-row dictionary-menu-row">
-            <div class="container-my">
-            <div class="left-menu">
-                  <ul class="row-menu">
-                      <li><a href="#">Департамент</a></li>
-                      <li><a href="#">Станции</a></li>
-                      <li><a href="#">Пользователи</a></li>
-                  </ul>
-              </div>
+            <div class="container">
+                 <h2 class=" dictionary-header">{{ name_obj }}</h2>
+
             </div>
-            <div class="container-my dictionary-header">
-                <h2>Департаменты</h2>
-            </div>
+
         </div>
 
 
 
 
   {% endblock %}
-{% block title-table%}
-<div class="container">
-        <div class="row">
-             <div class="col-1 align-content-center centered ">
-                 <small><span class="align-content-center number-column number" >№</span></small>
 
-             </div>
-             <div class="col-3 col-sm-5 col-md-3 d-none d-sm-block">
-               Название
-             </div>
-             <div class="col-3 col-sm-5 col-md-8 d-none d-sm-block">
-               Описание
-             </div>
-             <div class="col-11 col-md-6 col-sm-6 visible-md  d-block d-lg-none">
-                    Описание
-             </div>
-        </div>
-</div>
+{% block title-table%}
+
 
 {% endblock %}
 {% block content %}
-    {% include 'dictionaries/deparment-list-content.html' %}
+
 
 {% endblock %}
 {% block footer %}
     <div class="container">
      <div class="row">
 
-        <button id="btn-new-dictionary" class="btn  btn-sm" type="button"  >Новая заявка</button>
+        <button id="btn-new-dictionary" class="btn  btn-sm" type="button"  ></button>
          <button id="btn-update-dictionary" class="btn  btn-sm" type="button"  >Обновить список</button>
      </div>
     </div>
@@ -68,17 +57,21 @@
             <div class="box-modal" id="new-form-block">
                <div class="block top-block">
                 <div class="box-modal_close arcticmodal-close">X</div>
-                      <div class="number-new" id="number-new">Новая заявка</div>
+                      <div class="number-new" id="number-new"></div>
                 </div>
                 <div class="block main-block">
                 </div>
                 <div class="block">
+                    {% if can_save %}
 
                     <button  type="button" class="btn btn-smm" id="save-new-dictionary">Сохранить</button>
 
-
+                    {% endif %}
                     <button type="button" class="btn btn-smm arcticmodal-close"  id="new-dictionary__btn-close" > Отменть  </button>
-                    <button type="button" class="btn btn-smm  hiden"  id="new-dictionary__btn-new" > Новая заявка  </button>
+                {% if can_save %}
+                    <button type="button" class="btn btn-smm  hiden"  id="new-dictionary__btn-new" >  </button>
+                {% endif %}
+                <div id="cansave" class="hidden">{{ can_save }}</div>
 
                 </div>
             </div>
@@ -112,7 +105,14 @@
  <script src="{% static 'js/../../static/test2/script/init_form_widget.js' %}"></script>
  <script src="{% static 'js/const_name_ru.js' %}"></script>
     <script src="{% static 'js/workWithForm.js' %}"></script>
-    <script src="{% static 'js/dictionaries/dictionar-open.js' %}"></script>
+
+ <script src="{% static 'js/dictionaries/dictionar-open.js' %}"></script>
  <script src="{% static 'js/dictionaries/dictionary_new.js' %}"></script>
+ <script src="{% static 'js/dictionaries/dictionary_update.js' %}"></script>
+    <script src="{% static 'js/dictionaries/dictionary_delete.js' %}"></script>
+    {% block addObjectScript %}
+
+    {%endblock %}
+
 
 {% endblock %}

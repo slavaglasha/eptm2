@@ -1,0 +1,23 @@
+{% load static %}
+  <div class="  box-modal " id="delete-form">
+                                           <div class="block top-block">
+
+                                             <div class="box-modal_close arcticmodal-close">X</div>
+                                               <div class="number-new">Удаление</div>
+                                           </div>
+                                           <div class="block main-block">
+
+                                                    <div class="obj-name">{{ obj_name }}</div>
+                                               <div class="obj-info">{{ object }}</div>
+                                               <p class="mess"></p>
+                                               <form id="deleted-form">
+                                                    {% csrf_token %}
+
+                                                </form>
+                                               <button id="deleteButton" class="btn btn-smm ">Удалить</button>
+                                                    <button id = "cancelButton" class="btn btn-smm arcticmodal-close" >Отменить</button>
+
+
+
+                                            </div>
+                                       </div>

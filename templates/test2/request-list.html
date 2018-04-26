@@ -1,5 +1,6 @@
 {% extends 'test2/base.html' %}
 {% load static %}
+{% load enabled_tags %}
   {% block stylesheet %}
 
       <link rel="stylesheet" href="{% static 'libraries/jquery.arcticmodal-0.3.css' %}">
@@ -7,6 +8,11 @@
       <link rel="stylesheet" href="{% static 'libraries/themes/simple.css' %}">
       <link rel="stylesheet" href="{% static 'test2/css/corectarctic.css' %}">
    {% endblock %}
+{% block top-popu-refs %}
+    {%  if request.user|see_dict_group %}
+    <li><a href="{% url 'dictionary_department' %}" >Справочники</a></li>
+    {% endif %}
+{% endblock %}
  {% block title-table%}
      <div class="container-fluid">
         <div class="row">

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     'widget_tweaks',
     'django_filters',
     'departments',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'account',
     'places',
     'departures',
+
 ]
 
 MIDDLEWARE = [
@@ -68,6 +70,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+'django.template.context_processors.media',
+'django.template.context_processors.static'
+
             ],
         },
     },
@@ -137,3 +143,4 @@ STATICFILES_DIRS = [
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/test2/base/'
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'

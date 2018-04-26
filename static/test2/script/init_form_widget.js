@@ -43,7 +43,22 @@ function connectArcticUser(form, onSearch, onClear) {
 
 }
 function setWidgets(form){
-           $(form).find("#id_number").spinner({min:0,step:1});
+           //$(form).find("#id_number").spinner({min:0,step:1});
+            $.each($(form).find("input[type='number']"), function () {
+                vmin = $(this).attr("min");
+                if (vmin === undefined) {
+                    vmin = 0
+                }
+                vstep = $(this).attr("step");
+                if (vstep===undefined){
+                    vstep=1
+                }else{
+                    if (vstep==='any'){
+                        vstep=1
+                    }
+                }
+                $(this).spinner({min:vmin, step:vstep})
+            });
           // $(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
            $.each($(form).find("select:not(#id_request_user):not([multiple])"), function () {
                var attr = $(this).attr('readonly');
@@ -58,7 +73,7 @@ function setWidgets(form){
 
                var attr = $(this).attr('readonly');
                if (attr && attr!==false) {
-                   alert("multiple");
+
                    $(this).attr("disabled","");
                }
            });
@@ -89,12 +104,14 @@ function setWidgets(form){
 
                     }else {
                         $(this).datepicker({
-                            todayButton: false,
+
                             clearButton: true,
                             timepicker: true,
                             data_time_format: 'hh:ii',
                             position: 'bottom left',
-                            autoClose: true
+                            autoClose: true,
+                            todayButton: new Date(),
+
                         });
                     }
                     //.selectDate()
@@ -102,9 +119,10 @@ function setWidgets(form){
                 // $(this).removeAttr('disabled');
            });
           $.each($(form).find(".datepicker-need:nth-child(3)"), function() {
+
               var attr = $(this).attr('readonly');
               $(this).datepicker({
-                  todayButton: false,
+                  todayButton: new Date(),
                   clearButton: true,
                   timepicker: true,
                   data_time_format: 'hh:ii',
@@ -119,3 +137,30 @@ function connectPlace(form){
            el.parent().parent().remove();
            $(form).find("#id_place").parent().append(el) ;
         }
+
+function setWidgetsSelect(form){
+      $.each($(form).find("input[type='number']"), function () {
+                vmin = $(this).attr("min");
+                if (vmin === undefined) {
+                    vmin = 0
+                }
+                vstep = $(this).attr("step");
+                if (vstep===undefined){
+                    vstep=1
+                }else{
+                    if (vstep==='any'){
+                        vstep=1
+                    }
+                }
+                $(this).spinner({min:vmin, step:vstep})
+            });
+    $.each($(form).find("select:not(#id_request_user):not([multiple])"), function () {
+               var attr = $(this).attr('readonly');
+               if (attr && attr!==false) {
+                   $(this).selectmenu({disabled:true});
+                   $(this).removeAttr('disabled');
+               }else{
+                   $(this).selectmenu();
+               }
+            });
+}

@@ -74,7 +74,7 @@ body{
     display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: row;
-	flex-direction: row;
+/*	flex-direction: row;*/
 }
 
 .header-row{
@@ -88,20 +88,31 @@ body{
 -webkit-flex: auto;
 	flex: auto;
     padding-left:2em;
-
+    -webkit-flex-direction: row;
+	flex-direction: row;
+display: flex;
 
 }
-.logo{
+.dictionary-menu-row{
+    background: lightgray;
+    color: black;
+    font-size: 2em;
+}
+.logo,.name_app{
      font-family: 'Audiowide', Arial, Helvetica, Clean, sans-serif;
     font-size: 1em;
     text-shadow: 1px 1px 2px black;
-    line-height: 1.6em;
+    line-height: 1.8em;
+    margin-right: 1em;
+     padding:0.1em 0;
+
 }
 
 .right-menu{
   position:relative;
     padding-right: 2em;
-
+flex-direction: row;
+display: flex;
 }
 
 
@@ -110,7 +121,7 @@ body{
   background-color:black;
   display:block;
   right:0;
-  top:-100px;
+  top:-200px;
   z-index:10;
   transition: 1s;
    width: 10em;
@@ -128,7 +139,15 @@ body{
     text-align: right;
    padding:0.4em 1.4em;
 }
+.row-menu li a{
+    line-height: 1.8em;
+    padding-top:0.1em;
+    padding-bottom: 0.1em;
+}
 
+.right-menu .row-menu{
+    margin-right: 3em;
+}
 .pop-menu ul li :hover, .row-menu li a:hover{
 
   background-color: #8b98b4;
@@ -143,7 +162,7 @@ body{
     text-decoration:none;
     color:white;
     font-size:1.6em;
-    margin-top:-0.2em;
+ /*   margin-top:-0.2em;*/
 
 }
 
@@ -157,7 +176,9 @@ body{
 
   position:relative;
   padding-right:0.3em;
-
+line-height: 1.8em;
+    padding-bottom: 0.2em;
+    padding-top: 0.2em
 
 
 }
@@ -203,6 +224,7 @@ body{
 }
 label.help-label{
     margin-bottom: 0;
+    font-size: 1em;
 }
 .help-label:hover{
   cursor:pointer;
@@ -304,12 +326,20 @@ padding: 0.4em;
 	max-height: 90vh;
 }
 
-
+@media (min-width:1020px) {
+   .max-hided{
+     display: none;
+    }
+}
 
 @media (max-width: 1020px){
   .right-menu .user{
     display:none;
   }
+  .right-menu .row-menu{
+    display:none;
+    }
+
   .controls{
     display:flex;
 

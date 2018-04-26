@@ -448,3 +448,17 @@ select:focus, textarea:focus, input:focus{
     margin-bottom: 1.5em;
 }
 
+/*dictionary*/
+.small-alert{
+ width: 100%;
+    background: lightgray;
+    padding: 1em;
+    margin-bottom: 1em  ;
+    border: darkgray;
+}
+.obj-info{
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+}
+

@@ -1,0 +1,13 @@
+{% extends 'dictionaries/dictionary_list.html' %}
+{% load static %}
+{% block title-table%}
+ {% include 'dictionaries/places_list_tittle_table.html' %}
+
+{% endblock %}
+{% block content %}
+    {% include 'dictionaries/places-list-content.html' %}
+
+{% endblock %}
+{% block addObjectScript %}
+        <script src="{% static 'js/dictionaries/places.js' %}"></script>
+ {%endblock %}

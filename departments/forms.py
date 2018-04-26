@@ -6,5 +6,5 @@ from departments.models import department
 class DepartmentForm(forms.ModelForm):
     class Meta:
         model = department
-        fields = ['name', 'about']
-        labels = {'name': 'Название', 'about': 'Описание'}
+        fields = ['name', 'description']
+        labels = {'name': 'Название', 'description': 'Описание'}
