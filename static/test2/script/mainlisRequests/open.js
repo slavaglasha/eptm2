@@ -274,6 +274,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                      isTimerEnabled=false;
                      stopTimerUpdae();
                  }
+                  $(body).css("overflow",'hidden');
              }
              ,
              error: function (xhr, errmsg) {

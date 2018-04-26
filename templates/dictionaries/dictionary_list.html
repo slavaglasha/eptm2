@@ -7,14 +7,14 @@
 {% block top-popu-refs %}
     <li><a href="{% url 'view' %}" >Заявки</a></li>
     <li class="max-hided"><a href="{% url 'dictionary_department' %}" >Департамент</a></li>
-    <li class="max-hided"><a href="{%  url 'dictionary_places' %}">Станции</a></li>
-    <li class="max-hided"><a href="#">Пользователи</a></li>
+    <li class="max-hided"><a href="{%  url 'dictionary_places' %}">Объекты</a></li>
+    <li class="max-hided"><a href="{% url 'dictionary_users' %}">Пользователи</a></li>
 {% endblock %}
 {% block right-menu %}
                     <ul class="row-menu">
                       <li><a href="{% url 'dictionary_department' %}">Департамент</a></li>
-                      <li><a href="{%  url 'dictionary_places' %}">Станции</a></li>
-                      <li><a href="#">Пользователи</a></li>
+                      <li><a href="{%  url 'dictionary_places' %}">Объекты</a></li>
+                      <li><a href="{% url 'dictionary_users' %}">Пользователи</a></li>
                   </ul>
             {% endblock %}
 {% block title-two %}

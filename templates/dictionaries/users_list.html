@@ -1,0 +1,13 @@
+{% extends 'dictionaries/dictionary_list.html' %}
+{% load static %}
+{% block title-table%}
+ {% include 'dictionaries/user_list_tittle_table.html' %}
+
+{% endblock %}
+{% block content %}
+    {% include 'dictionaries/user_list_content.html' %}
+
+{% endblock %}
+{% block addObjectScript %}
+        <script src="{% static 'js/dictionaries/user.js' %}"></script>
+ {%endblock %}

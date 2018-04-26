@@ -58,6 +58,9 @@ urlpatterns = [
     url(r'^dictionaries/places-delete/(?P<pk>\d+)/$', places_view.Places_delete,
         name='places_delete_view'),
 
+    url(r'^dictionaries/users/$', profile_view.ListUsers, name='dictionary_users'),
+    url(r'^dictionaries/users-list-json/$', profile_view.ListUsersJson, name='users_list_json'),
+
     url(r'^test2/base/', main_views.test_base, name='view'),
     url(r'^$', main_views.test_base, name='view'),
 

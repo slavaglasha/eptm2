@@ -39,7 +39,7 @@ class MainRequest(models.Model):
         return '{0} - {1}'.format(self.input_datetime.year, self.number)
 
     def clean(self):
-        tomorrow = timezone.now().__add__(timedelta(days=2))
+        tomorrow = timezone.now().__add__(timedelta(days=1))
         yesterday = timezone.now().__add__(timedelta(days=-1))
         errors = {}
         origin = None
@@ -107,6 +107,10 @@ class MainRequest(models.Model):
         if self.receive_dateTime is not None and self.close_dateTime is not None:
             if self.receive_dateTime > self.close_dateTime:
                 errors['close_dateTime'] = "Дата закрытия заявки должна быть больше даты ее принятия!"
+
+        if (self.close_dateTime is not None) :
+            if (self.close_dateTime > tomorrow):
+                errors['close_dateTime'] = 'Не может быть позже ' + localtime(tomorrow).strftime(DATETIME_INPUT_FORMATS[0])
 
         print(errors)
         if len(errors) > 0:

@@ -71,8 +71,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-'django.template.context_processors.media',
-'django.template.context_processors.static'
+                'django.template.context_processors.media',
+                'django.template.context_processors.static'
 
             ],
         },
@@ -85,13 +85,13 @@ WSGI_APPLICATION = 'work3.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-     'default': dict(ENGINE='django.db.backends.sqlite3', NAME=os.path.join(BASE_DIR, 'db.sqlite3'))
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'eptm_db',
-    #     'USER': 'dbuser',
-    #     'PASSWORD':'pusha',
-    # }
+    # 'default': dict(ENGINE='django.db.backends.sqlite3', NAME=os.path.join(BASE_DIR, 'db.sqlite3'))
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eptm_db',
+        'USER': 'dbuser',
+        'PASSWORD': 'pusha',
+    }
 }
 
 # Password validation

@@ -29,5 +29,3 @@ class Places(models.Model):
                'to_place':'' if selfe.to_Place==None else selfe.to_Place.name
                }
 
-    def clean(self):
-        print('Geo point model', self.geo_point)
