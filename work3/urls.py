@@ -60,6 +60,9 @@ urlpatterns = [
 
     url(r'^dictionaries/users/$', profile_view.ListUsers, name='dictionary_users'),
     url(r'^dictionaries/users-list-json/$', profile_view.ListUsersJson, name='users_list_json'),
+    url(r'^dictionaries/users-new/$', profile_view.new_user_Profile,
+        name='users_create_view'),
+    url(r'^dictionaries/users-update/(?P<pk>\d+)/$',profile_view.update_user_profile_admin, name = 'update_profile_admin'),
 
     url(r'^test2/base/', main_views.test_base, name='view'),
     url(r'^$', main_views.test_base, name='view'),

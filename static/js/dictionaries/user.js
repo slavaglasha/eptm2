@@ -1,8 +1,8 @@
 url_open="/dictionaries/users-list-json/";
 
-let url_new ='/dictionaries/user-new/';
+let url_new ='/dictionaries/users-new/';
 let object_name = 'Пользователь';
-url_update =  "/dictionaries/user-update/";
+url_update =  "/dictionaries/users-update/";
 url_delete  = "/dictionaries/user-delete/";
 
 $(document).ready(function () {

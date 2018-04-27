@@ -5,7 +5,10 @@
                      {% csrf_token %}
                         <div class="container-fluid">
                             <div id="new-request-error-message"></div>
+
                                 {% include 'includes/arctic-form/form.html' %}
+                                {%block addForms%}
+                                {% endblock %}
 
                         </div>
 

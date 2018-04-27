@@ -1,0 +1,16 @@
+{% extends 'dictionaries/dictionary_update.html'%}
+{% load static %}
+{% load  form_arctic_tags widget_tweaks %}
+{% block addForms %}
+    {%  define form as main_form %}
+    {% define user_form as form %}
+    {% include 'includes/arctic-form/form.html' %}
+    {% define  main_form  as form%}
+    {% include 'includes/arctic-form/form.html' %}
+    {% define   group_form as form %}
+    {% include 'includes/arctic-form/form.html' %}
+
+
+
+
+{% endblock %}

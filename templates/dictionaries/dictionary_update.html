@@ -13,14 +13,17 @@
                             <div class="id hiden" id="id">{{ form.instance.id }}</div>
                             {% csrf_token %}
                             <div id="update-objectt-error-message"></div>
-                            {% include 'includes/arctic-form/form.html' %}
+                            {% block addForms %}
+                                {% include 'includes/arctic-form/form.html' %}
+
+                            {% endblock %}
 
                              <div class="hidden"></div>
-                            <div class="row">
-                        <div class="alert hidden" id="update-inline-form__message">
-                            <p></p>
-                        </div>
-                     </div>
+                             <div class="row">
+                                    <div class="alert hidden" id="update-inline-form__message">
+                                        <p></p>
+                                    </div>
+                             </div>
                              <div class="row">
 
                                    <div style="display: none;">
@@ -38,13 +41,6 @@
                                    </div>
                             </div>
                         </div>
-
-
-                          <!--<button type="button" class="btn  mt-2 btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close" >
-                                               Выйти
-                                        </button> -->
-
-
                     </form>
                 </div>
                 <div class="block">

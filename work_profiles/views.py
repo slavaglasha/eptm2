@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import transaction
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from work_profiles.forms import UserForm, ProfileForm, NewUserForm
+from work_profiles.forms import UserForm, ProfileForm, NewUserForm, UserCreateFormAdd, UserGroupForm
 from work_profiles.models import Profile
 
 
@@ -68,3 +68,76 @@ def new_profile(request):
             user.first_name = userData['firstname']
             user.last_name = userData['lastname']
             user.email = userData['useremail']
+
+
+@login_required
+def new_user_Profile(request):
+    if request.user.groups.filter(pk=1).__len__() == 0:
+        if request.method == 'GET':
+            return HttpResponse("У вас нет прав добавлять пользователей")
+        else:
+            return JsonResponse({'success': False, 'errors': ''})
+    user = User()
+    if request.method == 'POST':
+        form = UserCreateFormAdd(request.POST, instance=user)
+        if not (form.is_valid()):
+            return JsonResponse({'success': False,
+                                 'errors': [(k, v[0]) for k, v in form.errors.items()]}, safe=False)
+        else:
+            user = form.save()
+            print(user)
+
+            return JsonResponse({'success': True, 'name': user.username})
+
+    else:
+        form = UserCreateFormAdd(instance=user)
+        return render(request, 'dictionaries/newUser.html', {'form': form})
+
+
+@login_required
+def update_user_profile_admin(request,pk):
+    if request.method == 'POST':
+        p=get_object_or_404(Profile, pk=pk)
+        profile_form = ProfileForm(request.POST, instance=p)
+        user_form = UserForm(request.POST, instance=p.user)
+        group_form = UserGroupForm(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            profile_form.save()
+            group_id = group_form['group'].value()
+            group = Group.objects.get(pk=group_id)
+            user.groups.clear()
+            print(group)
+            user.groups.add(group)
+            return JsonResponse({'success': True, 'name': user.username})
+        else:
+            errors = [(k, v[0]) for k, v in user_form.errors.items()]
+            for e in [(k, v[0]) for k, v in profile_form.errors.items()]:
+                errors.append(e)
+            for e in [(k, v[0]) for k, v in group_form.errors.items()]:
+                errors.append(e)
+            return JsonResponse({'success': False, 'errors': errors})
+    else:
+        p = get_object_or_404(Profile, pk=pk)
+        user_form = UserForm(instance=p.user)
+        profile_form = ProfileForm(instance=p)
+        group_id = p.user_group_first_id
+        if group_id > 0:
+            user_group_form = UserGroupForm(initial={'group':group_id})
+        else:
+            user_group_form = UserGroupForm(initial={'group':3})
+        print(request.user.profileEptm.deparment)
+        return render(request, 'dictionaries/user_update.html', {
+            'user_form': user_form,
+            'form': profile_form,
+            'group_form': user_group_form,
+            'name':p.user.username,
+            'can_save': (request.user.groups.filter(id=1).__len__() > 0)
+
+
+
+
+
+
+
+        })

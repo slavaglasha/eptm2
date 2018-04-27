@@ -8,6 +8,9 @@ var need_saved = false;
 
 
        function saveNewForm(objname,url_new){
+        $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
+        $("#new-dictionary-form").find('.invalid').removeClass('invalid');
+        $("#new-dictionary-form").find('.error-text').hide();
 
 
         $("#newModal_wait").fadeIn(100);
@@ -26,6 +29,9 @@ var need_saved = false;
                              $("#number-new").text(objname + json.name);
                              $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
                              need_saved = true;
+                             $("#new-dictionary-form").find('.invalid').removeClass('invalid');
+                             $("#new-dictionary-form").find('.error-text').hide();
+
                              $("#new-dictionary__btn-close").text(exit);
                              $("#save-new-dictionary").hide();
                              $("#new-dictionary__btn-new").show();
@@ -82,6 +88,7 @@ var need_saved = false;
                         $(container).html(html);
                         // not need change form there are only text field and text area field
                         // connectArcticUser($("#new-request-form"), searchDep, clearDep);
+                        if ($("#new-dictionary-form")!==undefined){
                         setWidgetsSelect($("#new-dictionary-form"));
 
                         let el = $("#save-new-dictionary");
@@ -114,6 +121,11 @@ var need_saved = false;
                         $("#newModal_wait").fadeOut(100);
 
 
+                    }
+                    else{
+                         $("#save-new-dictionary").hide();
+                        $("#new-dictionary__btn-new").hide();
+                        }
                     }),
                     error: function (xhr, errmsg, err) {
 
@@ -135,6 +147,9 @@ var need_saved = false;
         $("#new-dictionary__btn-new").hide();
 
         $("#new-form__message").hide();
+        $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
+        $("#new-dictionary-form").find('.invalid').removeClass('invalid');
+        $("#new-dictionary-form").find('.error-text').hide();
 
         // var te = $("#new_form-user-name").text();
         //

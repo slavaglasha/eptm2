@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 
+from departments.models import  department
 from work_profiles.models import Profile
 
 #для редактирования данніх
@@ -32,3 +33,28 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ('deparment', 'user_position')
         labels = {'deparment':'Департамент','user_position':'Долджность'}
+
+
+
+class UserCreateFormAdd(UserCreationForm):
+    email = forms.EmailField(required=False)
+
+
+    class Meta:
+        model = User
+        fields = ("username",'first_name',"last_name", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(UserCreateFormAdd, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        user.firsy_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        group =Group.objects.get(id=3)
+
+        if commit:
+            user.save()
+            user.groups.add(group)
+        return user
+
+class UserGroupForm(forms.Form):
+    group = forms.ModelChoiceField(queryset =Group.objects.all(), label = "Тип пользователя", required=True )
