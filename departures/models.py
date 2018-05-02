@@ -19,7 +19,8 @@ class Departure(models.Model):
     input_datetime = models.DateTimeField(auto_now_add=True, null=False, blank=False, verbose_name='Дата ввода')
     start_datetime = models.DateTimeField(null=True, blank=True, default=timezone.now, verbose_name='Начало работ')
     end_datetime = models.DateTimeField(auto_now_add=False, null=True, blank=True, verbose_name='Окончание работ')
-    input_user = models.ForeignKey(Profile, related_name='Departure_input_user', null=False, blank=False, verbose_name='Ввел')
+    input_user = models.ForeignKey(Profile, related_name='Departure_input_user', null=False, blank=False, verbose_name='Ввел',
+                                   on_delete=models.PROTECT)
     works = models.CharField(max_length=1000, null=False, help_text='Выполненные работы' ) #error_messages='Нужно ввести что сделано'
     about = models.CharField(max_length=1000,null=True, blank=True,  help_text="Максимальная дллина 1000 символов",verbose_name='Дополнительная информация')
     execute_users = models.ManyToManyField(Profile,related_name='departure_execute_users',  blank=False, help_text='Принимали участие в работе',verbose_name='Исполнители')
@@ -36,26 +37,24 @@ class Departure(models.Model):
 
     def __init__(self, *args, **kwargs):
         super(Departure, self).__init__(*args, **kwargs)
-        print("init")
-        print(self.input_datetime)
+
 
         self.__old_start_datetime = self.input_datetime
         self.__old_end_date = self.end_datetime
 
     def clean(self):
-        print("Clean Departure {0}".format(self.pk))
+
         tomorrow = timezone.now().__add__(timedelta(days=1))
         yesterday = timezone.now().__add__(timedelta(days=-1))
 
-        print("time now-{0}".format(localtime(timezone.now())))
+
         errors = {}
-        print('valid', self.get_deferred_fields().__len__())
-        print("clean")
+
 
         #
 
         if (self.pk is None) :
-            print( "new departure")
+
             origin = None
         else:
             origin = Departure.objects.get(pk=self.pk)
@@ -63,9 +62,9 @@ class Departure(models.Model):
               errors['start_datetime'] = 'Нужно ввести дату начала работ'
         else:
             if origin is not  None:
-                print('origin_start-',localtime(origin.start_datetime).strftime('%d.%m.%Y %H:%M'))
+
                 if (origin.start_datetime!=self.start_datetime):
-                    print('start date is changed')
+
                     if (self.start_datetime<yesterday):
                         errors['start_datetime'] = 'Дата начала работ не может быть меньше ' + localtime(
                             yesterday).strftime('%d.%m.%Y %H:%M')
@@ -96,6 +95,8 @@ class Departure(models.Model):
         #         disp_users += user+'; '
         # if disp_users!='':
         #     errors['execute_users'] = 'Gjkmpjdfntkb '+disp_users + ' не могут быть исполнителями'
+
+
         if len(errors)>0:
             raise ValidationError(errors)
 

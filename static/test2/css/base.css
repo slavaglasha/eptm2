@@ -107,6 +107,9 @@ display: flex;
      padding:0.1em 0;
 
 }
+.logo a{
+    color:white;
+}
 
 .right-menu{
   position:relative;

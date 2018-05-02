@@ -14,8 +14,6 @@ class MainRequestAddition:
     main_request = {}
 
     def __init__(self, main__request):
-        print("Init MainRequestAddition")
-        print(main__request)
         self.main_request =main__request
 
 
@@ -30,7 +28,7 @@ class MainRequestAddition:
 
             for dep in departures:
 
-                users_str = ','.join([(k.user.first_name + ' ' + k.user.last_name) for k in dep.execute_users.all()])
+                users_str = ', '.join([(k.user.get_full_name()) for k in dep.execute_users.all()])
 
                 print('' if dep.start_datetime== None else dep.start_datetime.strftime(DATETIME_INPUT_FORMATS[0]))
 

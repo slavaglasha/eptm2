@@ -72,9 +72,9 @@ def input_class(bound_field):
     #if bound_field.field.widget.__class__.__name__!= 'NullBooleanSelect'
     if (bound_field.name.find('datetime') > 0) or (bound_field.name.find('dateTime') > 0) :
         if bound_field.field.widget.__class__.__name__!= 'NullBooleanSelect':
-            return 'datepicker-need'
-            print(bound_field.name, ' --datepicker-need')
-    return ''
+            return 'datepicker-need form-control '
+
+    return 'form-control '
 
 
 @register.filter

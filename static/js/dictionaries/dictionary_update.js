@@ -52,8 +52,14 @@ function prepareUpdateObjectForm(url_update, url_delete,objname, objid){
     ischanged = false;
      $("#updateForm").find("#save-object-update").unbind();
     $("#updateForm").find("#save-object-update").click(function(){saveUpdateObject(url_update,objname)});
-
-    $("#updateForm").find("#delete-object").unbind().click(function(){deleteObject(url_delete,objid)});
+     if (url_delete!=='') {
+           $("#updateForm").find("#delete-object").show();
+         $("#updateForm").find("#delete-object").unbind().click(function () {
+             deleteObject(url_delete, objid)
+         });
+     }else{
+         $("#updateForm").find("#delete-object").hide();
+    }
     $("#updateModal_wait").fadeOut(100);
     $("#updateModal_wait").fadeOut(100);
 
@@ -109,7 +115,6 @@ function saveUpdateObject(url_update,objname) {
 
 
          }
-         $("#updateModal_wait").fadeOut(100);
 
 
 }

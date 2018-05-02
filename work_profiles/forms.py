@@ -29,10 +29,13 @@ class NewUserForm( forms.ModelForm ):
 
 
 class ProfileForm(forms.ModelForm):
+    user_position = forms.CharField(label = 'Долджность', required=True)
+    deparment = forms.ModelChoiceField(queryset=department.objects.all(), required=True, label='Департамент')
     class Meta:
         model = Profile
         fields = ('deparment', 'user_position')
         labels = {'deparment':'Департамент','user_position':'Долджность'}
+
 
 
 

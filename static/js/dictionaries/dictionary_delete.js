@@ -70,7 +70,7 @@ function prepareButtonActions(url_delete, id_object){
                     error: function (xhr, errmsg) {
 
 
-                        $("#delete-form").addClass("small-alert").addClass('alert-danger').find(".mess").text(error_text_messsage);
+                        $("#delete-form").addClass('alert-danger').find(".mess").text(error_text_messsage+" "+error_delete_object);
                         $("#deleteButton").hide();
                         $("#delete-form").find("#cancelButton").text(exit);
                        deleted=false;

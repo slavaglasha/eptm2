@@ -44,7 +44,7 @@ class MainRequestFilter(HelpfulFilterSet):
 
     close_user =django_filters.ModelChoiceFilter(label = 'Закрыл', lookup_expr='exact', queryset=Profile.objects.filter())
     place = django_filters.ModelChoiceFilter(label = 'Место', lookup_expr ='exact', queryset=Places.objects.all())
-    close_user__isnull = django_filters.BooleanFilter(name = 'close_user',label = 'Только закрітіе',lookup_expr='isnull', exclude=True)
+    close_user__isnull = django_filters.BooleanFilter(name = 'close_user',label = 'Только закрытые',lookup_expr='isnull', exclude=True)
     departure__end_datetime__isnull=django_filters.BooleanFilter(name = 'departure__end_datetime', label='Только с незакрытыми выездами',lookup_expr='isnull',  method = 'filter_departures_not_closed')
 
     def filter_departures_not_closed(self, queryset, name, value):

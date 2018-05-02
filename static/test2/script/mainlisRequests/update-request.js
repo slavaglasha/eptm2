@@ -228,7 +228,7 @@ function saveUpdateRequest() {
 
     });
     total++;
-    $('#id_TOTAL_FORMS').val(total);
+    $('#id_departure_set-TOTAL_FORMS').val(total);
     var after_id="empty-form";
     if (total>1){
         after_id="form_departure-"+(total-1);
@@ -240,7 +240,7 @@ function saveUpdateRequest() {
     var id="#id-"+(total-1)+"-start_datetime";
   //  newElement.find(id).attr({"value":$("id_-__prefix__-start_datetime").attr('value')});
   //  newElement.find(id).text($("id_-__prefix__-start_datetime").attr('value'));
-       alert(getCurrentDateTime());
+
        var strDate = getCurrentDateTime();
        newElement.find(id).val(strDate);
        newElement.find(id).text(getCurrentDateTime());

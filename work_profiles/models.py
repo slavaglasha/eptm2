@@ -16,6 +16,10 @@ class Profile(models.Model):
     deparment = models.ForeignKey(department, null=True, blank=True)
     user_position = models.CharField(max_length=200, null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Профайл'
+        verbose_name_plural = 'Профайлы'
+
 
     def __str__(self):
         return self.user.last_name + ' ' + self.user.first_name

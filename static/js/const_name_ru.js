@@ -17,5 +17,5 @@ var error_messages_lg="НЕ загрузился фильтр";
  var closed_request = 'Заявка закрыта';
 
  var success_delete = 'успешно удален';
-  var error_delete_object = ' не удален';
+  var error_delete_object = ' Удаление не совершено!';
 

@@ -13,7 +13,7 @@
     {% for field in form %}
         {% comment %} для коротких полей ввода{% endcomment %}
         <div class="{{field|set_field_grid}}"> <!-- col-12 textarea  col-sm-12 col-lg-6 col-xl-6-->
-              <div class="row field {{   field|invalid_input_class }}">
+              <div class="row field {{   field|invalid_input_class }} ">
                   <div class="{{  field|set_label_grid }}">
                       {{field.label_tag}}
                   </div>

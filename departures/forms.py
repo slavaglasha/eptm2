@@ -31,7 +31,7 @@ class MainDepartureForm(forms.ModelForm):
             group = user.groups.all()[0].id
         else:
             user = "No user"
-        print("MainDepartureForm __штше__ user - {0} group_id -{1}, is-closed -  ".format(user, group))
+        # print("MainDepartureForm __штше__ user - {0} group_id -{1}, is-closed -  ".format(user, group))
         super(MainDepartureForm, self).__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
         if 2 == group:
@@ -89,13 +89,13 @@ class CustomDepartureFormSet(DeparturesFormSet):
         #  create a user attribute and take it out from kwargs
         # so it doesn't messes up with the other formset kwargs
         self.user = kwargs.pop('dep_user')  # нужно передать во View при создании формы
-        print("CustomDepartureFormSet init")
+
         super(DeparturesFormSet, self).__init__(*args, **kwargs)
         self.queryset = self.queryset.order_by('pk')
 
     def _construct_form(self, *args, **kwargs):
         kwargs['dep_user'] = self.user
-        print("_construct_form user - {0}".format(self.user))
+
         return super(CustomDepartureFormSet, self)._construct_form(*args, **kwargs)
 
 

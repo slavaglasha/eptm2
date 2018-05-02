@@ -8,26 +8,30 @@ from django.utils.timezone import localtime
 from places.models import Places
 from work3.settings import DATETIME_INPUT_FORMATS
 from work_profiles.models import Profile
-from main_requests import model_connect
 
 
 class MainRequest(models.Model):
     number = models.IntegerField(null=True, blank=True)
     input_datetime = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-    input_user = models.ForeignKey(Profile, related_name='mainRequestInput', null=False, blank=True)
+    input_user = models.ForeignKey(Profile, related_name='mainRequestInput', null=False, blank=True,
+                                    on_delete=models.PROTECT)
     request_dateTime = models.DateTimeField(null=True, blank=True, default=timezone.now)
     request_user = models.ForeignKey(Profile, related_name='mainRequestRequest', null=True, blank=True,
-                                     help_text="Можно сохранить данные не из списка")
+                                     help_text="Можно сохранить данные не из списка",
+                                     on_delete=models.PROTECT)
     request_outer_User = models.CharField(max_length=100, null=True, blank=True,
                                           help_text='От кого фактически пришла не из системы ФИО')
     request_outer_status = models.CharField(max_length=100, null=True, blank=True)
     request_outer_department = models.CharField(max_length=100, null=True, blank=True)
     about = models.TextField(max_length=1000, null=False)
     receive_dateTime = models.DateTimeField(null=True, blank=True)
-    receive_user = models.ForeignKey(Profile, related_name='mainRequestReceive', null=True, blank=True)
+    receive_user = models.ForeignKey(Profile, related_name='mainRequestReceive', null=True, blank=True,
+                                     on_delete=models.PROTECT)
     close_dateTime = models.DateTimeField(null=True, blank=True)
-    close_user = models.ForeignKey(Profile, related_name='mainRequestClose', null=True, blank=True)
-    place = models.ForeignKey(Places, related_name='main_requests_places', null=True, blank=True)
+    close_user = models.ForeignKey(Profile, related_name='mainRequestClose', null=True, blank=True,
+                                   on_delete=models.PROTECT)
+    place = models.ForeignKey(Places, related_name='main_requests_places', null=True, blank=True,
+                                on_delete=models.PROTECT)
     place_outer = models.CharField(max_length=200, null=True, blank=True)
     changed_datetime = models.DateTimeField(auto_now=True, null=False, blank=False)
 
@@ -45,16 +49,6 @@ class MainRequest(models.Model):
         origin = None
         if self.pk is not None:
             origin = MainRequest.objects.get(pk=self.pk)
-            print(timezone.localtime((origin.request_dateTime)).strftime(
-                DATETIME_INPUT_FORMATS[0]), '--',
-                timezone.localtime((self.request_dateTime)).strftime(
-                    DATETIME_INPUT_FORMATS[0]), '--', (self.request_dateTime), origin.request_dateTime)
-            print(self.request_dateTime - origin.request_dateTime)
-
-        print('valid', self.get_deferred_fields().__len__())
-
-        print("'request_dateTime' in self.get_deferred_fields() ", 'request_dateTime' in self.get_deferred_fields())
-        print(self.number)
         if (self.request_user is None) and (self.request_outer_User is None):
             errors['request_user'] = 'Нужно ввести заявителя.'
             errors['request_outer_User'] = 'Нужно ввести заявителя!'
@@ -65,7 +59,7 @@ class MainRequest(models.Model):
             errors['request_outer_status'] = 'Нужно ввести должность заявителя!'
         if (self.place_outer is None) and (self.place is None):
             errors['place'] = 'Нужно ввести место!'
-        if (self.pk is None):
+        if self.pk is None:
             if self.request_dateTime < yesterday:
                 errors['request_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime('%d.%m.%Y %H:%M')
         if self.request_dateTime > tomorrow:
@@ -73,13 +67,13 @@ class MainRequest(models.Model):
         if origin is not None:
             if timezone.localtime(self.request_dateTime).strftime(
                     DATETIME_INPUT_FORMATS[0]) != timezone.localtime(origin.request_dateTime).strftime(
-                DATETIME_INPUT_FORMATS[0]):
+                        DATETIME_INPUT_FORMATS[0]):
                 if self.request_dateTime < yesterday:
                     errors['request_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
                         '%d.%m.%Y %H:%M')
-        if (self.receive_dateTime is None) and (self.receive_user != None):
+        if (self.receive_dateTime is None) and (self.receive_user is not None):
             errors['receive_dateTime'] = ' Нужно ввести  дату принятия  заявки!'
-        if (self.receive_user is None) and (self.receive_dateTime != None):
+        if (self.receive_user is None) and (self.receive_dateTime is not None):
             errors['receive_user'] = ' Нужно ввести   пользоваеля принявшего заявку!'
         if (self.close_dateTime is None) and (self.close_user is not None):
             errors['close_dateTime'] = 'Дата закрытия  заявки должна быть определена!'
@@ -95,11 +89,11 @@ class MainRequest(models.Model):
                 if self.receive_dateTime < yesterday:
                     errors['receive_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
                         '%d.%m.%Y %H:%M')
-            else:
-                if timezone.localtime(origin.receive_dateTime) != timezone.localtime(self.receive_dateTime):
-                    if self.receive_dateTime < yesterday:
-                        errors['receive_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
-                            '%d.%m.%Y %H:%M')
+                    # else:
+                    #     if timezone.localtime(origin.receive_dateTime) != timezone.localtime(self.receive_dateTime):
+                    #         if self.receive_dateTime < yesterday:
+                    #             errors['receive_dateTime'] = 'Не может быть раньше ' + localtime(yesterday).strftime(
+                    #                 '%d.%m.%Y %H:%M')
         if (self.close_dateTime is not None) and (self.receive_user is None or self.request_dateTime is None):
             errors['close_dateTime'] = "Нужно сначала принять заявку!"
         if (self.close_user is not None) and (self.receive_user is None or self.request_dateTime is None):
@@ -108,11 +102,19 @@ class MainRequest(models.Model):
             if self.receive_dateTime > self.close_dateTime:
                 errors['close_dateTime'] = "Дата закрытия заявки должна быть больше даты ее принятия!"
 
-        if (self.close_dateTime is not None) :
-            if (self.close_dateTime > tomorrow):
-                errors['close_dateTime'] = 'Не может быть позже ' + localtime(tomorrow).strftime(DATETIME_INPUT_FORMATS[0])
+        # if self.close_dateTime is not None:
+        #     if self.close_dateTime > tomorrow:
+        #         errors['close_dateTime'] = 'Не может быть позже ' + localtime(tomorrow).strftime(
+        #             DATETIME_INPUT_FORMATS[0])
 
-        print(errors)
+        if self.close_dateTime is not None or self.close_user is not None:
+            if self.departure_set.filter(end_datetime__isnull=True).__len__() > 0:
+                if 'close_dateTime' in errors:
+                    errors['close_dateTime'].join(' Нужно закрыть все выезды а затем закрыть заявку!')
+                else:
+                    errors['close_dateTime'] = 'Нужно закрыть все выезды а затем закрыть заявку!'
+
+        # print(errors)
         if len(errors) > 0:
             raise ValidationError(errors)
 
@@ -173,47 +175,42 @@ class MainRequest(models.Model):
         if self.is_recived:
             return 1
         if self.is_closed == 3:
-            print('isclosed')
+           # print('isclosed')
             return 2
         return 0
 
-
-        # для преобразования в json
-
+    # для преобразования в json
     @property
-    def to_dict(selfe):
-        if selfe.place is None:
+    def to_dict(self):
+        if self.place is None:
             pl = ''
         else:
-            pl = selfe.place.name
-
-        return {"id": selfe.id,
-                "number": selfe.number,
-                "about": selfe.about,
-                "request_dateTime": timezone.localtime((selfe.request_dateTime)).strftime(DATETIME_INPUT_FORMATS[0]),
-                "str_user_request": selfe.str_user_request,
-                "str_user_status": selfe.str_user_status,
-                "str_user_deparment": selfe.str_user_deparment,
+            pl = self.place.name
+        return {"id": self.id,
+                "number": self.number,
+                "about": self.about,
+                "request_dateTime": timezone.localtime(self.request_dateTime).strftime(DATETIME_INPUT_FORMATS[0]),
+                "str_user_request": self.str_user_request,
+                "str_user_status": self.str_user_status,
+                "str_user_deparment": self.str_user_deparment,
                 "place": pl,
-                "receive-user-name": '' if selfe.receive_user == None else selfe.receive_user.user.first_name,
-                "str_receive_dateTime": selfe.str_receive_dateTime,
-                "close-user-name": '' if selfe.close_user == None else selfe.close_user.user.first_name,
-                "str_close_dateTime": selfe.str_close_dateTime
+                "receive-user-name": '' if self.receive_user is None else self.receive_user.user.first_name,
+                "str_receive_dateTime": self.str_receive_dateTime,
+                "close-user-name": '' if self.close_user == None else self.close_user.user.first_name,
+                "str_close_dateTime": self.str_close_dateTime
                 }
 
     def can_save(self, request_user):
         group_user = request_user.groups.all().values_list('id', flat=True)
-        print('CAN SAVE group user -', group_user, 'is-closed - ', self.is_closed)
-        for g in group_user:
-            print(g)
+
         if 1 in group_user:
             return True
         if 2 in group_user:
             if self.is_closed == 3:
-                print('F')
+
                 return False
             else:
-                print('T')
+
                 return True
         if 3 in group_user:
             if self.is_closed == 3:
