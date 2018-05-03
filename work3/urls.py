@@ -63,6 +63,7 @@ urlpatterns = [
     url(r'^dictionaries/users-new/$', profile_view.new_user_Profile,
         name='users_create_view'),
     url(r'^dictionaries/users-update/(?P<pk>\d+)/$',profile_view.update_user_profile_admin, name = 'update_profile_admin'),
+    url(r'^dictionaries/user-delete/(?P<pk>\d+)/$', profile_view.delete_user_profile, name = 'delete_user_profile'),
 
     url(r'^test2/base/', main_views.test_base, name='view'),
     url(r'^$', main_views.test_base, name='view'),

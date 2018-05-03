@@ -8,7 +8,7 @@ var timerUpdateListId;
 
 function correctNumber(strnumber){
     if ((strnumber.trim())!==''){
-        alert(strnumber);
+
         var re = /^\d+$/;
         return re.test(strnumber.trim());
     }else {
@@ -104,80 +104,138 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                cache: false,
                url: "/test2/filter-request-json/",
                data: $('#filterForm').find('form').serialize(),
-               success:function(json){
+               success:function(json) {
                    if (json.success) {
-                       $.each(json.requests, function (key, item) {
-                           if (item!==null) {
+                       if (!json.need_closed) {
+                            $("#danger-closed-deps").hide();
+                           $.each(json.requests, function (key, item) {
+                               if (item !== null) {
+                                   var newrow = $("#first-row").clone();
+                                   $.each(item, function (inkey, val) {
+                                       $(newrow).find("." + inkey).html(val);
+
+                                   });
+                               }
+                               if (item !== null) {
+                                   var deps;
+                                   deps = item.departures;
+                                   $.each(deps, function (inkey, val) {
+
+                                       $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>")
+                                       $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>")
+                                       $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                   });
+                                   $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                   $("#main-list").append(newrow);
+                                   id = item.id;
+                               }
+
+
+                           });
+                           var last_el = $("#first-row");
+                           $.each(json.new_requests, function (key, item) {
                                var newrow = $("#first-row").clone();
                                $.each(item, function (inkey, val) {
                                    $(newrow).find("." + inkey).html(val);
 
                                });
-                           }
-                           if (item!==null) {
                                var deps;
                                deps = item.departures;
                                $.each(deps, function (inkey, val) {
 
-                                   $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>")
-                                   $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>")
+                                   $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                   $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
                                    $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
                                });
                                $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
-                               $("#main-list").append(newrow);
-                               id = item.id;
+                               $(last_el).after(newrow);
+
+                               last_el = newrow;
+
+
+                           });
+                           if (json.changed_requests !== undefined) {
+                               $.each(json.changed_requests, function (key, item) {
+                                   var currow = $("#main-list").find("#row-" + item.id);
+                                   if (currow !== undefined) {
+                                       $.each(item, function (inkey, val) {
+                                           $(currow).find("." + inkey).html(val);
+
+                                       });
+                                       var deps;
+                                       deps = item.departures;
+                                       $(currow).find(".departures").html("");
+                                       $.each(deps, function (inkey, val) {
+
+                                           $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                           $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                           $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                       });
+                                   }
+
+
+                               });
+                           }
+                       }else{
+                           $("#danger-closed-deps").show();
+
+                           if (json.deps_need_closed!==undefined) {
+                               $.each(json.deps_need_closed, function (key, item) {
+                                   if (item !== null) {
+
+                                       var currow = $("#main-list").find("#row-" + item.id);
+                                       if (currow===undefined)
+                                        currow = $("#first-row").clone();
+                                       if ($(currow).length===0){
+                                           currow = $("#first-row").clone();
+                                            $(currow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                           $("#main-list").append(currow);
+                                       }
+                                       $.each(item, function (inkey, val) {
+                                           $(currow).find("." + inkey).html(val);
+                                            $(currow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                           $("#main-list").append(currow);
+
+                                       });
+                                   }
+                                   if (item !== null) {
+                                       var deps;
+                                       deps = item.departures;
+                                       $.each(deps, function (inkey, val) {
+
+                                           $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>")
+                                           $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>")
+                                           $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                       });
+                                       if ($("#main-list").find("#row-" + item.id)===undefined) {
+                                           $(currow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                           $("#main-list").append(currow);
+
+                                       }
+                                       id = 0;
+                                   }
+
+
+                               });
                            }
 
-
-                       });
-                       var last_el = $("#first-row");
-                       $.each(json.new_requests, function (key, item) {
-                           var newrow = $("#first-row").clone();
-                           $.each(item, function (inkey, val) {
-                               $(newrow).find("." + inkey).html(val);
-
-                           });
-                           var deps;
-                           deps = item.departures;
-                           $.each(deps, function (inkey, val) {
-
-                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
-                               $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
-                               $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
-                           });
-                           $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
-                           $(last_el).after(newrow);
-
-                           last_el = newrow;
-
-
-                       });
-                       if (json.changed_requests!==undefined) {
-                           $.each(json.changed_requests, function (key, item) {
-                               var currow = $("#main-list").find("#row-" + item.id);
-                               if (currow !== undefined) {
-                                   $.each(item, function (inkey, val) {
-                                       $(currow).find("." + inkey).html(val);
-
-                                   });
-                                   var deps;
-                                   deps = item.departures;
-                                   $(currow).find(".departures").html("");
-                                   $.each(deps, function (inkey, val) {
-
-                                       $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
-                                       $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
-                                       $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
-                                   });
-                               }
-
-
-                           });
                        }
+                        if (json.json_delete_change!==undefined) {
+                               $.each(json.json_delete_change, function (key, item) {
+                                   if (item !== null) {
+
+                                       var currow = $("#main-list").find("#row-" + item.id);
+                                       if (currow !== undefined) {
+                                           $(currow).remove();
+                                       }
+                                   }
+                               });
+                     }
                        var filterForm = $('#filterForm');
                        $(filterForm).find("#last-id").val(id);
                        $(filterForm).find("#last-dt").val(json.dt);
                        need_more = json.max_rows === json.requests.length;
+
 
                        setRowUpdater(); //установка собітия на строки окно просмотра заявок
                        $("#wait").fadeOut(100);
@@ -189,9 +247,10 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                        isLoaded = false;
                        setTimeUpdate();
 
-                       $(body).css("overflow",'hidden');
+                       $('body').css("overflow", 'hidden');
 
                    }
+
 
 
 
@@ -218,49 +277,106 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
              data: $('#filterForm').find('form').serialize(),
              success: function (json) {
                  if (json.success) {
-                     var last_el = $("#first-row");
-                     $.each(json.new_requests, function (key, item) {
-                         var newrow = $("#first-row").clone();
-                         $.each(item, function (inkey, val) {
-                             $(newrow).find("." + inkey).html(val);
-
-                         });
-                         var deps;
-                         deps = item.departures;
-                         $.each(deps, function (inkey, val) {
-
-                             $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
-                             $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
-                             $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
-                         });
-                         $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
-                         $(last_el).after(newrow);
-
-                         last_el = newrow;
-
-
-                     });
-                     $.each(json.changed_requests, function (key, item) {
-                         var currow = $("#main-list").find("#row-" + item.id);
-                         if (currow !== undefined) {
+                     if (!json.need_closed) {
+                          $("#danger-closed-deps").hide();
+                         var last_el = $("#first-row");
+                         $.each(json.new_requests, function (key, item) {
+                             var newrow = $("#first-row").clone();
                              $.each(item, function (inkey, val) {
-                                 $(currow).find("." + inkey).html(val);
+                                 $(newrow).find("." + inkey).html(val);
 
                              });
                              var deps;
                              deps = item.departures;
-                             $(currow).find(".departures").html("");
                              $.each(deps, function (inkey, val) {
 
-                                 $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
-                                 $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
-                                 $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                 $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                 $(newrow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                 $(newrow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
                              });
-                         }
+                             $(newrow).attr('id', 'row-' + item.id).removeClass("hidden");
+                             $(last_el).after(newrow);
+
+                             last_el = newrow;
 
 
-                     });
+                         });
+                         $.each(json.changed_requests, function (key, item) {
+                             var currow = $("#main-list").find("#row-" + item.id);
+                             if (currow !== undefined) {
+                                 $.each(item, function (inkey, val) {
+                                     $(currow).find("." + inkey).html(val);
+
+                                 });
+                                 var deps;
+                                 deps = item.departures;
+                                 $(currow).find(".departures").html("");
+                                 $.each(deps, function (inkey, val) {
+
+                                     $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                     $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                     $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                 });
+                             }
+
+
+                         });
+                     }else{
+                           $("#danger-closed-deps").show();
+                           if (json.deps_need_closed!==undefined) {
+                               $.each(json.deps_need_closed, function (key, item) {
+                                   if (item !== null) {
+
+                                       var currow = $("#main-list").find("#row-" + item.id);
+                                       if (currow===undefined)
+                                        currow = $("#first-row").clone();
+                                       if ($(currow).length===0){
+                                           currow = $("#first-row").clone();
+                                            $(currow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                           $("#main-list").append(currow);
+                                       }
+                                       $.each(item, function (inkey, val) {
+                                           $(currow).find("." + inkey).html(val);
+                                            $(currow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                           $("#main-list").append(currow);
+
+                                       });
+                                   }
+                                   if (item !== null) {
+                                       var deps;
+                                       deps = item.departures;
+                                       $.each(deps, function (inkey, val) {
+
+                                           $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.start + "</small>");
+                                           $(currow).find(".departures").append("<small class=\"text-muted d-block\">" + val.end + "</small>");
+                                           $(currow).find(".departures").append("<span class=\"d-block\">" + val.users + "</span>")
+                                       });
+                                       if ($("#main-list").find("#row-" + item.id)===undefined) {
+                                           $(currow).attr('id', 'row-' + item.id).removeClass("hidden");
+                                           $("#main-list").append(currow);
+
+                                       }
+                                       id = 0;
+                                   }
+
+
+                               });
+                           }
+
+                       }
+                     if (json.json_delete_change!==undefined) {
+                               $.each(json.json_delete_change, function (key, item) {
+                                   if (item !== null) {
+
+                                       var currow = $("#main-list").find("#row-" + item.id);
+                                       if (currow !== undefined) {
+                                           $(currow).remove();
+                                       }
+                                   }
+                               });
+                     }
                      var filterForm = $('#filterForm');
+
 
                      if (json.dt !== undefined) {
                          $(filterForm).find("#last-dt").val(json.dt);
@@ -274,7 +390,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                      isTimerEnabled=false;
                      stopTimerUpdae();
                  }
-                  $(body).css("overflow",'hidden');
+                  $('body').css("overflow",'hidden');
              }
              ,
              error: function (xhr, errmsg) {

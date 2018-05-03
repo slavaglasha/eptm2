@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.utils import timezone
 
 from departments.models import department
@@ -17,8 +17,8 @@ class Profile(models.Model):
     user_position = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Профайл'
-        verbose_name_plural = 'Профайлы'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 
     def __str__(self):
@@ -50,6 +50,10 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profileEptm.save()
+
+    @receiver(post_delete, sender=User)
+    def delete_user_profile(sender, instance, **kwargs):
+        instance.profileEptm.delete()
 
     @property
     def to_dict(self):

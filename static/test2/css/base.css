@@ -270,6 +270,15 @@ padding: 0.4em;
   min-height: 1.2em;
 }
 
+ #danger-closed-deps{
+     color: white;
+     text-align: center;
+     padding: 0.5em;
+     font-weight: bold;
+     font-size: 1.5em;
+     background: darkred;
+ }
+
 .content-block .row .centered{
 	text-align: center;
 }

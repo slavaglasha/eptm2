@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
@@ -8,13 +10,15 @@ from django.utils import timezone
 from django.views.generic import CreateView, UpdateView
 
 from departures.forms import CustomDepartureFormSet
+from departures.models import Departure
 from main_requests.model_additional import MainRequestAddition
 from work3.settings import DATETIME_INPUT_FORMATS
 from work_profiles.models import Profile
 from .filter import MainRequestFilter
 from .forms import newMainRequestForm, updateMainRequestForm
 from .models import MainRequest
-from departures import  models as model_departure
+from departures import models as model_departure
+
 
 # Create your views here.
 # @login_required
@@ -57,7 +61,7 @@ class CreateNewRequest(LoginRequiredMixin, CreateView):
         return data
 
     def get_success_url(self):
-       # print(self.request.META['HTTP_REFERER'])
+        # print(self.request.META['HTTP_REFERER'])
         return redirect('base_create_view_success', number=1)
 
     def form_valid(self, form):
@@ -108,7 +112,7 @@ class UpdateRequest(UpdateView):
             data['departures'] = CustomDepartureFormSet(instance=self.object, dep_user=self.request.user)
         can_save = self.object.can_save(self.request.user)
         data['can_save'] = can_save
-        #print('Permitions ---',self.request.user.has_perms('departures.add_departure'))
+        # print('Permitions ---',self.request.user.has_perms('departures.add_departure'))
 
 
         data['can_add_departure'] = self.object.can_add_dep(self.request.user)
@@ -120,7 +124,7 @@ class UpdateRequest(UpdateView):
         # try to delete object before valid
         dep_ids = []
         if form.is_valid():
-            #print("Form valid")
+            # print("Form valid")
             # for dep in departures.forms:
             #     print('dep obj')
             #     if dep in departures.deleted_forms:
@@ -129,7 +133,7 @@ class UpdateRequest(UpdateView):
 
             counter = 0
             if departures.is_valid():
-                #print("deparures valid")
+                # print("deparures valid")
                 with transaction.atomic():  # что это за  хрень?
                     self.object = form.save()
                     assert isinstance(departures, CustomDepartureFormSet)
@@ -139,20 +143,17 @@ class UpdateRequest(UpdateView):
                         departure.input_user = Profile.objects.get(user=self.request.user)
                         # print('dperture - ',formdep.instance.id,' ',formdep.instance.main_request )
                         counter += 1
-                        dep_id=[{'id':formdep.instance.id,'number':counter}]
+                        dep_id = [{'id': formdep.instance.id, 'number': counter}]
                         if formdep in departures.deleted_forms:
-                          dep_id.append({'id_deleted':'true'})
+                            dep_id.append({'id_deleted': 'true'})
                         dep_ids.append(dep_id)
                 departures.save()
 
-
-
-
-                return JsonResponse({'success': True,'dep_ids':dep_ids})
+                return JsonResponse({'success': True, 'dep_ids': dep_ids})
             else:
 
-                #print(departures.non_form_errors)
-                #print(departures.errors)
+                # print(departures.non_form_errors)
+                # print(departures.errors)
                 deps_errors = []
                 counter = 0
                 for dep_form in departures.forms:
@@ -163,7 +164,7 @@ class UpdateRequest(UpdateView):
                 return JsonResponse({'success': False,
                                      'departures_errors': [{'departures': departures.errors}],
                                      'dep_ids': dep_ids,
-                                     'errors':[]}, safe=False)
+                                     'errors': []}, safe=False)
 
     def form_invalid(self, form):
         return JsonResponse({'success': False,
@@ -176,7 +177,7 @@ def test_base(request):
     return render(request, 'test2/request-list.html')
 
 
-# фильтр json
+# фильтр json 20:00 - rjytw cvtys
 # filter
 @login_required
 def ListFilterJsonView(request):
@@ -186,17 +187,55 @@ def ListFilterJsonView(request):
         return render(request, 'includes/arctic-form/filter-form', {'form': f.form})
 
     dt = timezone.now()
+    dt_last_yesterday = (dt + timedelta(days=-1)).replace(hour=20).replace(minute=0).replace(second=0)
     dt_input = request.GET.get('last-dt')
     first_id = request.GET.get('first_id')
     row_count = 20
     f = MainRequestFilter(request.GET, queryset=MainRequest.objects.all().order_by('-pk'))
     not_closed_departure = request.GET.get('not_closed_departure')
+    dc = Departure.objects.filter(start_datetime__lt=dt_last_yesterday, end_datetime__isnull=True)
+    if dc.__len__()>0:
+
+        not_cl_dep_requests = MainRequest.objects.filter(id__in=dc.values_list('main_request',flat=True))
+
+        print(dt_last_yesterday,not_cl_dep_requests, dt_input)
+        if not_cl_dep_requests.__len__() > 0:
+            if f.form.is_valid():
+                deps_need_closed = []
+
+                for req in not_cl_dep_requests:
+                    json = req.to_dict
+                    add_main_req = MainRequestAddition(req)
+                    json1 = add_main_req.to_dict_add()
+                    deps_need_closed.append(json1)
+                json_delete_change = []
+                if dt_input is not None:
+                    if dt_input != '':
+                        list_changed_not_in_filter = MainRequest.objects.filter(changed_datetime__gt=dt_input)
+
+                        list_changed_not_in_filter = list_changed_not_in_filter.exclude(
+                        id__in=not_cl_dep_requests.values_list('id', flat=True))
+                        for req in list_changed_not_in_filter:
+                            json = req.to_dict
+                            add_main_req = MainRequestAddition(req)
+                            json1 = add_main_req.to_dict_add()
+                            json_delete_change.append(json1)
+
+                return JsonResponse({'success': True, 'need_closed': True, 'requests': [],
+                                 'new_requests': [],
+                                 'changed_requests': [],
+                                 'deps_need_closed': deps_need_closed,
+                                 'json_delete_change': json_delete_change,
+                                 'dt': dt, 'max_rows': row_count})
+
     deps_queryset = []
     # if not_closed_departure>0:
     #     deps_queryset = model_departure.Departure.objects.filter(end_datetime__isnull=True)
-   # print(not_closed_departure)
+    # print(not_closed_departure)
     list_new_requests = []
     list_changed_request = []
+    list_changed_not_in_filter = []
+    list_changed_not_in_filter = []
     if first_id != None:
         if first_id.isdigit():
             if int(first_id) > 0:
@@ -206,6 +245,7 @@ def ListFilterJsonView(request):
             if dt_input is not None:
                 list_new_requests = f.qs.filter(input_datetime__gt=dt_input)
                 list_changed_request = f.qs.filter(changed_datetime__gt=dt_input)
+                list_changed_not_in_filter = MainRequest.objects.filter(changed_datetime__gt=dt_input)
         else:
             list_requests = f.qs[0:row_count]
     else:
@@ -245,12 +285,25 @@ def ListFilterJsonView(request):
         if not req in list_requests and not req in list_new_requests:
             json_change.append(json1)
             # print('append')
-
+    if list_changed_not_in_filter.__len__()>0:
+        list_changed_not_in_filter = list_changed_not_in_filter.exclude(
+            id__in=list_requests.values_list('id', flat=True)).exclude(
+            id__in=list_new_requests.values_list('id', flat=True)).exclude(
+            id__in=list_changed_request.values_list('id', flat=True))
+    json_delete_change = []
+    for req in list_changed_not_in_filter:
+        json = req.to_dict
+        add_main_req = MainRequestAddition(req)
+        # print(add_main_req.main_request)
+        json1 = add_main_req.to_dict_add()
+        json_delete_change.append(json1)
 
     if f.form.is_valid():
-        return JsonResponse({'success': True, 'requests': json_res,
-                                              'new_requests':json_new,
-                                              'changed_requests':json_change,
+        return JsonResponse({'success': True, 'need_closed': False, 'requests': json_res,
+                             'new_requests': json_new,
+                             'changed_requests': json_change,
+                             'deps_need_closed': [],
+                             'json_delete_change': json_delete_change,
                              'dt': dt, 'max_rows': row_count})
     else:
         return JsonResponse({'success': False,

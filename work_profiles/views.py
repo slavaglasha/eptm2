@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.db import transaction
+from django.db.models import ProtectedError
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -85,7 +86,7 @@ def new_user_Profile(request):
                                  'errors': [(k, v[0]) for k, v in form.errors.items()]}, safe=False)
         else:
             user = form.save()
-            print(user)
+            print(user.profileEptm.id)
 
             return JsonResponse({'success': True, 'name': user.username})
 
@@ -95,13 +96,13 @@ def new_user_Profile(request):
 
 
 @login_required
-def update_user_profile_admin(request,pk):
+def update_user_profile_admin(request, pk):
     if request.method == 'POST':
-        p=get_object_or_404(Profile, pk=pk)
+        p = get_object_or_404(Profile, pk=pk)
         profile_form = ProfileForm(request.POST, instance=p)
         user_form = UserForm(request.POST, instance=p.user)
         group_form = UserGroupForm(request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid() and group_form.is_valid():
             user = user_form.save()
             profile_form.save()
             group_id = group_form['group'].value()
@@ -123,21 +124,47 @@ def update_user_profile_admin(request,pk):
         profile_form = ProfileForm(instance=p)
         group_id = p.user_group_first_id
         if group_id > 0:
-            user_group_form = UserGroupForm(initial={'group':group_id})
+            user_group_form = UserGroupForm(initial={'group': group_id})
         else:
-            user_group_form = UserGroupForm(initial={'group':3})
+            user_group_form = UserGroupForm(initial={'group': 3})
         print(request.user.profileEptm.deparment)
         return render(request, 'dictionaries/user_update.html', {
             'user_form': user_form,
             'form': profile_form,
             'group_form': user_group_form,
-            'name':p.user.username,
+            'name': p.user.username,
             'can_save': (request.user.groups.filter(id=1).__len__() > 0)
-
-
-
-
-
-
-
         })
+
+
+def delete_user_profile(request, pk):
+
+
+    data = dict()
+    if request.method == 'POST':
+        if request.user.groups.filter(pk=1):
+            try:
+                d = Profile.objects.get(pk=pk)
+                d.user.delete()
+                data['success'] = True  # This is just to play along with the existing code
+                return JsonResponse(data)
+            except ProtectedError:
+                data['success'] = False
+                data['error_message'] = 'Пользователь в системе'
+                return JsonResponse(data)
+            except Profile.DoesNotExist:
+                data['success'] = False
+                data['error_message'] = 'Нет такого пользователя'
+                return JsonResponse(data)
+            except Exception as e:
+                data['success'] = False
+                data['error_message'] = 'Ошибка удаления'
+                return JsonResponse(data)
+        else:
+            data['success'] = False
+            data['error_message'] = 'У вас нет прав удалять !'
+        return JsonResponse(data)
+    else:
+        d = Profile.objects.get(pk=pk)
+        context = {'object': d.name, 'obj_name': d._meta.verbose_name.title}
+        return render(request, 'dictionaries/dictionary_delete.html', context)

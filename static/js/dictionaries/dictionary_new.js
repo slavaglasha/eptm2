@@ -10,7 +10,7 @@ var need_saved = false;
        function saveNewForm(objname,url_new){
         $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
         $("#new-dictionary-form").find('.invalid').removeClass('invalid');
-        $("#new-dictionary-form").find('.error-text').hide();
+         
 
 
         $("#newModal_wait").fadeIn(100);
@@ -30,7 +30,7 @@ var need_saved = false;
                              $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
                              need_saved = true;
                              $("#new-dictionary-form").find('.invalid').removeClass('invalid');
-                             $("#new-dictionary-form").find('.error-text').hide();
+
 
                              $("#new-dictionary__btn-close").text(exit);
                              $("#save-new-dictionary").hide();
@@ -147,9 +147,9 @@ var need_saved = false;
         $("#new-dictionary__btn-new").hide();
 
         $("#new-form__message").hide();
-        $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
+        $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(object_name+success_created);
         $("#new-dictionary-form").find('.invalid').removeClass('invalid');
-        $("#new-dictionary-form").find('.error-text').hide();
+
 
         // var te = $("#new_form-user-name").text();
         //

@@ -1,6 +1,9 @@
 {% extends 'test2/base.html' %}
 {% load static %}
 {% load enabled_tags %}
+{% block titlesite %}
+    <title>RC Заявки</title>
+{% endblock %}
   {% block stylesheet %}
 
       <link rel="stylesheet" href="{% static 'libraries/jquery.arcticmodal-0.3.css' %}">
@@ -50,6 +53,11 @@
 {% endblock %}
 {% block footer %}
     <div class="container">
+    <div class="row  hidden" id="danger-closed-deps">
+        <div class="col-12">
+            Нужно закрыть все вчерашние выезды до 20:00!
+        </div>
+    </div>
      <div class="row">
         <button id="open-filter"     class="btn  btn-sm" type="button" data-toggle="modal"  >Фильтр</button>
         <button id="btn-new-request" class="btn  btn-sm" type="button"  >Новая заявка</button>

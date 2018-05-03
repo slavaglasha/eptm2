@@ -3,7 +3,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>RC</title>
+    {% block titlesite %}
+        <title>RC</title>
+    {% endblock %}
     <link rel="stylesheet" href = "{% static 'libraries/boostrap/css/bootstrap.min.css' %}" >
     <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.css' %}" rel="stylesheet">
     <link href="{%  static 'libraries/jquery-ui-1.12.1.custom/jquery-ui.theme.css' %}" rel="stylesheet">

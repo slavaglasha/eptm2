@@ -86,6 +86,7 @@ function setWidgets(form){
                 var attr = $(this).attr('readonly');
                 if (attr!=undefined && attr!==false){
                     $(this).attr("disabled",'');
+                    $(this).attr("readonly",'true');
                 } else {
                     var setd =  undefined;
                     if ($(this).attr("value")!=undefined) {
@@ -130,6 +131,7 @@ function setWidgets(form){
 
               });
           });
+          $(form).find(".datepicker-need").removeAttr("disabled");
         }
 
 function connectPlace(form){

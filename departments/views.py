@@ -132,9 +132,7 @@ def Deartmen_delete(request, pk):
         return JsonResponse(data)
     else:
         context = {'object': d.name, 'obj_name': d._meta.verbose_name.title}
-        return render(request, 'dictionaries/dictionary_delete.html', context
-
-                      )
+        return render(request, 'dictionaries/dictionary_delete.html', context)
 
         # class DeleteDepartmetn(DeleteView):
         #    model = department
