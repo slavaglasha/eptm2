@@ -16,8 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.views.static import serve
 from main_requests import views as main_views
 from account import views as account_views
+from work3 import settings
 from work_profiles import views as profile_view
 from departments import views as departments_view
 from places import views as places_view
@@ -33,7 +35,7 @@ urlpatterns = [
     url(r'^user-change/', profile_view.update_profile, name='update_profile'),
 
     url(r'^base/new-request/$', main_views.CreateNewRequest.as_view(), name='base_create_view'),
-    url(r'^base/new-request/success/', main_views.new_request_success, name='base_create_view_success'),
+
     url(r'^base/update-request/(?P<pk>\d+)/$', main_views.UpdateRequest.as_view(), name='base_update_veiw'),
     url(r'^simplle/', main_views.simple, name='views'),
 
@@ -65,7 +67,14 @@ urlpatterns = [
     url(r'^dictionaries/users-update/(?P<pk>\d+)/$',profile_view.update_user_profile_admin, name = 'update_profile_admin'),
     url(r'^dictionaries/user-delete/(?P<pk>\d+)/$', profile_view.delete_user_profile, name = 'delete_user_profile'),
 
+    url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
+    url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        auth_views.password_reset_confirm, name='password_reset_confirm'),
+    url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
+
     url(r'^test2/base/', main_views.test_base, name='view'),
+   # url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     url(r'^$', main_views.test_base, name='view'),
 
 ]

@@ -91,27 +91,7 @@ a.btn.btn-primary.disabled{
    background: #6d6d91;
 }
 
-/*блок ожидания*/
-.wait-block{
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgb(32, 32, 32);
-    width: 100%;
 
-    content: "WAIT";
-    color: white;
-    font-size: 18px;
-    text-align: center;
-    padding-top: 30vh;
-    z-index: 1000;
-
-    font-weight: bold;
-
-
-}
 
 /*календарик*/
 .datepicker-here {

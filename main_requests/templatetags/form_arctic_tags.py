@@ -32,7 +32,7 @@ def set_enabled(bound_field):
 @register.filter
 def set_label_grid(bound_field):
     if bound_field.field.widget.__class__.__name__ == 'Textarea':
-        return ' col-sm-4 col-md-4 col-lg-2 col-xl-2  col-4'
+        return ' col-sm-4 col-md-2 col-lg-2 col-xl-2  col-4'
     for item, valu in bound_field.field.widget.attrs.items():
         if item == 'new_line':
             return ' col-sm-4 col-md-2 col-lg-2 col-xl-2  col-4'
@@ -42,7 +42,7 @@ def set_label_grid(bound_field):
 @register.filter
 def  set_input_grid(bound_field):
     if bound_field.field.widget.__class__.__name__ == 'Textarea':
-        return ' col-sm-8 col-md-8 col-lg-8 col-xl-10  col-10'
+        return ' col-sm-8 col-md-8 col-lg-8 col-xl-10  col-8'
     for item, valu in bound_field.field.widget.attrs.items():
         if item == 'new_line':
             return ' col-sm-8 col-md-4 col-lg-4 col-xl-4  col-8'

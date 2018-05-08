@@ -17,15 +17,15 @@
   <body>
 
 
-	<div class="container">
-        <h1 class="text-center logo mb-4"><span class="header-font">{% block tittle %}RC{% endblock %}</span></h1>
+	<div class="container" id="account">
+        <h1 class="text-center logo mb-4 acount-header"><span class="header-font">{% block tittle %}RC{% endblock %}</span></h1>
         <div class="row justify-content-center">
             {% block columns %}
-            <div class="col-lg-4 col-md-6 col-sm-10">
+            <div class="col-lg-4 col-md-5 col-sm-10">
             {% endblock %}
 
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body " id="account-body">
                         <h2 class="card-title">{% block h1 %}Log in{% endblock %}</h2>
                             {%  block card_form %}
                             <form method="post" novalidate>
@@ -48,7 +48,7 @@
 
                 </div>
                 {% block footer %}
-                <div class="text-center py-2">
+                <div class="text-center py-2 " id="account-footer">
                     <a href="#" class="text-muted">
                         Forgot your password?
                     </a>

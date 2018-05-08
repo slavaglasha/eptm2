@@ -424,6 +424,12 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
      isTimerEnabled = true;
  }
 
+ function restartTimerifStoped() {
+     if (!isTimerEnabled){
+         setTimeUpdate();
+     }
+ }
+
  function DoFilter(need_closed){
      if (need_closed=== undefined){
          need_closed = false;
@@ -491,7 +497,7 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
                    $(el).html(htmll);
                    connectArcticUser($(el).find('form'));
                    $("#do-filter").click(function (){DoFilter(true); });
-                   $("#btn-update-list").click(function(){updateList();});
+                   $("#btn-update-list").click(function(){restartTimerifStoped(); updateList();});
                    setTimeUpdate();
                    //preparefilterForm();
 

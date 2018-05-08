@@ -61,13 +61,26 @@ function setWidgets(form){
             });
           // $(form).find("select:not(#id_request_user):not([multiple])").selectmenu();
            $.each($(form).find("select:not(#id_request_user):not([multiple])"), function () {
-               var attr = $(this).attr('readonly');
-               if (attr && attr!==false) {
-                   $(this).selectmenu({disabled:true});
-                   $(this).removeAttr('disabled');
-               }else{
-                   $(this).selectmenu();
-               }
+
+                   var attr = $(this).attr('readonly');
+                   if (attr && attr !== false) {
+                       //  $(this).selectmenu({disabled:true});
+                       $(this).combobox({
+                           "id_innput": undefined,
+                           "enabaleOther": false,
+                           "disabled": true
+                       });
+                       $(this).removeAttr('disabled');
+                   } else {
+                       //$(this).selectmenu();
+                       $(this).combobox({
+                           "id_innput": undefined,
+                           "enabaleOther": false,
+                           "disabled": false
+                       });
+
+                   }
+
             });
            $.each($(form).find("select[multiple='multiple']"), function () {
 

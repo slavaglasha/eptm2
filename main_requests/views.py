@@ -171,7 +171,7 @@ class UpdateRequest(UpdateView):
                              'errors': [(k, v[0]) for k, v in form.errors.items()]}, safe=False)
 
 
-# для тестов
+# для главная страница список заявок
 @login_required
 def test_base(request):
     return render(request, 'test2/request-list.html')
@@ -196,7 +196,7 @@ def ListFilterJsonView(request):
     dc = Departure.objects.filter(start_datetime__lt=dt_last_yesterday, end_datetime__isnull=True)
     if dc.__len__()>0:
 
-        not_cl_dep_requests = MainRequest.objects.filter(id__in=dc.values_list('main_request',flat=True))
+        not_cl_dep_requests = MainRequest.objects.filter(id__in=dc.values_list('main_request',flat=True)).order_by('-pk')
 
         print(dt_last_yesterday,not_cl_dep_requests, dt_input)
         if not_cl_dep_requests.__len__() > 0:
@@ -286,17 +286,28 @@ def ListFilterJsonView(request):
             json_change.append(json1)
             # print('append')
     if list_changed_not_in_filter.__len__()>0:
-        list_changed_not_in_filter = list_changed_not_in_filter.exclude(
-            id__in=list_requests.values_list('id', flat=True)).exclude(
-            id__in=list_new_requests.values_list('id', flat=True)).exclude(
-            id__in=list_changed_request.values_list('id', flat=True))
+        for req in list_requests:
+            id = req.id
+            list_changed_not_in_filter = list_changed_not_in_filter.exclude(id=id)
+        for req in list_new_requests:
+            id = req.id
+            list_changed_not_in_filter = list_changed_not_in_filter.exclude(id=id)
+        for req in list_changed_request:
+            id =req.id
+            list_changed_not_in_filter = list_changed_not_in_filter.exclude(id=id)
+
+        # list_changed_not_in_filter = list_changed_not_in_filter.exclude(
+        #     id__in=list_requests.values_list('id', flat=True)).exclude(
+        #     id__in=list_new_requests.values_list('id', flat=True)).exclude(
+        #     id__in=list_changed_request.values_list('id', flat=True))
     json_delete_change = []
+    print(list_changed_not_in_filter)
     for req in list_changed_not_in_filter:
-        json = req.to_dict
-        add_main_req = MainRequestAddition(req)
-        # print(add_main_req.main_request)
-        json1 = add_main_req.to_dict_add()
-        json_delete_change.append(json1)
+         json = req.to_dict
+         add_main_req = MainRequestAddition(req)
+         # print(add_main_req.main_request)
+         json1 = add_main_req.to_dict_add()
+         json_delete_change.append(json1)
 
     if f.form.is_valid():
         return JsonResponse({'success': True, 'need_closed': False, 'requests': json_res,

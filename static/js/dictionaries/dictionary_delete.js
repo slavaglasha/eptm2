@@ -54,8 +54,8 @@ function prepareButtonActions(url_delete, id_object){
                        }
                        else{
 
-                            $("#delete-form").find("mess").text(error_delete+" "+json.error_message);
-                           $("#delete-form").addClass("small-alert").addClass('alert-danger').find(".mess").text(error_delete_object+" "+json.error_message);
+                            $("#delete-form").find(".mess").text(error_delete+" "+json.error_message);
+                           $("#delete-form").addClass('alert-danger').find(".mess").text(error_delete_object+" "+json.error_message);
                             deleted = false;
 
 

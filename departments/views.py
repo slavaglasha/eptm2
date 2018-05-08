@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
@@ -17,7 +18,8 @@ class AuthenticatedMixin(object):
             return super(AuthenticatedMixin, self).dispatch(request, *args, **kwargs)
 
 
-# , DeleteView
+# для тестов
+@login_required
 def ListDepartment(request):
     can_save = (request.user.groups.filter(id=1).__len__() > 0)
 

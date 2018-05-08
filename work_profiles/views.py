@@ -22,7 +22,7 @@ def ListUsers(request):
 
 
 def ListUsersJson(request):
-    list_objects = Profile.objects.all().order_by('user__last_name')
+    list_objects = Profile.objects.all().order_by('user__username')
     json_res = []
     for obj in list_objects:
         json_res.append(obj.to_dict)
@@ -150,7 +150,7 @@ def delete_user_profile(request, pk):
                 return JsonResponse(data)
             except ProtectedError:
                 data['success'] = False
-                data['error_message'] = 'Пользователь в системе'
+                data['error_message'] = 'Пользователь совершал действия системе!'
                 return JsonResponse(data)
             except Profile.DoesNotExist:
                 data['success'] = False

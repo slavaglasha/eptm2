@@ -9,13 +9,13 @@
 {% endblock %}
 {% block top-popu-refs %}
     <li><a href="{% url 'view' %}" >Заявки</a></li>
-    <li class="max-hided"><a href="{% url 'dictionary_department' %}" >Департамент</a></li>
+    <li class="max-hided"><a href="{% url 'dictionary_department' %}" >Департаменты</a></li>
     <li class="max-hided"><a href="{%  url 'dictionary_places' %}">Объекты</a></li>
     <li class="max-hided"><a href="{% url 'dictionary_users' %}">Пользователи</a></li>
 {% endblock %}
 {% block right-menu %}
                     <ul class="row-menu">
-                      <li><a href="{% url 'dictionary_department' %}">Департамент</a></li>
+                      <li><a href="{% url 'dictionary_department' %}">Департаменты</a></li>
                       <li><a href="{%  url 'dictionary_places' %}">Объекты</a></li>
                       <li><a href="{% url 'dictionary_users' %}">Пользователи</a></li>
                   </ul>
@@ -46,9 +46,11 @@
 {% block footer %}
     <div class="container">
      <div class="row">
+         <div class="col-12">
 
-        <button id="btn-new-dictionary" class="btn  btn-sm" type="button"  ></button>
+        <button id="btn-new-dictionary" class="btn  btn-sm" type="button"  >{{ name_obj }}</button>
          <button id="btn-update-dictionary" class="btn  btn-sm" type="button"  >Обновить список</button>
+             </div>
      </div>
     </div>
 

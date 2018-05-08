@@ -26,7 +26,7 @@ var need_saved = false;
                      success: function (json) {
                          if (json.success) {
 
-                             $("#number-new").text(objname + json.name);
+                             $("#number-new").text(objname +' '+ json.name);
                              $("#new-form__message").removeClass("hidden").removeClass('alert-danger').children("p").text(objname+success_created);
                              need_saved = true;
                              $("#new-dictionary-form").find('.invalid').removeClass('invalid');

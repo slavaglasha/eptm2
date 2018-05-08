@@ -22,9 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nx-es#!ly@@t8q1k$fv&((-7c!af2#r01%2g6mmzy+pfrk#3ri'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+#  Ошибки 404 500 404error Если True тоо отладочніе ошибки
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -85,13 +86,13 @@ WSGI_APPLICATION = 'work3.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-     'default': dict(ENGINE='django.db.backends.sqlite3', NAME=os.path.join(BASE_DIR, 'db.sqlite3'))
-     #'default': {
-    #    'ENGINE': 'django.db.backends.mysql',
-    #    'NAME': 'eptm_db',
-    #    'USER': 'dbuser',
-   #     'PASSWORD': 'pusha',
-    # }
+   #  'default': dict(ENGINE='django.db.backends.sqlite3', NAME=os.path.join(BASE_DIR, 'db.sqlite3'))
+     'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eptm_db',
+        'USER': 'dbuser',
+       'PASSWORD': 'pusha',
+     }
 }
 
 # Password validation
@@ -135,12 +136,21 @@ DATETIME_INPUT_FORMATS = ('%d.%m.%Y %H:%M', '%d.%m.%Y %I:%M', '%Y-%m-%d %H:%M', 
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+#STATIC_ROOT = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+     os.path.join(BASE_DIR, 'static'),
+ ]
 
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/test2/base/'
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
+
+EMAIL_HOST = '172.16.33.1'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'TestSite Team <noreply@example.com>'

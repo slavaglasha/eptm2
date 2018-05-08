@@ -159,9 +159,13 @@ $(document).ready(function() {
 
                 this.input
                     .val("")
-                    .attr("title", " Совпадений не найдено")
+                    //   .attr("title", " Совпадений не найдено")
                     .tooltip("open");
                 outinput.val("");
+                if (this.options.doOnClear !== undefined){
+                    this.options.doOnClear($(this.element).parents("form").first());
+
+                }
             }
             this.element.val("");
             this._delay(function () {

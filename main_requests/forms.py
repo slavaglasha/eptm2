@@ -127,7 +127,7 @@ class updateMainRequestForm(forms.ModelForm):
             self.fields['close_user'].widget.attrs['readonly'] = True
             self.fields['close_dateTime'].widget.attrs['readonly'] = True
 
-            if instance.is_closed==3:
+            if instance.is_closed:
                 self.fields['request_user'].widget.attrs['readonly'] = True
                 self.fields['request_outer_User'].widget.attrs['readonly'] = True
                 self.fields['request_outer_status'].widget.attrs['readonly'] = True
@@ -153,7 +153,7 @@ class updateMainRequestForm(forms.ModelForm):
             self.fields['request_outer_department'].widget.attrs['readonly'] = True
 
 
-            if instance.input_user.user.id != user.id or instance.receive_user is not None or instance.is_closed==3:
+            if instance.input_user.user.id != user.id or instance.receive_user is not None or instance.is_closed:
 
 
                 self.fields['request_dateTime'].widget.attrs['readonly'] = True

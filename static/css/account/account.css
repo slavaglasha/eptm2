@@ -18,3 +18,114 @@
 .header-russion-font{
      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 }
+
+body{
+    font-size: 14px;
+    font-family: 'OpenSansRegular', sans-serif;
+    margin: 0 ;
+    padding: 0;
+}
+#account{
+    padding-top: 1rem;
+}
+
+#account .form-group{
+    margin-bottom: 0.5rem;
+}
+
+h1{
+
+    font-size: 2rem;
+}
+h2,.h2{
+    font-size: 1.5rem;
+}
+
+.error_block{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient( to right , #000, #232930, #000);
+    color: white;
+
+    margin: 0;
+    box-sizing: border-box;
+    padding: 5em;
+    overflow: hidden;
+
+}
+
+.error_block h1{
+    margin-top: 4em;
+    font-size: 3em;
+    left: 30%;
+position: relative;
+    margin-bottom: 2em;
+
+
+}
+.error_block p {
+
+
+
+    font-size: 2em;
+margin-left: 30%;
+}
+
+  #account #account-footer{
+        font-size: 1rem;
+    }
+
+@media (max-width: 600px) {
+
+    body{
+        font-size: 12px;
+    }
+    .error_block p {
+        font-size: 1.2em;
+        margin-left: 10%;
+        width: auto;
+    }
+
+    .error_block h1{
+        left: 10%;
+
+    }
+
+    #account #account-footer{
+        font-size: 14px;
+    }
+
+   #account-body{
+        font-size: 8px;
+   }
+
+    #account-body .col-form-label-sm{
+        font-size: 12px;
+    }
+
+    #account-body .form-control-sm{
+        font-size: 12px;
+    }
+
+   #account-body  h1{
+        font-size: 12px;
+       font-weight: bold;
+    }
+
+   #account-body h2{
+        font-size: 14px;
+       font-weight: bold;
+    }
+
+
+   #account-body .form-group{
+       margin-bottom: 1em;
+   }
+
+
+    .acount-header {
+        font-size: 25px;
+        margin-top: 1em;
+    }
+}

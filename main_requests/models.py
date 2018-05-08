@@ -162,10 +162,9 @@ class MainRequest(models.Model):
     @property
     def is_closed(self):
         if self.close_user is not None and self.close_dateTime is not None:
-            return 3
+            return True
         else:
-            return 2
-
+            return False
     @property
     def is_recived(self):
         return self.receive_dateTime is not None and self.receive_user is not None
@@ -174,7 +173,7 @@ class MainRequest(models.Model):
     def status(self):
         if self.is_recived:
             return 1
-        if self.is_closed == 3:
+        if self.is_closed :
            # print('isclosed')
             return 2
         return 0
@@ -206,14 +205,14 @@ class MainRequest(models.Model):
         if 1 in group_user:
             return True
         if 2 in group_user:
-            if self.is_closed == 3:
+            if self.is_closed:
 
                 return False
             else:
 
                 return True
         if 3 in group_user:
-            if self.is_closed == 3:
+            if self.is_closed:
                 return False
             else:
                 if self.input_user.user.pk == request_user.pk and self.receive_user is None:

@@ -66,12 +66,31 @@ function setRowUpdater(){
 
 }
 
+
+function setActionReceive(){
+    el = $("#update-from-main-form").find("#id_receive_user");
+    attr = $(el).attr('readonly');
+    disa =  (attr && attr!==false) ;
+    $(el).combobox
+        ({
+                           "id_innput": undefined,
+                           "enabaleOther": false,
+                           "disabled": disa,
+                            "doOnSelect": changeReceiveUser,
+                            "doOnClear": function (){
+                               changeReceiveUser('', $("#update-from-main-form"));
+                            }
+                       });
+
+}
+
 function prepareUpdateForm(){
     ischanged = false;
     if ($(".arcticmodal-container").length>1){
          $(".arcticmodal-container")[1].remove();
          $(".arcticmodal-overlay")[1].remove();
      }
+    setActionReceive();
     connectArcticUser($("#update-from-main-form"),searchDep, clearDep);
     enabledDepartures();
 
@@ -111,7 +130,7 @@ function enabledDepartures(){
     $("label[for$='main_request']").hide();
 }
 
-function changeReceiveUser(val) {
+function changeReceiveUser(val, parentblock) {
 
    if (val!==''){
        $("#updateForm").find("#id_receive_dateTime").val(getCurrentDateTime());

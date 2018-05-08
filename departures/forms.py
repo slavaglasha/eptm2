@@ -39,10 +39,8 @@ class MainDepartureForm(forms.ModelForm):
                 print("dep_user - {0} pk -{1} ".format(user, instance.pk))
                 if instance.pk != None:
                     parent_main_request = instance.main_request
-                    print("is_closd -",parent_main_request.is_closed)
-                    print('main_request-', parent_main_request)
                     if parent_main_request != None:
-                        if parent_main_request.is_closed==3:
+                        if parent_main_request.is_closed:
                             self.fields['start_datetime'].widget.attrs['readonly'] = True
                             self.fields['end_datetime'].widget.attrs['readonly'] = True
                             self.fields['works'].widget.attrs['readonly'] = True

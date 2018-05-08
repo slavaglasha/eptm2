@@ -1,16 +1,16 @@
 {% extends 'base_account.html' %}
 {% load static %}
 {% load  form_arctic_tags widget_tweaks %}
-
+{% block title %} RC Пользователь     {% endblock %}
 
 {% block tittle %} RC     <span class="header-russion-font">Настройки</span>     {% endblock %}
 {% block columns %}
-    <div class="col-lg-6 col-md-10 col-sm-12">
+    <h2 class="col-lg-6 col-md-10 col-sm-12">
   {% endblock %}
 {% block h1 %} {{ user.get_full_name }} {% endblock %}
 
 {%  block card_form %}
-    <div class="h2">{{ user.username }}</div>
+    <h2>{{ user.username }}</h2>
                             <form method="post" novalidate>
                                 {% csrf_token %}
 
@@ -33,7 +33,7 @@
 
 
   {% block footer %}
-                <div class="text-center py-2">
+                <div class="text-center py-2 " id="account-footer">
                     <a href="{% url  'view' %}" class="text-muted">
                         Вернуться к заявкам
                     </a>

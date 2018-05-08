@@ -51,20 +51,21 @@
                     {% block top-refs %}{% endblock %}
                     <a href="{% url 'login' %}" class=" btn  btn-sm">Вход</a>
                 {% endif %}
+              {% if user.is_authenticated %}
 
-           </label>
-           {% if user.is_authenticated %}
+                   <input type="checkbox" class="help-checkbox" id="help-checkbox-menu" >
+                   <div class="pop-menu">
+                    <ul>
+                      <li class="user-list"><a href="{% url 'update_profile' %} ">{{ user.get_full_name }}</a><div id="user-id" class="hidden">{{ user.id }}</div></li>
+                      <!-- <li><a href="#">Аккаунт </a></li> -->
+                        {% block top-popu-refs %}{% endblock %}
+                      <li><a href="{% url 'logout' %}">Выход</a></li>
+                    </ul>
+                   </div>
+              {%endif%}
 
-               <input type="checkbox" class="help-checkbox" id="help-checkbox-menu" >
-               <div class="pop-menu">
-                <ul>
-                  <li class="user-list"><a href="{% url 'update_profile' %} ">{{ user.get_full_name }}</a><div id="user-id" class="hidden">{{ user.id }}</div></li>
-                  <!-- <li><a href="#">Аккаунт </a></li> -->
-                    {% block top-popu-refs %}{% endblock %}
-                  <li><a href="{% url 'logout' %}">Выход</a></li>
-                </ul>
-               </div>
-          {%endif%}
+            </label>
+
       </div>
     </div>
     </div>
