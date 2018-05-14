@@ -775,6 +775,8 @@
                 offset = this.opts.offset,
                 main = pos[0],
                 secondary = pos[1];
+                ww =$(window).width();
+                wh = $(window).height();
 
             switch (main) {
                 case 'top':
@@ -810,6 +812,12 @@
                     } else {
                         left = dims.left + dims.width/2 - selfDims.width/2;
                     }
+            }
+            if  (this.$datepicker.width()+left>ww){
+                left = offset;
+            }
+            if (this.$datepicker.height()+top>wh) {
+                top =( wh - this.$datepicker.height())/2;
             }
 
             this.$datepicker

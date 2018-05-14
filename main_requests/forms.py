@@ -58,8 +58,8 @@ class newMainRequestForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(newMainRequestForm, self).__init__(*args, **kwargs)
-        groups = user.groups.all().values_list('id', flat=True)
-        if 3 in groups:
+        groups = user.profileEptm.user_group_first_id
+        if  groups == 3 or groups == 0 :
             self.fields['request_outer_status'].widget.attrs['readonly'] = True
             self.fields['request_outer_department'].widget.attrs['readonly'] = True
             self.fields['request_user'].widget.attrs['readonly'] = True

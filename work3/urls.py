@@ -13,24 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import django.views.generic
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.views.static import serve
-from main_requests import views as main_views
-from account import views as account_views
-from work3 import settings
-from work_profiles import views as profile_view
+
 from departments import views as departments_view
+from main_requests import views as main_views
 from places import views as places_view
+from work_profiles import views as profile_view
+
 # from django.views.generic.base import TemplateView
 
 # set' object is not reversible keyError :'ru' Еужно во всех url gjcnfdbnm КВАДРАТНЫЕСКОБКИ
 urlpatterns = [
 
-    url(r'^signup/', account_views.signup, name='signup'),
+
     url(r'^login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/', auth_views.LogoutView.as_view(template_name='simple.html'), name='logout'),
+    url(r'^need_login/', django.views.generic.TemplateView.as_view(template_name="need_login.html"), name ='need_login'),
 
     url(r'^user-change/', profile_view.update_profile, name='update_profile'),
 

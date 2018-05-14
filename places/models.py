@@ -6,7 +6,7 @@ class Places(models.Model):
     adres =  models.CharField(max_length=200, null=True, unique=False, blank=True)
     geo_point = models.DecimalField(max_digits=5, decimal_places=2,null=True, blank=True)
     note = models.CharField(max_length=500, null=True, blank=True)
-    to_Place = models.ForeignKey('self',related_name='places', verbose_name='Относится к станции', null=True, blank=True)
+    to_Place = models.ForeignKey('self',related_name='places', verbose_name='Относится к станции', null=True, blank=True,  on_delete=models.PROTECT )
 
     def __str__(self):
         if self.adres is not None:

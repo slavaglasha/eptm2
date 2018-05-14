@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{% block title %} SignUp{% endblock %}</title>
+    <title>{% block title %} Вход{% endblock %}</title>
 	<link rel="stylesheet" href = "{% static 'libraries/boostrap/css/bootstrap.min.css' %}" >
     <link rel="stylesheet" href="{% static 'css/form-correct.css' %}">
 
@@ -41,7 +41,7 @@
                     </div>
                     <div class="card-footer text-center">
                         {% block card-footer %}
-                            New to ? <a href="{% url 'signup' %}">Sign Up</a>
+
                         {% endblock %}
 
                     </div>

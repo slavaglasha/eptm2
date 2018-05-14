@@ -86,13 +86,13 @@ WSGI_APPLICATION = 'work3.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-   #  'default': dict(ENGINE='django.db.backends.sqlite3', NAME=os.path.join(BASE_DIR, 'db.sqlite3'))
-     'default': {
+    #  'default': dict(ENGINE='django.db.backends.sqlite3', NAME=os.path.join(BASE_DIR, 'db.sqlite3'))
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eptm_db',
         'USER': 'dbuser',
-       'PASSWORD': 'pusha',
-     }
+        'PASSWORD': 'pusha',
+    }
 }
 
 # Password validation
@@ -136,17 +136,16 @@ DATETIME_INPUT_FORMATS = ('%d.%m.%Y %H:%M', '%d.%m.%Y %I:%M', '%Y-%m-%d %H:%M', 
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = 'static/'
+# STATIC_ROOT = 'static/'
 
 STATICFILES_DIRS = [
-     os.path.join(BASE_DIR, 'static'),
- ]
+    os.path.join(BASE_DIR, '/static/'),
+]
 
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/test2/base/'
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
-
 
 EMAIL_HOST = '172.16.33.1'
 EMAIL_PORT = 25

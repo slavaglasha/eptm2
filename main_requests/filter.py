@@ -1,6 +1,7 @@
 import django_filters
 import django_filters.widgets
-from django.forms import CheckboxSelectMultiple, NullBooleanSelect,CheckboxInput, NumberInput, SelectMultiple
+from decimal import Decimal
+from django.forms import CheckboxSelectMultiple, NullBooleanSelect, CheckboxInput, NumberInput, SelectMultiple, forms
 from django.db import models
 
 from .models import MainRequest
@@ -24,7 +25,17 @@ class HelpfulFilterSet(django_filters.FilterSet):
         return filter
 
 
-
+class FilterForm(forms.Form):
+    def clean(self):
+        clean_data = super(FilterForm, self).clean()
+        num = clean_data.get('number')
+        print('number=',num)
+        if num != '':
+             try:
+                 Decimal(num)
+             except:
+                  self._errors['number'] = 'Ddtlbnt xbckj!'
+        return    clean_data
 
 
 class MainRequestFilter(HelpfulFilterSet):
@@ -68,6 +79,7 @@ class MainRequestFilter(HelpfulFilterSet):
 
     class Meta:
         model = MainRequest
+        forms = FilterForm
         fields=['number','input_datetime','input_user','request_dateTime','request_user']
 
         filter_overrides = {
@@ -79,6 +91,10 @@ class MainRequestFilter(HelpfulFilterSet):
                 },
             },
         }
+
+
+
+
 
 
 

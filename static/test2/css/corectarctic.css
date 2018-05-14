@@ -464,3 +464,41 @@ select:focus, textarea:focus, input:focus{
     text-align: center;
 }
 
+@media (max-width: 400px) {
+    .box-modal{
+        min-width: 300px;
+    }
+    .arcticmodal-container_i2{
+        padding: 2px;
+    }
+
+    .box-modal .block {
+       padding-left: 0.1em;
+        padding-right: 0.1em;
+    }
+
+   .arcticmodal-container_i2 .container-fluid{
+       padding-left: 0;
+       padding-right: 0;
+   }
+
+   .arcticmodal-container_i2 .container-fluid .row{
+         margin-right: 0;
+       margin-left: 0;
+   }
+
+   .arcticmodal-container_i2 .container-fluid .row .col-12{
+       padding-right: 0;
+       padding-left: 0;
+   }
+
+   .interval span{
+       padding-left: 0.1em;
+       padding-right: 0.1em;
+
+   }
+}
+
+
+
+

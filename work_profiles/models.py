@@ -13,13 +13,12 @@ from work3.settings import DATETIME_INPUT_FORMATS
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profileEptm')
-    deparment = models.ForeignKey(department, null=True, blank=True)
+    deparment = models.ForeignKey(department, null=True, blank=True, on_delete=models.PROTECT)
     user_position = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-
 
     def __str__(self):
         return self.user.last_name + ' ' + self.user.first_name
@@ -27,25 +26,30 @@ class Profile(models.Model):
     def name(self):
         return self.user.username
 
-
     @property
-    def  user_group_first(self):
+    def user_group_first(self):
         if self.user.groups.all().__len__() == 0:
-            return  None
+            return None
         else:
             return self.user.groups.all()[0]
 
-
     @property
     def user_group_first_id(self):
-        if self.user.groups.all().__len__()==0:
+        if self.user.groups.all().__len__() == 0:
             return -1
         return self.user.groups.all()[0].id
+
+    @property
+    def user_group_name(self):
+        group_name = ''
+        if self.user.groups.all().__len__() > 0:
+            group_name = self.user.groups.all()[0].name
+        return group_name
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-                Profile.objects.create(user=instance)
+            Profile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
@@ -57,9 +61,7 @@ class Profile(models.Model):
 
     @property
     def to_dict(self):
-        group_name = ''
-        if self.user.groups.all().__len__() > 0:
-            group_name = self.user.groups.all()[0].name
+        group_name = self.user_group_name()
 
         return {'id': self.id,
                 'username': self.user.username,

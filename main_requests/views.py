@@ -7,6 +7,7 @@ from django.db.models import Max
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView
 
 from departures.forms import CustomDepartureFormSet
@@ -30,10 +31,10 @@ def simple(request):
 # создание новой заявки
 class CreateNewRequest(LoginRequiredMixin, CreateView):
     login_url = '/login/'
-    redirect_field_name = '/base/filter-request/'
+
     form_class = newMainRequestForm
     template_name = 'baseviews/new_request/new_request.html'
-    success_url = '/base/filter-request/'
+
 
     def get_form_kwargs(self):
         kwargs = super(CreateNewRequest, self).get_form_kwargs()
@@ -89,11 +90,17 @@ def new_request_success(request):
 
 
 # изменеие формы заявок
+
+
 class UpdateRequest(UpdateView):
     form_class = updateMainRequestForm
     model = MainRequest
     template_name = 'baseviews/update_view/update.html'
     success_url = '/simplle/'
+
+    @method_decorator(login_required(login_url='/need_login/'))
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateRequest, self).dispatch(*args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super(UpdateRequest, self).get_form_kwargs()
@@ -179,7 +186,7 @@ def test_base(request):
 
 # фильтр json 20:00 - rjytw cvtys
 # filter
-@login_required
+@login_required(login_url='/need_login/')
 def ListFilterJsonView(request):
     get_form = request.GET.get("get_form")
     if get_form is not None and get_form:

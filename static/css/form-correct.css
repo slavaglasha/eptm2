@@ -91,6 +91,10 @@ a.btn.btn-primary.disabled{
    background: #6d6d91;
 }
 
+a.btn.large{
+    font-size: 1em;
+}
+
 
 
 /*календарик*/

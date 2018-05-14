@@ -270,6 +270,9 @@ function checkDateIntervalElementFilter(eldt1, eldt2 ){
  function updateList() {
      if (!isLoaded && isTimerEnabled) {
          isLoaded = true;
+         if ($("#danger-closed-deps").visible()){
+            loadData(false);
+         }
          $.ajax({
              type: "get",
              cache: false,
