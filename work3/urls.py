@@ -17,10 +17,12 @@ import django.views.generic
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.views.static import serve
 
 from departments import views as departments_view
 from main_requests import views as main_views
 from places import views as places_view
+from work3 import settings
 from work_profiles import views as profile_view
 
 # from django.views.generic.base import TemplateView
@@ -75,7 +77,7 @@ urlpatterns = [
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
 
     url(r'^test2/base/', main_views.test_base, name='view'),
-   # url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     url(r'^$', main_views.test_base, name='view'),
 
 ]

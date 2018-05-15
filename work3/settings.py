@@ -23,7 +23,7 @@ SECRET_KEY = 'nx-es#!ly@@t8q1k$fv&((-7c!af2#r01%2g6mmzy+pfrk#3ri'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #  Ошибки 404 500 404error Если True тоо отладочніе ошибки
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
@@ -136,10 +136,10 @@ DATETIME_INPUT_FORMATS = ('%d.%m.%Y %H:%M', '%d.%m.%Y %I:%M', '%Y-%m-%d %H:%M', 
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = 'static/'
+STATIC_ROOT = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '/static/'),
+    os.path.join(BASE_DIR, 'static/'),
 ]
 
 LOGOUT_REDIRECT_URL = 'login'

@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.timezone import localtime
 
 from places.models import Places
-from work3.settings import DATETIME_INPUT_FORMATS
+from work3.settings import DATETIME_INPUT_FORMATS, BASE_DIR
 from work_profiles.models import Profile
 
 
@@ -165,6 +165,7 @@ class MainRequest(models.Model):
             return True
         else:
             return False
+
     @property
     def is_recived(self):
         return self.receive_dateTime is not None and self.receive_user is not None
@@ -181,6 +182,7 @@ class MainRequest(models.Model):
     # для преобразования в json
     @property
     def to_dict(self):
+        print(BASE_DIR)
         if self.place is None:
             pl = ''
         else:
